@@ -1,0 +1,22 @@
+REALIZAREA CONEXIUNII CU MYSQL
+
+1. faceti un proiect nou (file -> new -> Java Project)
+2. descarcati ConnectorJ (platform independent, zip)
+	https://dev.mysql.com/downloads/connector/j/
+3. dezarhivati 
+4. copiati mysql-connector-java-....-bin.jar in fisierul cu proiectul vostru (langa bin si src)
+5. in Eclipse: click dreapta pe proiect -> build path -> add external archives -> adaugati jar-ul de mai sus
+6. in Main: actualizati DB_NAME, USER si PASSWORD cu valorile voastre
+7. testati functionalitatea conexiunii
+
+
+
+TODO:
+1. Afisati toate intrarile dintr-o tabela
+2. Afisati toate intrarile dintr-o tabela care respecta o anumita conditie
+3. Realizati un login si afisati un mesaj de succes / eroare in consola
+4. Afisati rezultatul unui JOIN in consola
+5. Apelati o procedura de SELECT dintr-un tabel la alegere
+6. Apelati o procedura de INSERT intr-un tabel la alegere
+
+	

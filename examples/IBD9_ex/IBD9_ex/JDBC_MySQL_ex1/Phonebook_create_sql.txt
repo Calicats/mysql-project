@@ -1,0 +1,4 @@
+create database PhoneBook;
+use PhoneBook;
+create table Contacts(UID int AUTO_INCREMENT Primary Key  ,FirstnAME varchar(50),LastName varchar(50),HomePhone varchar(50), MObilePhone varchar(50),EmailAddress varchar (50));
+
