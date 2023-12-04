@@ -87,6 +87,11 @@ CREATE TABLE IF NOT EXISTS GrupStudiu(
     foreign key(id_participant_activitate) references ParticipantActivitate(idParticipantActivitate)
 );
 
+ALTER TABLE SuperAdministrator ADD COLUMN parola char(255);
+ALTER TABLE Administrator ADD COLUMN parola char(255);
+ALTER TABLE Profesor ADD COLUMN parola char(255);
+ALTER TABLE Student ADD COLUMN parola char(255);
+
 CREATE TABLE IF NOT EXISTS Rol(
 	idRol int unique auto_increment primary key,
     numeRol char(15)
