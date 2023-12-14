@@ -87,6 +87,11 @@ CREATE TABLE IF NOT EXISTS GrupStudiu(
     foreign key(id_participant_activitate) references ParticipantActivitate(idParticipantActivitate)
 );
 
+ALTER TABLE SuperAdministrator ADD COLUMN username char(255);
+ALTER TABLE Administrator ADD COLUMN username char(255);
+ALTER TABLE Profesor ADD COLUMN username char(255);
+ALTER TABLE Student ADD COLUMN username char(255);
+
 ALTER TABLE SuperAdministrator ADD COLUMN parola char(255);
 ALTER TABLE Administrator ADD COLUMN parola char(255);
 ALTER TABLE Profesor ADD COLUMN parola char(255);
@@ -146,5 +151,75 @@ GRANT ALL PRIVILEGES ON db_platforma.GrupStudiu TO 'Admin'@'%';
 #drepturi superadmin
 GRANT ALL PRIVILEGES ON db_platforma.* TO 'SuperAdmin'@'%';
 
+#procedura pentru adaugarea unui super admin
+DELIMITER //
+CREATE PROCEDURE AddNewSuperAdministrator(
+    IN cnp_param CHAR(20),
+    IN nume_param CHAR(30),
+    IN adresa_param CHAR(50),
+    IN nrTelefon_param CHAR(15),
+    IN email_param CHAR(40),
+    IN parola_param CHAR(255),
+    IN username_param CHAR(255)
+)
+BEGIN
+    INSERT INTO SuperAdministrator(cnp, nume, adresa, nrTelefon, email, parola, idRol, username)
+    VALUES(cnp_param, nume_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'SuperAdmin'), username_param);
+END //
+DELIMITER ;
 
+# procedura pentru adaugarea unui admin
+DELIMITER //
+CREATE PROCEDURE AddNewAdministrator(
+    IN cnp_param CHAR(20),
+    IN nume_param CHAR(30),
+    IN adresa_param CHAR(50),
+    IN nrTelefon_param CHAR(15),
+    IN email_param CHAR(40),
+    IN parola_param CHAR(255),
+    IN username_param CHAR(255)
+)
+BEGIN
+    INSERT INTO Administrator(cnp, nume, adresa, nrTelefon, email, parola, idRol, username)
+    VALUES(cnp_param, nume_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'Admin'), username_param);
+END //
+DELIMITER ;
 
+# procedura pentru adaugarea unui profesor
+DELIMITER //
+CREATE PROCEDURE AddNewProfessor(
+    IN cnp_param CHAR(20),
+    IN nume_param CHAR(30),
+    IN departament_param CHAR(50),
+    IN nrMinOre_param INT,
+    IN nrMaxOre_param INT,
+    IN adresa_param CHAR(50),
+    IN nrTelefon_param CHAR(15),
+    IN email_param CHAR(40),
+    IN parola_param CHAR(255),
+    IN username_param CHAR(255)
+)
+BEGIN
+    INSERT INTO Profesor(cnp, nume, departament, nrMinOre, nrMaxOre, adresa, nrTelefon, email, parola, idRol, username)
+    VALUES(cnp_param, nume_param, departament_param, nrMinOre_param, nrMaxOre_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'Profesor'), username_param);
+END //
+DELIMITER ;
+
+# procedura pentru adaugarea unui student
+DELIMITER //
+CREATE PROCEDURE AddNewStudent(
+    IN cnp_param CHAR(20),
+    IN nume_param CHAR(30),
+    IN anStudiu_param INT,
+    IN numarOre_param INT,
+    IN adresa_param CHAR(50),
+    IN nrTelefon_param CHAR(15),
+    IN email_param CHAR(40),
+    IN parola_param CHAR(255),
+    IN username_param CHAR(255)
+)
+BEGIN
+    INSERT INTO Student(cnp, nume, anStudiu, numarOre, adresa, nrTelefon, email, parola, idRol, username)
+    VALUES(cnp_param, nume_param, anStudiu_param, numarOre_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'Student'), username_param);
+END //
+DELIMITER ;
