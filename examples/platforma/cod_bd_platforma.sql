@@ -87,10 +87,10 @@ CREATE TABLE IF NOT EXISTS GrupStudiu(
     foreign key(id_participant_activitate) references ParticipantActivitate(idParticipantActivitate)
 );
 
-ALTER TABLE SuperAdministrator ADD COLUMN username char(255);
-ALTER TABLE Administrator ADD COLUMN username char(255);
-ALTER TABLE Profesor ADD COLUMN username char(255);
-ALTER TABLE Student ADD COLUMN username char(255);
+ALTER TABLE SuperAdministrator ADD COLUMN username char(255) unique;
+ALTER TABLE Administrator ADD COLUMN username char(255) unique;
+ALTER TABLE Profesor ADD COLUMN username char(255) unique;
+ALTER TABLE Student ADD COLUMN username char(255) unique;
 
 ALTER TABLE SuperAdministrator ADD COLUMN parola char(255);
 ALTER TABLE Administrator ADD COLUMN parola char(255);
@@ -223,3 +223,11 @@ BEGIN
     VALUES(cnp_param, nume_param, anStudiu_param, numarOre_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'Student'), username_param);
 END //
 DELIMITER ;
+
+call addNewSuperAdministrator("0000000000000", "Vlad Durdeu", "Str Principala nr 1", "0755333444", "johnsmith0@random.org", "Calicats", "Vlad");
+call addNewSuperAdministrator( "1111111111111", "Alex Stancu", "Str Principala nr 2", "0755333445", "johnsmith1@random.org", "Calicats", "Stancu");
+call addNewSuperAdministrator("2222222222222", "Lion Moroz", "Str Principala nr 3", "0755333446", "johnsmith2@random.org", "Calicats", "Lion");
+
+ALTER TABLE SuperAdministrator AUTO_INCREMENT = 1;
+DELETE FROM SuperAdministrator;
+SELECT * FROM SuperAdministrator;
