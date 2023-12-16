@@ -40,13 +40,9 @@ public class AfterLoginController {
     public void userLogout() throws IOException{
         Main main = new Main();
         System.out.println("Bye, " + username);
-        nume.setText("");
-        cnp.setText("");
-        adresa.setText("");
-        email.setText("");
-        nrTelefon.setText("");
         main.changeScene("logare.fxml", username, tableName);
     }
+
     public void showPersonalData(){
         try
         {

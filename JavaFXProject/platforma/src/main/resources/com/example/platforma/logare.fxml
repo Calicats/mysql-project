@@ -14,9 +14,9 @@
    <left>
       <AnchorPane prefHeight="400.0" prefWidth="270.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="400.0" fitWidth="270.0">
+            <ImageView fitHeight="400.0" fitWidth="278.0">
                <image>
-                  <Image url="@../../../img/logo.jpg" />
+                  <Image url="@../../../img/logo.png" />
                </image>
             </ImageView>
          </children>

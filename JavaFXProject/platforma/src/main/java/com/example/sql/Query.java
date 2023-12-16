@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 public class Query {
     public static boolean validateUser(Connection connection, String tableName, String username, String password, int userType) {
         String query = "SELECT COUNT(*) FROM " + tableName + " WHERE username = ? AND parola = ? AND idRol = ?";
+
         try
         {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -24,12 +25,14 @@ public class Query {
         {
             e.printStackTrace();
         }
+
         return false;
     }
 
     public static String getInfo(Connection connection, String tableName, String username, String info)
     {
         String query = "SELECT " + info + " FROM " + tableName + " WHERE username = ?";
+
         try
         {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
