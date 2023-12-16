@@ -49,13 +49,13 @@ public class LoginController {
 
                 for(int i = 0; i < 4; ++i)
                 {
-                    String table = possibleTables.get(idRol[i]);
-                    boolean connected = Query.validateUser(connection, table, usernameString, passwordString, idRol[i]);
+                    String tableName = possibleTables.get(idRol[i]);
+                    boolean connected = Query.validateUser(connection, tableName, usernameString, passwordString, idRol[i]);
                     if(connected)
                     {
                         System.out.println(usernameString + " has logged in!");
                         loginMessage.setText("Logare cu succes!");
-                        main.changeScene("dupaLogare.fxml");
+                        main.changeScene("dupaLogare.fxml", usernameString, tableName);
                         found = true;
                         break;
                     }

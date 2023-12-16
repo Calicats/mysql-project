@@ -26,4 +26,26 @@ public class Query {
         }
         return false;
     }
+
+    public static String getInfo(Connection connection, String tableName, String username, String info)
+    {
+        String query = "SELECT " + info + " FROM " + tableName + " WHERE username = ?";
+        try
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next())
+            {
+                return resultSet.getString(info);
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
