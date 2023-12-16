@@ -16,14 +16,9 @@
          <children>
             <ImageView fitHeight="400.0" fitWidth="270.0">
                <image>
-                  <Image url="@../../../img/autocolant-uni-mov-liliac-45cm-lucios.jpg" />
+                  <Image url="@../../../img/logo.jpg" />
                </image>
             </ImageView>
-            <Label layoutX="13.0" layoutY="62.0" text="PLATFORMA SCOLARA" textFill="WHITE">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
          </children>
       </AnchorPane>
    </left>
