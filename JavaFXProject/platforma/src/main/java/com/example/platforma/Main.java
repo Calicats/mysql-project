@@ -30,6 +30,7 @@ public class Main extends Application {
 
         if(fxml.equals("dupaLogare.fxml") && username != null && tableName != null)
         {
+            currentStage.setTitle("Platforma scolara");
             AfterLoginController controller = fxmlLoader.getController();
             controller.initUser(username, tableName);
         }

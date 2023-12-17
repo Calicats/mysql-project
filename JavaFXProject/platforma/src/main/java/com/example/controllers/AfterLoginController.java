@@ -1,9 +1,6 @@
 package com.example.controllers;
 
-import com.example.Administrator;
-import com.example.Profesor;
-import com.example.Student;
-import com.example.User;
+import com.example.*;
 import com.example.platforma.Main;
 import com.example.sql.Connect;
 import com.example.sql.Query;
@@ -142,14 +139,14 @@ public class AfterLoginController{
             }
             else
             {
-                for (String columnName : columns)
+                for(String columnName : columns)
                 {
                     TableColumn<User, String> column = new TableColumn<>(columnName);
 
                     column.setCellValueFactory(cellData ->
                             new SimpleStringProperty(getUserPropertyValue(cellData.getValue(), columnName)));
 
-                    column.prefWidthProperty().bind(table.widthProperty().divide(columns.length));
+                    column.setMinWidth(200);
                     table.getColumns().add(column);
                 }
 
@@ -160,6 +157,11 @@ public class AfterLoginController{
                 {
                     for (String[] row : userInfo)
                     {
+                        for(String value : row)
+                        {
+                            System.out.print(value + "\t");
+                        }
+                        System.out.println();
                         User user = createUserFromRow(row, tableName);
                         data.add(user);
                     }

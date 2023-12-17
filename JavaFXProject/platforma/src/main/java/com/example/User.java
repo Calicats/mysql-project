@@ -5,19 +5,19 @@ public class User {
     private String nume;
     private String cnp;
     private String adresa;
-    private String email;
     private String nrTelefon;
+    private String email;
     private String username;
     private String parola;
     private int idRol;
 
-    public User(int id, String nume, String cnp, String adresa, String email, String nrTelefon, String username, String parola, int idRol) {
+    public User(int id, String cnp, String nume, String adresa, String nrTelefon, String email, String username, String parola, int idRol) {
         this.id = id;
-        this.nume = nume;
         this.cnp = cnp;
+        this.nume = nume;
         this.adresa = adresa;
-        this.email = email;
         this.nrTelefon = nrTelefon;
+        this.email = email;
         this.username = username;
         this.parola = parola;
         this.idRol = idRol;

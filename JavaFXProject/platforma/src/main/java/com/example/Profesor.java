@@ -5,8 +5,8 @@ public class Profesor extends User {
     private int nrMinOre;
     private int nrMaxOre;
 
-    public Profesor(int idProfesor, String nume, String cnp, String departament, int nrMinOre, int nrMaxOre, String adresa, String email, String nrTelefon, String username, String parola, int idRol) {
-        super(idProfesor, nume, cnp, adresa, email, nrTelefon, username, parola, idRol);
+    public Profesor(int idProfesor, String cnp, String nume, String departament, int nrMinOre, int nrMaxOre, String adresa, String nrTelefon, String email, String username, String parola, int idRol) {
+        super(idProfesor, cnp, nume, adresa, nrTelefon, email, username, parola, idRol);
         this.departament = departament;
         this.nrMinOre = nrMinOre;
         this.nrMaxOre = nrMaxOre;
