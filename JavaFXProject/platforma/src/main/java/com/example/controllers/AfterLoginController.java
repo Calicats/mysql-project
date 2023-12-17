@@ -66,7 +66,7 @@ public class AfterLoginController{
         main.changeScene("logare.fxml", username, tableName, 600, 400);
     }
 
-    public void showPersonalData(){
+    public void showPersonalData() {
         try
         {
             Connection connection = Connect.getConnection();
@@ -105,7 +105,7 @@ public class AfterLoginController{
         }
     }
 
-    public void controlUsers(){
+    public void controlUsers() {
         greetUser.setVisible(false);
         nume.setVisible(false);
         cnp.setVisible(false);

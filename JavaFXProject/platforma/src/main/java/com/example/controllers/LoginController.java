@@ -21,11 +21,11 @@ public class LoginController {
     @FXML
     private PasswordField parola;
 
-    public void userLogin() throws IOException{
+    public void userLogin() {
         checkLogin();
     }
 
-    private void checkLogin() throws IOException{
+    private void checkLogin() {
         try
         {
             Main main = new Main();
@@ -38,32 +38,17 @@ public class LoginController {
             else
             {
                 Connection connection = Connect.getConnection();
-                HashMap<Integer, String> possibleTables = new HashMap<>();
-                possibleTables.put(1, "superadministrator");
-                possibleTables.put(2, "administrator");
-                possibleTables.put(3, "profesor");
-                possibleTables.put(4, "student");
+                String tableName = Query.validateUser(connection, usernameString, passwordString);
 
-                int[] idRol = {1, 2, 3, 4};
-                boolean found = false;
-
-                for(int i = 0; i < 4; ++i)
+                if(tableName != null)
                 {
-                    String tableName = possibleTables.get(idRol[i]);
-                    boolean connected = Query.validateUser(connection, tableName, usernameString, passwordString, idRol[i]);
-                    if(connected)
-                    {
-                        System.out.println(usernameString + " has logged in!");
-                        loginMessage.setText("Logare cu succes!");
-                        main.changeScene("dupaLogare.fxml", usernameString, tableName, 1024, 768);
-                        found = true;
-                        break;
-                    }
+                    System.out.println(usernameString + " logged in as " + tableName);
+                    main.changeScene("dupaLogare.fxml", usernameString, tableName, 1024, 768);
                 }
-                if(!found)
+                else
                 {
-                    loginMessage.setText("Logarea a esuat!");
-                    System.out.println(usernameString + " does not exist!");
+                    loginMessage.setText("Date incorecte!");
+                    System.out.println("null");
                 }
             }
         }

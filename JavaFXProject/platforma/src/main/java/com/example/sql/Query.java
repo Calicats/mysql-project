@@ -3,20 +3,32 @@ package com.example.sql;
 import java.sql.*;
 
 public class Query {
-    public static boolean validateUser(Connection connection, String tableName, String username, String password, int userType) {
-        String query = "SELECT COUNT(*) FROM " + tableName + " WHERE username = ? AND parola = ? AND idRol = ?";
+    public static String validateUser(Connection connection, String username, String password) {
+        String query = "SELECT id_rol FROM utilizator WHERE BINARY username = ? AND BINARY parola = ?";
 
         try
         {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
-            preparedStatement.setInt(3, userType);
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                int count = resultSet.getInt(1);
-                return count > 0;
+            if (resultSet.next())
+            {
+                int id_rol = resultSet.getInt("id_rol");
+                switch(id_rol)
+                {
+                    case 1:
+                        return "superadministrator";
+                    case 2:
+                        return "administrator";
+                    case 3:
+                        return "profesor";
+                    case 4:
+                        return "student";
+                    default:
+                        return null;
+                }
             }
         }
         catch (Exception e)
@@ -24,7 +36,7 @@ public class Query {
             e.printStackTrace();
         }
 
-        return false;
+        return null;
     }
 
     public static String getInfo(Connection connection, String tableName, String username, String info)
