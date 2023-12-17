@@ -43,7 +43,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TableView fx:id="table" layoutX="36.0" layoutY="84.0" prefHeight="200.0" prefWidth="857.0" />
+            <TableView fx:id="table" layoutX="25.0" layoutY="84.0" prefHeight="200.0" prefWidth="974.0" />
             <ComboBox fx:id="comboBox" layoutX="174.0" layoutY="40.0" onAction="#selectTable" prefWidth="150.0" />
             <Label fx:id="msgControlUsers" layoutX="36.0" layoutY="42.0" prefHeight="22.0" prefWidth="138.0" text="Selecteaza o tabela">
                <font>

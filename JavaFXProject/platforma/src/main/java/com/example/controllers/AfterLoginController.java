@@ -1,20 +1,20 @@
 package com.example.controllers;
 
+import com.example.Administrator;
+import com.example.Profesor;
+import com.example.Student;
+import com.example.User;
 import com.example.platforma.Main;
 import com.example.sql.Connect;
 import com.example.sql.Query;
-import com.example.sql.roles.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.Connection;
-import java.util.ResourceBundle;
 
 public class AfterLoginController{
     @FXML
@@ -142,16 +142,173 @@ public class AfterLoginController{
             }
             else
             {
-                for(String columnName: columns)
+                for (String columnName : columns)
                 {
                     TableColumn<User, String> column = new TableColumn<>(columnName);
+
+                    column.setCellValueFactory(cellData ->
+                            new SimpleStringProperty(getUserPropertyValue(cellData.getValue(), columnName)));
+
+                    column.prefWidthProperty().bind(table.widthProperty().divide(columns.length));
                     table.getColumns().add(column);
                 }
+
+                ObservableList<User> data = FXCollections.observableArrayList();
+                String[][] userInfo = Query.getTableInfo(connection, tableName);
+
+                if(userInfo != null)
+                {
+                    for (String[] row : userInfo)
+                    {
+                        User user = createUserFromRow(row, tableName);
+                        data.add(user);
+                    }
+                }
+
+                table.setItems(data);
             }
         }
         catch(Exception e)
         {
             e.printStackTrace();
+        }
+    }
+
+    private String getUserPropertyValue(User user, String propertyName) {
+        if (user instanceof SuperAdministrator)
+        {
+            switch(propertyName)
+            {
+                case "idSuperAdmin":
+                    return String.valueOf(user.getId());
+                case "nume":
+                    return user.getNume();
+                case "cnp":
+                    return user.getCnp();
+                case "adresa":
+                    return user.getAdresa();
+                case "email":
+                    return user.getEmail();
+                case "nrTelefon":
+                    return user.getNrTelefon();
+                case "parola":
+                    return user.getParola();
+                case "username":
+                    return user.getUsername();
+                case "idRol":
+                    return String.valueOf(user.getIdRol());
+                default:
+                    return "";
+            }
+        }
+        else if(user instanceof Administrator)
+        {
+            switch(propertyName)
+            {
+                case "idAdmin":
+                    return String.valueOf(user.getId());
+                case "nume":
+                    return user.getNume();
+                case "cnp":
+                    return user.getCnp();
+                case "adresa":
+                    return user.getAdresa();
+                case "email":
+                    return user.getEmail();
+                case "nrTelefon":
+                    return user.getNrTelefon();
+                case "parola":
+                    return user.getParola();
+                case "username":
+                    return user.getUsername();
+                case "idRol":
+                    return String.valueOf(user.getIdRol());
+                default:
+                    return "";
+            }
+        }
+        else if(user instanceof Profesor)
+        {
+            switch(propertyName)
+            {
+                case "idProfesor":
+                    return String.valueOf(user.getId());
+                case "nume":
+                    return user.getNume();
+                case "cnp":
+                    return user.getCnp();
+                case "departament":
+                    return ((Profesor) user).getDepartament();
+                case "nrMinOre":
+                    return String.valueOf(((Profesor) user).getNrMinOre());
+                case "nrMaxOre":
+                    return String.valueOf(((Profesor) user).getNrMaxOre());
+                case "adresa":
+                    return user.getAdresa();
+                case "email":
+                    return user.getEmail();
+                case "nrTelefon":
+                    return user.getNrTelefon();
+                case "parola":
+                    return user.getParola();
+                case "username":
+                    return user.getUsername();
+                case "idRol":
+                    return String.valueOf(user.getIdRol());
+                default:
+                    return "";
+            }
+        }
+        else if(user instanceof Student)
+        {
+            switch(propertyName)
+            {
+                case "idStudent":
+                    return String.valueOf(user.getId());
+                case "nume":
+                    return user.getNume();
+                case "cnp":
+                    return user.getCnp();
+                case "anStudiu":
+                    return String.valueOf(((Student) user).getAnStudiu());
+                case "numarOre":
+                    return String.valueOf(((Student) user).getNumarOre());
+                case "adresa":
+                    return user.getAdresa();
+                case "email":
+                    return user.getEmail();
+                case "nrTelefon":
+                    return user.getNrTelefon();
+                case "parola":
+                    return user.getParola();
+                case "username":
+                    return user.getUsername();
+                case "idRol":
+                    return String.valueOf(user.getIdRol());
+                default:
+                    return "";
+            }
+        }
+        return null;
+    }
+
+    private User createUserFromRow(String[] row, String tableName) {
+        switch (tableName) {
+            case "Superadministrator":
+                return new SuperAdministrator(Integer.parseInt(row[0]), row[1], row[2], row[3],
+                        row[4], row[5], row[6], row[7], Integer.parseInt(row[8]));
+            case "Administrator":
+                return new Administrator(Integer.parseInt(row[0]), row[1], row[2], row[3],
+                        row[4], row[5], row[6], row[7], Integer.parseInt(row[8]));
+            case "Profesor":
+                return new Profesor(Integer.parseInt(row[0]), row[1], row[2], row[3],
+                        Integer.parseInt(row[4]), Integer.parseInt(row[5]), row[6], row[7],
+                        row[8], row[9], row[10], Integer.parseInt(row[11]));
+            case "Student":
+                return new Student(Integer.parseInt(row[0]), row[1], row[2], Integer.parseInt(row[3]), Integer.parseInt(row[4]),
+                        row[5], row[6], row[7], row[8], row[9],Integer.parseInt(row[10]));
+            default:
+                return null;
         }
     }
 }

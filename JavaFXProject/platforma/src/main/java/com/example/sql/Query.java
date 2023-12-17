@@ -1,6 +1,7 @@
 package com.example.sql;
 
 import java.sql.*;
+import java.util.*;
 
 public class Query {
     public static String validateUser(Connection connection, String username, String password) {
@@ -75,14 +76,52 @@ public class Query {
             resultSet.beforeFirst();
 
             String[] columnNames = new String[columnCount];
-            int i = 0;
 
+            int i = 0;
             while (resultSet.next()) {
                 columnNames[i++] = resultSet.getString("COLUMN_NAME");
             }
 
             return columnNames;
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static String[][] getTableInfo(Connection connection, String tableName)
+    {
+        String query = "SELECT * FROM " + tableName;
+
+        try
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            List<String[]> rows = new ArrayList<>();
+
+            while (resultSet.next())
+            {
+                String[] rowData = new String[columnCount];
+
+                for(int i = 0; i < columnCount; i++)
+                {
+                    rowData[i] = resultSet.getString(i + 1);
+                }
+
+                rows.add(rowData);
+            }
+
+            String[][] result = new String[rows.size()][];
+            rows.toArray(result);
+
+            return result;
+        }
+        catch(Exception e)
+        {
             e.printStackTrace();
         }
 

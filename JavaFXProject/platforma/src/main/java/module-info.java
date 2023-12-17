@@ -13,4 +13,6 @@ module com.example.platforma {
     exports com.example.platforma;
     exports com.example.controllers;
     opens com.example.controllers to javafx.fxml;
+    exports com.example;
+    opens com.example to javafx.fxml;
 }

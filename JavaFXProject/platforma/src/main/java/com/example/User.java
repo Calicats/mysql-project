@@ -1,4 +1,4 @@
-package com.example.sql.roles;
+package com.example;
 
 public class User {
     private int id;
@@ -7,16 +7,20 @@ public class User {
     private String adresa;
     private String email;
     private String nrTelefon;
+    private String username;
     private String parola;
+    private int idRol;
 
-    public User(int id, String nume, String cnp, String adresa, String email, String nrTelefon, String parola) {
+    public User(int id, String nume, String cnp, String adresa, String email, String nrTelefon, String username, String parola, int idRol) {
         this.id = id;
         this.nume = nume;
         this.cnp = cnp;
         this.adresa = adresa;
         this.email = email;
         this.nrTelefon = nrTelefon;
+        this.username = username;
         this.parola = parola;
+        this.idRol = idRol;
     }
 
     public int getId() {
@@ -66,12 +70,25 @@ public class User {
     public void setNrTelefon(String nrTelefon) {
         this.nrTelefon = nrTelefon;
     }
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
     public String getParola() {
         return parola;
     }
 
     public void setParola(String parola) {
         this.parola = parola;
+    }
+    public int getIdRol() {
+        return idRol;
+    }
+
+    public void setIdRol(int idRol) {
+        this.idRol = idRol;
     }
 }

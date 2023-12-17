@@ -1,12 +1,12 @@
-package com.example.sql.roles;
+package com.example;
 
-public class Profesor extends User{
+public class Profesor extends User {
     private String departament;
     private int nrMinOre;
     private int nrMaxOre;
 
-    public Profesor(int idProfesor, String nume, String cnp, String departament, int nrMinOre, int nrMaxOre, String adresa, String email, String nrTelefon, String parola) {
-        super(idProfesor, nume, cnp, adresa, email, nrTelefon, parola);
+    public Profesor(int idProfesor, String nume, String cnp, String departament, int nrMinOre, int nrMaxOre, String adresa, String email, String nrTelefon, String username, String parola, int idRol) {
+        super(idProfesor, nume, cnp, adresa, email, nrTelefon, username, parola, idRol);
         this.departament = departament;
         this.nrMinOre = nrMinOre;
         this.nrMaxOre = nrMaxOre;
