@@ -108,6 +108,15 @@ INSERT INTO Rol(numeRol) VALUES
 ('Profesor'),
 ('Student');
 
+CREATE TABLE IF NOT EXISTS Utilizator(
+    idUtilizator int unique auto_increment primary key,
+    username char(255) unique,
+    parola char(255),
+    id_rol int,
+    
+    foreign key(id_rol) references Rol(idRol)
+);
+
 ALTER TABLE SuperAdministrator ADD COLUMN idRol int, ADD FOREIGN KEY(idRol) REFERENCES Rol(idRol);
 ALTER TABLE Administrator ADD COLUMN idRol int, ADD FOREIGN KEY(idRol) REFERENCES Rol(idRol);
 ALTER TABLE Profesor ADD COLUMN idRol int, ADD FOREIGN KEY(idRol) REFERENCES Rol(idRol);
@@ -151,7 +160,7 @@ GRANT ALL PRIVILEGES ON db_platforma.GrupStudiu TO 'Admin'@'%';
 #drepturi superadmin
 GRANT ALL PRIVILEGES ON db_platforma.* TO 'SuperAdmin'@'%';
 
-#procedura pentru adaugarea unui super admin
+# procedura pentru adaugarea unui super admin
 DELIMITER //
 CREATE PROCEDURE AddNewSuperAdministrator(
     IN cnp_param CHAR(20),
@@ -164,7 +173,7 @@ CREATE PROCEDURE AddNewSuperAdministrator(
 )
 BEGIN
     INSERT INTO SuperAdministrator(cnp, nume, adresa, nrTelefon, email, parola, idRol, username)
-    VALUES(cnp_param, nume_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'SuperAdmin'), username_param);
+    VALUES(cnp_param, nume_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'SuperAdmin'), username_param);
 END //
 DELIMITER ;
 
@@ -181,7 +190,7 @@ CREATE PROCEDURE AddNewAdministrator(
 )
 BEGIN
     INSERT INTO Administrator(cnp, nume, adresa, nrTelefon, email, parola, idRol, username)
-    VALUES(cnp_param, nume_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'Admin'), username_param);
+    VALUES(cnp_param, nume_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Admin'), username_param);
 END //
 DELIMITER ;
 
@@ -201,7 +210,7 @@ CREATE PROCEDURE AddNewProfessor(
 )
 BEGIN
     INSERT INTO Profesor(cnp, nume, departament, nrMinOre, nrMaxOre, adresa, nrTelefon, email, parola, idRol, username)
-    VALUES(cnp_param, nume_param, departament_param, nrMinOre_param, nrMaxOre_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'Profesor'), username_param);
+    VALUES(cnp_param, nume_param, departament_param, nrMinOre_param, nrMaxOre_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Profesor'), username_param);
 END //
 DELIMITER ;
 
@@ -220,8 +229,43 @@ CREATE PROCEDURE AddNewStudent(
 )
 BEGIN
     INSERT INTO Student(cnp, nume, anStudiu, numarOre, adresa, nrTelefon, email, parola, idRol, username)
-    VALUES(cnp_param, nume_param, anStudiu_param, numarOre_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'Student'), username_param);
+    VALUES(cnp_param, nume_param, anStudiu_param, numarOre_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Student'), username_param);
 END //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER InsertSuperAdmin
+AFTER INSERT ON SuperAdministrator
+FOR EACH ROW
+BEGIN
+    INSERT INTO Utilizator(username, parola, id_rol)
+    VALUES (NEW.username, NEW.parola, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'SuperAdmin'));
+END;
+//
+CREATE TRIGGER InsertAdmin
+AFTER INSERT ON Administrator
+FOR EACH ROW
+BEGIN
+    INSERT INTO Utilizator(username, parola, id_rol)
+    VALUES (NEW.username, NEW.parola, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Admin'));
+END;
+//
+CREATE TRIGGER InsertProfesor
+AFTER INSERT ON Profesor
+FOR EACH ROW
+BEGIN
+    INSERT INTO Utilizator(username, parola, id_rol)
+    VALUES (NEW.username, NEW.parola, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Profesor'));
+END;
+//
+CREATE TRIGGER InsertStudent
+AFTER INSERT ON Student
+FOR EACH ROW
+BEGIN
+    INSERT INTO Utilizator(username, parola, id_rol)
+    VALUES (NEW.username, NEW.parola, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Student'));
+END;
+//
 DELIMITER ;
 
 call addNewSuperAdministrator("0000000000000", "Vlad Durdeu", "Str Principala nr 1", "0755333444", "johnsmith0@random.org", "Calicats", "Vlad");
@@ -230,4 +274,9 @@ call addNewSuperAdministrator("2222222222222", "Lion Moroz", "Str Principala nr 
 
 ALTER TABLE SuperAdministrator AUTO_INCREMENT = 1;
 DELETE FROM SuperAdministrator;
+ALTER TABLE Utilizator AUTO_INCREMENT = 1;
+DELETE FROM Utilizator;
+
 SELECT * FROM SuperAdministrator;
+SELECT * FROM Student;
+SELECT * FROM Utilizator;
