@@ -23,9 +23,9 @@ public class Main extends Application {
         stage.show();
     }
 
-    public void changeScene(String fxml, String username, String tableName) throws IOException {
+    public void changeScene(String fxml, String username, String tableName, int xRow, int yRow) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Scene scene = new Scene(fxmlLoader.load(), xRow, yRow);
         currentStage.setScene(scene);
 
         if(fxml.equals("dupaLogare.fxml") && username != null && tableName != null)

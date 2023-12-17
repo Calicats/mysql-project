@@ -55,7 +55,7 @@ public class LoginController {
                     {
                         System.out.println(usernameString + " has logged in!");
                         loginMessage.setText("Logare cu succes!");
-                        main.changeScene("dupaLogare.fxml", usernameString, tableName);
+                        main.changeScene("dupaLogare.fxml", usernameString, tableName, 1024, 768);
                         found = true;
                         break;
                     }
