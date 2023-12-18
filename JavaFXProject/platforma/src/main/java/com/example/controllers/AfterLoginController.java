@@ -150,10 +150,14 @@ public class AfterLoginController{
                     table.getColumns().add(column);
                 }
 
-                ObservableList<User> data = FXCollections.observableArrayList();
+                ObservableList<User> list = FXCollections.observableArrayList();
                 String[][] userInfo = Query.getTableInfo(connection, tableName);
 
-                if(userInfo != null)
+                if(userInfo == null)
+                {
+                    System.out.println("null");
+                }
+                else
                 {
                     for (String[] row : userInfo)
                     {
@@ -162,12 +166,12 @@ public class AfterLoginController{
                             System.out.print(value + "\t");
                         }
                         System.out.println();
-                        User user = createUserFromRow(row, tableName);
-                        data.add(user);
+                        User user = rowToUserInfo(row, tableName);
+                        list.add(user);
                     }
                 }
 
-                table.setItems(data);
+                table.setItems(list);
             }
         }
         catch(Exception e)
@@ -177,7 +181,7 @@ public class AfterLoginController{
     }
 
     private String getUserPropertyValue(User user, String propertyName) {
-        if (user instanceof SuperAdministrator)
+        if(user instanceof SuperAdministrator)
         {
             switch(propertyName)
             {
@@ -294,7 +298,7 @@ public class AfterLoginController{
         return null;
     }
 
-    private User createUserFromRow(String[] row, String tableName) {
+    private User rowToUserInfo(String[] row, String tableName) {
         switch (tableName) {
             case "Superadministrator":
                 return new SuperAdministrator(Integer.parseInt(row[0]), row[1], row[2], row[3],
