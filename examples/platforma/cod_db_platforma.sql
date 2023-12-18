@@ -268,6 +268,37 @@ END;
 //
 DELIMITER ;
 
+DELIMITER //
+CREATE TRIGGER DeleteSuperAdmin
+AFTER DELETE ON SuperAdministrator
+FOR EACH ROW
+BEGIN
+    DELETE FROM Utilizator WHERE username = OLD.username;
+END;
+//
+CREATE TRIGGER DeleteAdmin
+AFTER DELETE ON Administrator
+FOR EACH ROW
+BEGIN
+    DELETE FROM Utilizator WHERE username = OLD.username;
+END;
+//
+CREATE TRIGGER DeleteProfesor
+AFTER DELETE ON Profesor
+FOR EACH ROW
+BEGIN
+    DELETE FROM Utilizator WHERE username = OLD.username;
+END;
+//
+CREATE TRIGGER DeleteStudent
+AFTER DELETE ON Student
+FOR EACH ROW
+BEGIN
+    DELETE FROM Utilizator WHERE username = OLD.username;
+END;
+//
+DELIMITER ;
+
 call addNewSuperAdministrator("0000000000000", "Vlad Durdeu", "Str Principala nr 1", "0755333444", "johnsmith0@random.org", "Calicats", "Vlad");
 call addNewSuperAdministrator( "1111111111111", "Alex Stancu", "Str Principala nr 2", "0755333445", "johnsmith1@random.org", "Calicats", "Stancu");
 call addNewSuperAdministrator("2222222222222", "Lion Moroz", "Str Principala nr 3", "0755333446", "johnsmith2@random.org", "Calicats", "Lion");
