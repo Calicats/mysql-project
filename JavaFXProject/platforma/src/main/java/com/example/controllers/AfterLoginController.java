@@ -19,6 +19,16 @@ public class AfterLoginController{
     @FXML
     private Button personalDataButton;
     @FXML
+    private Button refreshButton;
+    @FXML
+    private Button findUsernameButton;
+    @FXML
+    private TextField findUsernameField;
+    @FXML
+    private Label foundUser;
+    @FXML
+    private Label msgFindUser;
+    @FXML
     private Label greetUser;
     @FXML
     private Label nume;
@@ -31,7 +41,7 @@ public class AfterLoginController{
     @FXML
     private Label nrTelefon;
     @FXML
-    private Label msgControlUsers;
+    private Label msgSelectTable;
     @FXML
     private TableView<User> table;
     @FXML
@@ -48,10 +58,15 @@ public class AfterLoginController{
 
         table.setVisible(false);
         comboBox.setVisible(false);
-        msgControlUsers.setVisible(false);
+        msgSelectTable.setVisible(false);
+        findUsernameButton.setVisible(false);
+        findUsernameField.setVisible(false);
+        msgFindUser.setVisible(false);
+        foundUser.setVisible(false);
+        refreshButton.setVisible(false);
     }
 
-    public void userLogout() throws IOException{
+    public void onUserLogout() throws IOException{
         Main main = new Main();
         System.out.println("Bye, " + username);
 
@@ -63,15 +78,15 @@ public class AfterLoginController{
         main.changeScene("logare.fxml", username, tableName, 600, 400);
     }
 
-    public void showPersonalData() {
+    public void onShowPersonalData() {
         try
         {
             Connection connection = Connect.getConnection();
-            String numeString = Query.getInfo(connection, tableName, username, "nume");
-            String cnpString= Query.getInfo(connection, tableName, username, "CNP");
-            String adresaString = Query.getInfo(connection, tableName, username, "adresa");
-            String emailString = Query.getInfo(connection, tableName, username, "email");
-            String nrTelefonString = Query.getInfo(connection, tableName, username, "nrTelefon");
+            String numeString = Query.getSingleInfo(connection, tableName, username, "nume");
+            String cnpString= Query.getSingleInfo(connection, tableName, username, "CNP");
+            String adresaString = Query.getSingleInfo(connection, tableName, username, "adresa");
+            String emailString = Query.getSingleInfo(connection, tableName, username, "email");
+            String nrTelefonString = Query.getSingleInfo(connection, tableName, username, "nrTelefon");
 
             greetUser.setVisible(true);
             nume.setVisible(true);
@@ -80,6 +95,12 @@ public class AfterLoginController{
             email.setVisible(true);
             nrTelefon.setVisible(true);
 
+            findUsernameButton.setVisible(false);
+            refreshButton.setVisible(false);
+            findUsernameField.setVisible(false);
+            msgFindUser.setVisible(false);
+            foundUser.setVisible(false);
+
             table.setVisible(false);
             table.getItems().clear();
             table.getColumns().clear();
@@ -87,7 +108,7 @@ public class AfterLoginController{
             comboBox.setVisible(false);
             comboBox.getItems().clear();
 
-            msgControlUsers.setVisible(false);
+            msgSelectTable.setVisible(false);
 
             greetUser.setText("Bine ai venit, " + this.username + "!");
             nume.setText("Nume: " + numeString);
@@ -102,7 +123,7 @@ public class AfterLoginController{
         }
     }
 
-    public void controlUsers() {
+    public void onControlUsers() {
         greetUser.setVisible(false);
         nume.setVisible(false);
         cnp.setVisible(false);
@@ -110,18 +131,26 @@ public class AfterLoginController{
         email.setVisible(false);
         nrTelefon.setVisible(false);
 
+        findUsernameButton.setVisible(true);
+        refreshButton.setVisible(true);
+        findUsernameField.setVisible(true);
+        msgFindUser.setVisible(true);
+        foundUser.setVisible(true);
+
         table.setVisible(true);
 
         comboBox.setVisible(true);
         ObservableList<String> list = FXCollections.observableArrayList("Superadministrator", "Administrator", "Profesor", "Student");
         comboBox.setItems(list);
 
-        msgControlUsers.setVisible(true);
+        msgSelectTable.setVisible(true);
     }
 
-    public void selectTable(){
+    public void onSelectTable() {
         table.getItems().clear();
         table.getColumns().clear();
+        findUsernameField.clear();
+        foundUser.setText("");
 
         String tableName = comboBox.getValue();
         if(tableName == null)
@@ -139,44 +168,107 @@ public class AfterLoginController{
             }
             else
             {
-                for(String columnName : columns)
-                {
-                    TableColumn<User, String> column = new TableColumn<>(columnName);
-
-                    column.setCellValueFactory(cellData ->
-                            new SimpleStringProperty(getUserPropertyValue(cellData.getValue(), columnName)));
-
-                    column.setMinWidth(200);
-                    table.getColumns().add(column);
-                }
-
-                ObservableList<User> list = FXCollections.observableArrayList();
-                String[][] userInfo = Query.getTableInfo(connection, tableName);
-
-                if(userInfo == null)
-                {
-                    System.out.println("null");
-                }
-                else
-                {
-                    for (String[] row : userInfo)
-                    {
-                        for(String value : row)
-                        {
-                            System.out.print(value + "\t");
-                        }
-                        System.out.println();
-                        User user = rowToUserInfo(row, tableName);
-                        list.add(user);
-                    }
-                }
-
-                table.setItems(list);
+                generateTable(columns);
+                populateTable(connection, tableName);
             }
         }
         catch(Exception e)
         {
             e.printStackTrace();
+        }
+    }
+
+    public void onSearchUsername()
+    {
+        String tableName = comboBox.getValue();
+
+        table.getItems().clear();
+        table.getColumns().clear();
+
+        if(tableName == null)
+        {
+            foundUser.setText("Selecteaza o tabela!");
+            return;
+        }
+
+        try
+        {
+            Connection connection = Connect.getConnection();
+            String findUsernameString = findUsernameField.getText();
+            if(findUsernameString.isEmpty())
+            {
+                foundUser.setText("Introdu un utilizator!");
+                return;
+            }
+
+            String[] userInfo = Query.getAllInfoOnUser(connection, tableName, findUsernameString);
+            String[] columns = Query.getColumnNames(connection, tableName);
+            if(userInfo == null || columns == null)
+            {
+                foundUser.setText("Utilizatorul nu exista!");
+                System.out.println("null");
+                return;
+            }
+
+            ObservableList<User> list = FXCollections.observableArrayList();
+            for(String value: userInfo)
+            {
+                System.out.print(value + "\t");
+            }
+            System.out.println();
+            foundUser.setText("");
+
+            generateTable(columns);
+            list.add(rowToUserInfo(userInfo, tableName));
+            table.setItems(list);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void onRefresh()
+    {
+        table.getItems().clear();
+        table.getColumns().clear();
+        findUsernameField.clear();
+        foundUser.setText("");
+        comboBox.getSelectionModel().clearSelection();
+    }
+
+    private void populateTable(Connection connection, String tableName) {
+        ObservableList<User> list = FXCollections.observableArrayList();
+        String[][] userInfo = Query.getTableInfo(connection, tableName);
+
+        if(userInfo == null)
+        {
+            System.out.println("null");
+        }
+        else
+        {
+            for (String[] row : userInfo)
+            {
+                for(String value : row)
+                {
+                    System.out.print(value + "\t");
+                }
+                System.out.println();
+                User user = rowToUserInfo(row, tableName);
+                list.add(user);
+            }
+            table.setItems(list);
+        }
+    }
+
+    private void generateTable(String[] columns) {
+        for (String columnName : columns) {
+            TableColumn<User, String> column = new TableColumn<>(columnName);
+
+            column.setCellValueFactory(cellData ->
+                    new SimpleStringProperty(getUserPropertyValue(cellData.getValue(), columnName)));
+
+            table.getColumns().add(column);
         }
     }
 

@@ -40,7 +40,7 @@ public class Query {
         return null;
     }
 
-    public static String getInfo(Connection connection, String tableName, String username, String info)
+    public static String getSingleInfo(Connection connection, String tableName, String username, String info)
     {
         String query = "SELECT " + info + " FROM " + tableName + " WHERE username = ?";
 
@@ -63,6 +63,35 @@ public class Query {
         return null;
     }
 
+    public static String[] getAllInfoOnUser(Connection connection, String tableName, String username)
+    {
+        String query = getQueryForAllInfoOnUser(tableName);
+        try
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            int columnCount = resultSetMetaData.getColumnCount();
+
+            if(resultSet.next())
+            {
+                String[] userInfo = new String[columnCount];
+                for(int i = 1; i <= columnCount; ++i)
+                {
+                    userInfo[i - 1] = resultSet.getString(i);
+                }
+                return userInfo;
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String[] getColumnNames(Connection connection, String tableName) {
         try {
             DatabaseMetaData metaData = connection.getMetaData();
@@ -70,7 +99,11 @@ public class Query {
 
             int columnCount = 0;
             while (resultSet.next()) {
-                columnCount++;
+                String columnName = resultSet.getString("COLUMN_NAME");
+                if(!columnName.contains("id"))
+                {
+                    ++columnCount;
+                }
             }
 
             resultSet.beforeFirst();
@@ -79,7 +112,11 @@ public class Query {
 
             int i = 0;
             while (resultSet.next()) {
-                columnNames[i++] = resultSet.getString("COLUMN_NAME");
+                String columnName = resultSet.getString("COLUMN_NAME");
+                if(!columnName.contains("id"))
+                {
+                    columnNames[i++] = columnName;
+                }
             }
 
             return columnNames;
@@ -92,7 +129,7 @@ public class Query {
 
     public static String[][] getTableInfo(Connection connection, String tableName)
     {
-        String query = "SELECT * FROM " + tableName;
+        String query = getQueryForTableInfo(tableName);
 
         try
         {
@@ -127,4 +164,48 @@ public class Query {
 
         return null;
     }
+
+    private static String getQueryForTableInfo(String tableName) {
+        String query = null;
+        if(tableName.equals("Superadministrator"))
+        {
+            query = "SELECT * FROM superadministrator";
+        }
+        else if(tableName.equals("Administrator"))
+        {
+            query = "SELECT * FROM administrator";
+        }
+        else if(tableName.equals("Profesor"))
+        {
+            query = "SELECT * FROM profesor";
+        }
+        else if(tableName.equals("Student"))
+        {
+            query = "SELECT * FROM student";
+        }
+        return query;
+    }
+
+    private static String getQueryForAllInfoOnUser(String tableName)
+    {
+        String query = null;
+        if(tableName.equals("Superadministrator"))
+        {
+            query = "SELECT * FROM superadministrator WHERE username = ?";
+        }
+        else if(tableName.equals("Administrator"))
+        {
+            query = "SELECT * FROM administrator WHERE username = ?";
+        }
+        else if(tableName.equals("Profesor"))
+        {
+            query = "SELECT * FROM profesor WHERE username = ?";
+        }
+        else if(tableName.equals("Student"))
+        {
+            query = "SELECT * FROM student WHERE username = ?";
+        }
+        return query;
+    }
+
 }
