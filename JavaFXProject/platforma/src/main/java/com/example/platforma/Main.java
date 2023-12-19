@@ -1,6 +1,7 @@
 package com.example.platforma;
 
 import com.example.controllers.AfterLoginController;
+import com.example.controllers.ManageUsersController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,11 +29,20 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load(), xRow, yRow);
         currentStage.setScene(scene);
 
-        if(fxml.equals("dupaLogare.fxml") && username != null && tableName != null)
+        if(username != null && tableName != null)
         {
-            currentStage.setTitle("Platforma scolara");
-            AfterLoginController controller = fxmlLoader.getController();
-            controller.initUser(username, tableName);
+            if(fxml.equals("dupaLogare.fxml"))
+            {
+                currentStage.setTitle("Platforma scolara");
+                AfterLoginController controller = fxmlLoader.getController();
+                controller.initUser(username, tableName);
+            }
+            else if(fxml.equals("gestionareUtilizatori.fxml"))
+            {
+                currentStage.setTitle("Gestionare utilizatori");
+                ManageUsersController controller = fxmlLoader.getController();
+                controller.initUser(username, tableName);
+            }
         }
     }
 

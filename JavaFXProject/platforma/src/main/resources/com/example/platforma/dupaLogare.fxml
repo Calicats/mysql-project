@@ -75,12 +75,17 @@
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="controlPanelButton" mnemonicParsing="false" onAction="#onControlUsers" prefHeight="108.0" prefWidth="159.0" style="-fx-background-color: transparent;" text="Cautare utilizatori" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="controlPanelButton" mnemonicParsing="false" onAction="#onFindUsers" prefHeight="100.0" prefWidth="194.0" style="-fx-background-color: transparent;" text="Cautare utilizatori" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#onUserLogout" prefHeight="100.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="Delogare" textFill="WHITE">
+            <Button fx:id="manageUsersButton" mnemonicParsing="false" onAction="#onManageUsers" prefHeight="100.0" prefWidth="194.0" style="-fx-background-color: transparent;" text="Gestionare utilizatori" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#onUserLogout" prefHeight="100.0" prefWidth="194.0" style="-fx-background-color: transparent;" text="Delogare" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>

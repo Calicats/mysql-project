@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controllers.ManageUsersController">
+   <top>
+      <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #6F2282;" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackButton" prefHeight="104.0" prefWidth="146.0" style="-fx-background-color: transparent;" text="Inapoi" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <AnchorPane prefHeight="668.0" prefWidth="1042.0" BorderPane.alignment="CENTER">
+         <children>
+            <ComboBox fx:id="selectTableComboBox" layoutX="167.0" layoutY="59.0" onAction="#onSelectTable" prefWidth="150.0" />
+            <ComboBox fx:id="selectOperationComboBox" layoutX="167.0" layoutY="93.0" onAction="#onSelectOperation" prefWidth="150.0" />
+            <Label layoutX="24.0" layoutY="61.0" text="Selecteaza o tabela">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="95.0" text="Selecteaza operatia">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="145.0" text="Nume">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="180.0" text="CNP">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="215.0" text="Adresa">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="250.0" text="Email">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="285.0" text="Numar telefon">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="320.0" text="Username">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="355.0" text="Parola">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="nameField" layoutX="123.0" layoutY="143.0" promptText="Nume" />
+            <TextField fx:id="cnpField" layoutX="123.0" layoutY="178.0" promptText="CNP" />
+            <TextField fx:id="adresaField" layoutX="123.0" layoutY="213.0" promptText="Adresa" />
+            <TextField fx:id="emailField" layoutX="123.0" layoutY="248.0" promptText="Email" />
+            <TextField fx:id="nrTelefonField" layoutX="123.0" layoutY="283.0" promptText="Numar telefon" />
+            <TextField fx:id="usernameField" layoutX="124.0" layoutY="318.0" promptText="Username" />
+            <PasswordField fx:id="parolaField" layoutX="124.0" layoutY="353.0" promptText="Parola" />
+            <Button fx:id="operationButton" layoutX="291.0" layoutY="353.0" mnemonicParsing="false" onAction="#onOperationButton" text="Adauga" />
+            <Label fx:id="additionalLabel1" layoutX="390.0" layoutY="145.0">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="additionalLabel2" layoutX="390.0" layoutY="180.0">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="additionalLabel3" layoutX="390.0" layoutY="215.0">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="additionalField1" layoutX="576.0" layoutY="143.0" />
+            <TextField fx:id="additionalField2" layoutX="576.0" layoutY="178.0" />
+            <TextField fx:id="additionalField3" layoutX="576.0" layoutY="213.0" />
+            <Label fx:id="errorHandling" layoutX="124.0" layoutY="388.0" textFill="RED" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

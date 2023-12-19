@@ -19,6 +19,8 @@ public class AfterLoginController{
     @FXML
     private Button personalDataButton;
     @FXML
+    private Button manageUsersButton;
+    @FXML
     private Button refreshButton;
     @FXML
     private Button findUsernameButton;
@@ -78,6 +80,12 @@ public class AfterLoginController{
         main.changeScene("logare.fxml", username, tableName, 600, 400);
     }
 
+    public void onManageUsers() throws IOException
+    {
+        Main main = new Main();
+        main.changeScene("gestionareUtilizatori.fxml", username, tableName, 1024, 768);
+    }
+
     public void onShowPersonalData() {
         try
         {
@@ -123,7 +131,7 @@ public class AfterLoginController{
         }
     }
 
-    public void onControlUsers() {
+    public void onFindUsers() {
         greetUser.setVisible(false);
         nume.setVisible(false);
         cnp.setVisible(false);
