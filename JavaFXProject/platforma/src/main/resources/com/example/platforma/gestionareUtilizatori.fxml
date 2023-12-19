@@ -79,7 +79,7 @@
             <TextField fx:id="nrTelefonField" layoutX="123.0" layoutY="283.0" promptText="Numar telefon" />
             <TextField fx:id="usernameField" layoutX="124.0" layoutY="318.0" promptText="Username" />
             <PasswordField fx:id="parolaField" layoutX="124.0" layoutY="353.0" promptText="Parola" />
-            <Button fx:id="operationButton" layoutX="291.0" layoutY="353.0" mnemonicParsing="false" onAction="#onOperationButton" text="Adauga" />
+            <Button fx:id="operationButton" layoutX="291.0" layoutY="353.0" mnemonicParsing="false" onAction="#onOperationButton" text="Selecteaza o operatie" />
             <Label fx:id="additionalLabel1" layoutX="390.0" layoutY="145.0">
                <font>
                   <Font size="15.0" />
@@ -98,7 +98,11 @@
             <TextField fx:id="additionalField1" layoutX="576.0" layoutY="143.0" />
             <TextField fx:id="additionalField2" layoutX="576.0" layoutY="178.0" />
             <TextField fx:id="additionalField3" layoutX="576.0" layoutY="213.0" />
-            <Label fx:id="errorHandling" layoutX="124.0" layoutY="388.0" textFill="RED" />
+            <Label fx:id="errorHandling" layoutX="124.0" layoutY="388.0" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </center>
