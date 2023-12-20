@@ -208,4 +208,30 @@ public class Query {
         return query;
     }
 
+    public static int getId(Connection connection, String tableName, String username) throws Exception
+    {
+        String id = switch (tableName) {
+            case "superadministrator" -> "idSuperAdmin";
+            case "administrator" -> "idAdmin";
+            case "profesor" -> "idProfesor";
+            case "student" -> "idStudent";
+            default -> null;
+        };
+        if(id == null)
+        {
+            throw new IllegalAccessException("Nu s-a gasit tabela!");
+        }
+
+        String query = "SELECT " + id + " FROM " + tableName + " WHERE username = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, username);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if(resultSet.next())
+        {
+            return resultSet.getInt(id);
+        }
+
+        return 0;
+    }
 }
