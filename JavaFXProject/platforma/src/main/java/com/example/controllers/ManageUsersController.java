@@ -95,13 +95,15 @@ public class ManageUsersController {
         clearAllFields();
     }
 
-    public void onOperationButton() {
+    public void onOperationButton()
+    {
         String tableName = selectTableComboBox.getValue();
         String operationName = selectOperationComboBox.getValue();
         errorHandling.setTextFill(Color.RED);
         errorHandling.setText("");
 
-        if (tableName == null) {
+        if (tableName == null)
+        {
             errorHandling.setText("Selecteaza o tabela!");
             return;
         }
@@ -123,24 +125,31 @@ public class ManageUsersController {
 
         switch (tableName) {
             case "Superadministrator" -> {
-                if (oneIsEmpty(numeString, cnpString, adresaString, emailString, nrTelefonString, usernameString, parolaString)) {
+                if (oneIsEmpty(numeString, cnpString, adresaString, emailString, nrTelefonString, usernameString, parolaString))
+                {
                     errorHandling.setText("Introdu date in toate campurile!");
                     return;
                 }
-                if (operationName == null) {
+                if (operationName == null)
+                {
                     errorHandling.setText("Selecteaza o operatie!");
                     return;
                 }
                 if (operationName.equals("Adauga")) {
                     System.out.println("Se va adauga un superadmin!");
                     boolean ex = false;
-                    try {
+
+                    try
+                    {
                         Insert.addSuperAdmin(connection, cnpString, numeString, adresaString, nrTelefonString, emailString, usernameString, parolaString);
-                    } catch (Exception e) {
+                    }
+                    catch(Exception e)
+                    {
                         errorHandling.setText(e.getMessage());
                         ex = true;
                         e.printStackTrace();
                     }
+
                     if(!ex)
                     {
                         errorHandling.setTextFill(Color.rgb(0, 255, 0));
@@ -149,18 +158,24 @@ public class ManageUsersController {
                     clearAllFields();
                 }
             }
+
             case "Administrator" -> {
-                if (oneIsEmpty(numeString, cnpString, adresaString, emailString, nrTelefonString, usernameString, parolaString)) {
+                if (oneIsEmpty(numeString, cnpString, adresaString, emailString, nrTelefonString, usernameString, parolaString))
+                {
                     errorHandling.setText("Introdu date in toate campurile!");
                     return;
                 }
-                if (operationName == null) {
+
+                if (operationName == null)
+                {
                     errorHandling.setText("Selecteaza o operatie!");
                     return;
                 }
+
                 if (operationName.equals("Adauga")) {
                     System.out.println("Se va adauga un admin!");
                     boolean ex = false;
+
                     try
                     {
                         Insert.addAdmin(connection, cnpString, numeString, adresaString, nrTelefonString, emailString, usernameString, parolaString);
@@ -171,6 +186,7 @@ public class ManageUsersController {
                         ex = true;
                         e.printStackTrace();
                     }
+
                     if(!ex)
                     {
                         errorHandling.setTextFill(Color.rgb(0, 255, 0));
@@ -179,30 +195,41 @@ public class ManageUsersController {
                     clearAllFields();
                 }
             }
+
             case "Profesor" -> {
                 String departamentString = additionalField1.getText();
                 String nrMinOreString = additionalField2.getText();
                 String nrMaxOreString = additionalField3.getText();
-                if (departamentString.isEmpty() || nrMinOreString.isEmpty() || nrMaxOreString.isEmpty()) {
+
+                if (departamentString.isEmpty() || nrMinOreString.isEmpty() || nrMaxOreString.isEmpty())
+                {
                     errorHandling.setText("Introdu date in toate campurile!");
                     return;
                 }
+
                 int nrMinOre = Integer.parseInt(nrMinOreString);
                 int nrMaxOre = Integer.parseInt(nrMaxOreString);
+
                 if (operationName == null) {
                     errorHandling.setText("Selecteaza o operatie!");
                     return;
                 }
+
                 if (operationName.equals("Adauga")) {
                     System.out.println("Se va adauga un profesor");
                     boolean ex = false;
-                    try {
+
+                    try
+                    {
                         Insert.addProfessor(connection, cnpString, numeString, departamentString, nrMinOre, nrMaxOre, adresaString, nrTelefonString, emailString, usernameString, parolaString);
-                    } catch (Exception e) {
+                    }
+                    catch(Exception e)
+                    {
                         errorHandling.setText(e.getMessage());
                         ex = true;
                         e.printStackTrace();
                     }
+
                     if(!ex)
                     {
                         errorHandling.setTextFill(Color.rgb(0, 255, 0));
@@ -211,29 +238,42 @@ public class ManageUsersController {
                     clearAllFields();
                 }
             }
+
             case "Student" -> {
                 String anStudiuString = additionalField1.getText();
                 String numarOreString = additionalField2.getText();
-                if (anStudiuString.isEmpty() || numarOreString.isEmpty()) {
+
+                if (anStudiuString.isEmpty() || numarOreString.isEmpty())
+                {
                     errorHandling.setText("Introdu date in toate campurile!");
                     return;
                 }
+
                 int anStudiu = Integer.parseInt(anStudiuString);
                 int numarOre = Integer.parseInt(numarOreString);
-                if (operationName == null) {
+
+                if (operationName == null)
+                {
                     errorHandling.setText("Selecteaza o operatie!");
                     return;
                 }
-                if (operationName.equals("Adauga")) {
+
+                if (operationName.equals("Adauga"))
+                {
                     System.out.println("Se va adauga un student");
                     boolean ex = false;
-                    try {
+
+                    try
+                    {
                         Insert.addStudent(connection, cnpString, numeString, anStudiu, numarOre, adresaString, nrTelefonString, emailString, usernameString, parolaString);
-                    } catch (Exception e) {
+                    }
+                    catch(Exception e)
+                    {
                         errorHandling.setText(e.getMessage());
                         ex = true;
                         e.printStackTrace();
                     }
+
                     if(!ex)
                     {
                         errorHandling.setTextFill(Color.rgb(0, 255, 0));
@@ -245,12 +285,12 @@ public class ManageUsersController {
         }
     }
 
-
     public void onSelectTable()
     {
         String tableName = selectTableComboBox.getValue();
         errorHandling.setText("");
         clearAllFields();
+
         if(tableName.equals("Profesor"))
         {
             additionalField1.setVisible(true);
@@ -266,15 +306,15 @@ public class ManageUsersController {
             additionalLabel2.setText("Numar minim ore");
 
             additionalField3.setVisible(true);
-            additionalField3.setPromptText("Numar minim ore");
+            additionalField3.setPromptText("Numar maxim ore");
             additionalField3.setText("");
             additionalLabel3.setVisible(true);
-            additionalLabel3.setText("Numar minim ore");
+            additionalLabel3.setText("Numar maxim ore");
         }
         else if(tableName.equals("Student"))
         {
             additionalField1.setVisible(true);
-            additionalField1.setPromptText("An studii");
+            additionalField1.setPromptText("An studiu");
             additionalField1.setText("");
             additionalLabel1.setVisible(true);
             additionalLabel1.setText("An studiu");
@@ -296,7 +336,8 @@ public class ManageUsersController {
         }
     }
 
-    private void makeAdditionalFieldsInvisible() {
+    private void makeAdditionalFieldsInvisible()
+    {
         additionalField1.setVisible(false);
         additionalField1.setText("");
         additionalField2.setVisible(false);
@@ -312,7 +353,8 @@ public class ManageUsersController {
         additionalLabel3.setText("");
     }
 
-    private void clearAllFields() {
+    private void clearAllFields()
+    {
         nameField.clear();
         cnpField.clear();
         adresaField.clear();
@@ -325,7 +367,8 @@ public class ManageUsersController {
         additionalField3.clear();
     }
 
-    private boolean oneIsEmpty(String numeString, String cnpString, String adresaString, String emailString, String nrTelefonString, String usernameString, String parolaString) {
+    private boolean oneIsEmpty(String numeString, String cnpString, String adresaString, String emailString, String nrTelefonString, String usernameString, String parolaString)
+    {
         return numeString.isEmpty() || cnpString.isEmpty() || adresaString.isEmpty() || emailString.isEmpty() || nrTelefonString.isEmpty() || usernameString.isEmpty() || parolaString.isEmpty();
     }
 }

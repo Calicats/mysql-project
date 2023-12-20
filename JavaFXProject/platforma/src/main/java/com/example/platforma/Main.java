@@ -1,6 +1,7 @@
 package com.example.platforma;
 
 import com.example.controllers.AfterLoginController;
+import com.example.controllers.FindUsersController;
 import com.example.controllers.ManageUsersController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -31,17 +32,26 @@ public class Main extends Application {
 
         if(username != null && tableName != null)
         {
-            if(fxml.equals("dupaLogare.fxml"))
-            {
-                currentStage.setTitle("Platforma scolara");
-                AfterLoginController controller = fxmlLoader.getController();
-                controller.initUser(username, tableName);
-            }
-            else if(fxml.equals("gestionareUtilizatori.fxml"))
-            {
-                currentStage.setTitle("Gestionare utilizatori");
-                ManageUsersController controller = fxmlLoader.getController();
-                controller.initUser(username, tableName);
+            switch (fxml) {
+                case "logare.fxml" -> currentStage.setTitle("Logare platforma");
+
+                case "dupaLogare.fxml" -> {
+                    currentStage.setTitle("Platforma scolara");
+                    AfterLoginController controller = fxmlLoader.getController();
+                    controller.initUser(username, tableName);
+                }
+
+                case "gestionareUtilizatori.fxml" -> {
+                    currentStage.setTitle("Gestionare utilizatori");
+                    ManageUsersController controller = fxmlLoader.getController();
+                    controller.initUser(username, tableName);
+                }
+
+                case "cautareUtilizatori.fxml" -> {
+                    currentStage.setTitle("Cautare utilizatori");
+                    FindUsersController controller = fxmlLoader.getController();
+                    controller.initUser(username, tableName);
+                }
             }
         }
     }

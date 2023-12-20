@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -44,26 +41,6 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TableView fx:id="table" layoutX="420.0" layoutY="30.0" prefHeight="200.0" prefWidth="506.0" />
-            <ComboBox fx:id="comboBox" layoutX="174.0" layoutY="40.0" onAction="#onSelectTable" prefWidth="150.0" />
-            <Label fx:id="msgSelectTable" layoutX="36.0" layoutY="42.0" prefHeight="22.0" prefWidth="138.0" text="Selecteaza o tabela">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <Label fx:id="msgFindUser" layoutX="36.0" layoutY="95.0" prefHeight="22.0" prefWidth="117.0" text="Cauta utilizator">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <TextField fx:id="findUsernameField" layoutX="175.0" layoutY="94.0" promptText="Nume utilizator" />
-            <Button fx:id="findUsernameButton" layoutX="334.0" layoutY="94.0" mnemonicParsing="false" onAction="#onSearchUsername" text="Cauta" />
-            <Label fx:id="foundUser" layoutX="175.0" layoutY="119.0" textFill="RED">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <Button fx:id="refreshButton" layoutX="330.0" layoutY="40.0" mnemonicParsing="false" onAction="#onRefresh" text="Refresh" />
          </children>
       </AnchorPane>
    </center>
@@ -75,7 +52,7 @@
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="controlPanelButton" mnemonicParsing="false" onAction="#onFindUsers" prefHeight="100.0" prefWidth="194.0" style="-fx-background-color: transparent;" text="Cautare utilizatori" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="findUsersButton" mnemonicParsing="false" onAction="#onFindUsers" prefHeight="100.0" prefWidth="194.0" style="-fx-background-color: transparent;" text="Cautare utilizatori" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
