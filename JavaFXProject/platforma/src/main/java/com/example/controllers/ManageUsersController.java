@@ -75,7 +75,7 @@ public class ManageUsersController {
         }
         else if(tableName.equals("administrator"))
         {
-            tablesList.addAll(Arrays.asList(tables).subList(0, 3));
+            tablesList.addAll(Arrays.asList(tables).subList(1, 3));
         }
 
         selectTableComboBox.setItems(tablesList);
