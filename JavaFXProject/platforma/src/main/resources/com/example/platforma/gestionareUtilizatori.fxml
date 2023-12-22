@@ -103,6 +103,12 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
+            <Label fx:id="modifyUserLabel" layoutX="356.0" layoutY="95.0" text="Introdu un nume de utilizator">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="modifyUserField" layoutX="576.0" layoutY="93.0" promptText="Username" />
          </children>
       </AnchorPane>
    </center>

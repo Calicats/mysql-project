@@ -40,6 +40,10 @@ public class ManageUsersController {
     @FXML
     private TextField usernameField;
     @FXML
+    private Label modifyUserLabel;
+    @FXML
+    private TextField modifyUserField;
+    @FXML
     private Label additionalLabel1;
     @FXML
     private Label additionalLabel2;
@@ -79,6 +83,12 @@ public class ManageUsersController {
         errorHandling.setTextFill(Color.RED);
         errorHandling.setText("");
 
+        modifyUserLabel.setVisible(false);
+        modifyUserField.setVisible(false);
+
+        modifyUserField.setText("");
+        modifyUserLabel.setText("");
+
         makeAdditionalFieldsInvisible();
     }
 
@@ -94,6 +104,22 @@ public class ManageUsersController {
         operationButton.setText(buttonText);
         errorHandling.setTextFill(Color.RED);
         errorHandling.setText("");
+
+        modifyUserLabel.setVisible(false);
+        modifyUserField.setVisible(false);
+        modifyUserField.setText("");
+        modifyUserLabel.setText("");
+        setUsernameAndPasswordEditable(true);
+
+        if(buttonText.equals("Modifica") || buttonText.equals("Sterge"))
+        {
+            modifyUserLabel.setVisible(true);
+            modifyUserField.setVisible(true);
+            modifyUserField.setText("");
+            modifyUserLabel.setText("Introdu un nume de utilizator");
+
+            setUsernameAndPasswordEditable(false);
+        }
 
         clearAllFields();
     }
@@ -127,47 +153,62 @@ public class ManageUsersController {
         String parolaString = parolaField.getText();
         List<String> entries = Arrays.asList(cnpString, numeString, adresaString, nrTelefonString, emailString, usernameString, parolaString);
 
-        if (operationName == null) {
+        if (operationName == null)
+        {
             errorHandling.setText("Selecteaza o operatie!");
             return;
         }
 
-        if (operationName.equals("Adauga")) {
-            switch (tableName) {
-                case "Superadministrator" -> {
-                    if (oneIsEmpty(numeString, cnpString, adresaString, emailString, nrTelefonString, usernameString, parolaString)) {
+        if (operationName.equals("Adauga"))
+        {
+            switch (tableName)
+            {
+                case "Superadministrator" ->
+                {
+                    if (oneIsEmpty(numeString, cnpString, adresaString, emailString, nrTelefonString, usernameString, parolaString))
+                    {
                         errorHandling.setText("Introdu date in toate campurile!");
                         return;
                     }
 
                     boolean ex = false;
 
-                    try {
+                    try
+                    {
                         Insert.addSuperAdmin(connection, cnpString, numeString, adresaString, nrTelefonString, emailString, usernameString, parolaString);
-                    } catch (Exception e) {
+                    }
+                    catch(Exception e)
+                    {
                         errorHandling.setText(e.getMessage());
                         ex = true;
                         e.printStackTrace();
                     }
 
-                    if (!ex) {
+                    if (!ex)
+                    {
                         errorHandling.setTextFill(Color.rgb(0, 255, 0));
                         errorHandling.setText("Superadministrator adaugat cu succes!");
                     }
+
                     clearAllFields();
                 }
 
-                case "Administrator" -> {
-                    if (oneIsEmpty(numeString, cnpString, adresaString, emailString, nrTelefonString, usernameString, parolaString)) {
+                case "Administrator" ->
+                {
+                    if (oneIsEmpty(numeString, cnpString, adresaString, emailString, nrTelefonString, usernameString, parolaString))
+                    {
                         errorHandling.setText("Introdu date in toate campurile!");
                         return;
                     }
 
                     boolean ex = false;
 
-                    try {
+                    try
+                    {
                         Insert.addAdmin(connection, cnpString, numeString, adresaString, nrTelefonString, emailString, usernameString, parolaString);
-                    } catch (Exception e) {
+                    }
+                    catch(Exception e)
+                    {
                         errorHandling.setText(e.getMessage());
                         ex = true;
                         e.printStackTrace();
@@ -180,12 +221,14 @@ public class ManageUsersController {
                     clearAllFields();
                 }
 
-                case "Profesor" -> {
+                case "Profesor" ->
+                {
                     String departamentString = additionalField1.getText();
                     String nrMinOreString = additionalField2.getText();
                     String nrMaxOreString = additionalField3.getText();
 
-                    if (departamentString.isEmpty() || nrMinOreString.isEmpty() || nrMaxOreString.isEmpty()) {
+                    if (departamentString.isEmpty() || nrMinOreString.isEmpty() || nrMaxOreString.isEmpty())
+                    {
                         errorHandling.setText("Introdu date in toate campurile!");
                         return;
                     }
@@ -195,26 +238,32 @@ public class ManageUsersController {
 
                     boolean ex = false;
 
-                    try {
+                    try
+                    {
                         Insert.addProfessor(connection, cnpString, numeString, departamentString, nrMinOre, nrMaxOre, adresaString, nrTelefonString, emailString, usernameString, parolaString);
-                    } catch (Exception e) {
+                    }
+                    catch(Exception e)
+                    {
                         errorHandling.setText(e.getMessage());
                         ex = true;
                         e.printStackTrace();
                     }
 
-                    if (!ex) {
+                    if (!ex)
+                    {
                         errorHandling.setTextFill(Color.rgb(0, 255, 0));
                         errorHandling.setText("Profesor adaugat cu succes!");
                     }
                     clearAllFields();
                 }
 
-                case "Student" -> {
+                case "Student" ->
+                {
                     String anStudiuString = additionalField1.getText();
                     String numarOreString = additionalField2.getText();
 
-                    if (anStudiuString.isEmpty() || numarOreString.isEmpty()) {
+                    if (anStudiuString.isEmpty() || numarOreString.isEmpty())
+                    {
                         errorHandling.setText("Introdu date in toate campurile!");
                         return;
                     }
@@ -224,88 +273,109 @@ public class ManageUsersController {
 
                     boolean ex = false;
 
-                    try {
+                    try
+                    {
                         Insert.addStudent(connection, cnpString, numeString, anStudiu, numarOre, adresaString, nrTelefonString, emailString, usernameString, parolaString);
-                    } catch (Exception e) {
+                    }
+                    catch(Exception e)
+                    {
                         errorHandling.setText(e.getMessage());
                         ex = true;
                         e.printStackTrace();
                     }
 
-                    if (!ex) {
+                    if (!ex)
+                    {
                         errorHandling.setTextFill(Color.rgb(0, 255, 0));
                         errorHandling.setText("Student adaugat cu succes!");
                     }
+
                     clearAllFields();
                 }
             }
-        } else if (operationName.equals("Modifica")) {
+        }
+        else if(operationName.equals("Modifica"))
+        {
+            String modifyUserString = modifyUserField.getText();
+
+            List<String> columnsList = getColumnsList(tableName);
             List<String> validEntries = new ArrayList<>();
-            if(tableName.equals("Superadministrator"))
+
+            int emptyCount = 0;
+            for(String value: entries)
             {
-                int emptyCount = 0;
-                for(String value: entries)
+                if(!value.isEmpty())
                 {
-                    if(!value.isEmpty())
-                    {
-                        validEntries.add(value);
-                    }
-                    else
-                    {
-                        validEntries.add("null");
-                        ++emptyCount;
-                    }
+                    validEntries.add(value);
                 }
-
-                if(emptyCount == 7)
+                else
                 {
-                    errorHandling.setText("Introdu cel putin o data valida!");
-                    return;
+                    validEntries.add("null");
+                    ++emptyCount;
                 }
-
-                String[] columns = {"cnp", "nume", "adresa", "nrTelefon", "email", "username", "parola"};
-                boolean ex = false;
-                int rowsAffected = 0;
-
-                for(int i = 0; i < validEntries.size(); ++i)
-                {
-                    if(!validEntries.get(i).equals("null"))
-                    {
-                        String columnName = columns[i];
-                        if(columnName.equals("username"))
-                        {
-                            continue;
-                        }
-                        String newValue = validEntries.get(i);
-                        try
-                        {
-                            int updated = Update.updateEntry(connection, usernameString, tableName, columnName, newValue);
-                            if(updated > 0)
-                            {
-                                ++rowsAffected;
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            errorHandling.setText(e.getMessage());
-                            ex = true;
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                if(rowsAffected == 0)
-                {
-                    errorHandling.setText("Introdu un utilizator valid!");
-                    clearAllFields();
-                    return;
-                }
-                if(!ex)
-                {
-                    errorHandling.setTextFill(Color.rgb(0, 255, 0));
-                    errorHandling.setText("Modificare efectuata cu succes!");
-                }
-                clearAllFields();
             }
+
+            if(emptyCount == 7 || emptyCount == 9 || emptyCount == 10)
+            {
+                errorHandling.setText("Introdu cel putin o data valida!");
+                return;
+            }
+
+            boolean ex = false;
+            int rowsAffected = 0;
+
+            for(int i = 0; i < validEntries.size(); ++i)
+            {
+                if(!validEntries.get(i).equals("null"))
+                {
+                    String columnName = columnsList.get(i);
+                    if(columnName.equals("username") || columnName.equals("parola"))
+                    {
+                        continue;
+                    }
+
+                    String newValue = validEntries.get(i);
+                    try
+                    {
+                        int updated = 0;
+                        if(columnName.equals("nrMinOre") || columnName.equals("nrMaxOre") || columnName.equals("numarOre") || columnName.equals("anStudiu"))
+                        {
+                            updated = Update.updateEntry(connection, modifyUserString, tableName, columnName, Integer.parseInt(newValue));
+                        }
+                        else
+                        {
+                            updated = Update.updateEntry(connection, modifyUserString, tableName, columnName, newValue);
+                        }
+
+                        if(updated > 0)
+                        {
+                            ++rowsAffected;
+                        }
+                    }
+
+                    catch (Exception e)
+                    {
+                        errorHandling.setText(e.getMessage());
+                        ex = true;
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            if(rowsAffected == 0)
+            {
+                errorHandling.setText("Introdu un utilizator valid!");
+                clearAllFields();
+                return;
+            }
+
+            if(!ex)
+            {
+                errorHandling.setTextFill(Color.rgb(0, 255, 0));
+                errorHandling.setText("Modificare efectuata cu succes!");
+            }
+
+            clearAllFields();
         }
 
     }
@@ -361,6 +431,12 @@ public class ManageUsersController {
         }
     }
 
+    private void setUsernameAndPasswordEditable(boolean expr)
+    {
+        usernameField.setEditable(expr);
+        parolaField.setEditable(expr);
+    }
+
     private void makeAdditionalFieldsInvisible()
     {
         additionalField1.setVisible(false);
@@ -378,6 +454,28 @@ public class ManageUsersController {
         additionalLabel3.setText("");
     }
 
+    private List<String> getColumnsList(String tableName)
+    {
+        List<String> columnsList = new ArrayList<>();
+
+        if(tableName.equals("Superadministrator") || tableName.equals("Administrator"))
+        {
+            String[] columns = {"cnp", "nume", "adresa", "nrTelefon", "email", "username", "parola"};
+            columnsList = Arrays.asList(columns);
+        }
+        else if(tableName.equals("Profesor"))
+        {
+            String[] columns = {"cnp", "nume", "departament", "nrMinOre", "nrMaxOre", "adresa", "nrTelefon", "email", "username", "parola"};
+            columnsList = Arrays.asList(columns);
+        }
+        else if(tableName.equals("Student"))
+        {
+            String[] columns = {"cnp", "nume", "anStudiu", "numarOre", "adresa", "nrTelefon", "email", "username", "parola"};
+            columnsList = Arrays.asList(columns);
+        }
+        return columnsList;
+    }
+
     private void clearAllFields()
     {
         nameField.clear();
@@ -390,6 +488,7 @@ public class ManageUsersController {
         additionalField1.clear();
         additionalField2.clear();
         additionalField3.clear();
+        modifyUserField.clear();
     }
 
     private boolean oneIsEmpty(String numeString, String cnpString, String adresaString, String emailString, String nrTelefonString, String usernameString, String parolaString)
