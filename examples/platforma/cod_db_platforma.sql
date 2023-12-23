@@ -3,48 +3,56 @@ USE db_platforma;
 
 CREATE TABLE IF NOT EXISTS SuperAdministrator(
     idSuperAdmin int unique auto_increment primary key,
-	cnp char(20) unique not null,
+	  cnp char(20) unique not null,
     nume char(30),
     adresa char(50),
     nrTelefon char(15),
-    email char(40)
+    email char(40),
+    username char(255) unique not null,
+    parola char(255) not null
 );
 
 CREATE TABLE IF NOT EXISTS Administrator(
     idAdmin int unique auto_increment primary key,
-	cnp char(20) unique not null,
+	  cnp char(20) unique not null,
     nume char(30),
     adresa char(50),
     nrTelefon char(15),
-    email char(40)
+    email char(40),
+    username char(255) unique not null,
+    parola char(255) not null
 );
 
 CREATE TABLE IF NOT EXISTS Profesor(
     idProfesor int unique auto_increment primary key,
-	cnp char(20) unique not null,
+	  cnp char(20) unique not null,
     nume char(30),
     departament char(50),
     nrMinOre int,
     nrMaxOre int,
     adresa char(50),
     nrTelefon char(15),
-    email char(40)
+    email char(40),
+    username char(255) unique not null,
+    parola char(255) not null
 );
 
 CREATE TABLE IF NOT EXISTS Student(
     idStudent int unique auto_increment primary key,
-	cnp char(20) unique not null,
+	  cnp char(20) unique not null,
     nume char(30),
     anStudiu int,
     numarOre int,
     adresa char(50),
     nrTelefon char(15),
-    email char(40)
+    email char(40),
+    username char(255) unique not null,
+    parola char(255) not null
 );
 
 # aici tin activitatea profesorilor (curs, seminar, lab)
 CREATE TABLE IF NOT EXISTS ActivitateProfesor(
-	idActivitateProfesor int unique auto_increment primary key,
+	  idActivitateProfesor int unique auto_increment primary key,
     tipActivitate char(15),
     descriere char(50),
     id_profesor int,
@@ -53,7 +61,7 @@ CREATE TABLE IF NOT EXISTS ActivitateProfesor(
 
 # aici tin cine participa la activitate
 CREATE TABLE IF NOT EXISTS ParticipantActivitate(
-	idParticipantActivitate int unique auto_increment primary key,
+	  idParticipantActivitate int unique auto_increment primary key,
     nrMaximStudenti int,
     id_activitate_profesor int,
     id_student int,
@@ -63,7 +71,7 @@ CREATE TABLE IF NOT EXISTS ParticipantActivitate(
 
 # aici tin calendarul desfasurarii activitatilor
 CREATE TABLE IF NOT EXISTS CalendarActivitate(
-	idCalendarActivitate int unique auto_increment primary key,
+	  idCalendarActivitate int unique auto_increment primary key,
     dataDesfasurareActivitate date,
     id_participant_activitate int,
     foreign key(id_participant_activitate) references ParticipantActivitate(idParticipantActivitate)
@@ -71,7 +79,7 @@ CREATE TABLE IF NOT EXISTS CalendarActivitate(
 
 # aici tin notele studentilor
 CREATE TABLE IF NOT EXISTS NoteStudent(
-	idNota int unique auto_increment primary key,
+	  idNota int unique auto_increment primary key,
     nota int,
     id_student int,
     id_participant_activitate int,
@@ -81,24 +89,14 @@ CREATE TABLE IF NOT EXISTS NoteStudent(
 
 # aici tin marele grup de whatsapp cu un profesor
 CREATE TABLE IF NOT EXISTS GrupStudiu(
-	idGrupStudiu int unique auto_increment primary key,
+	 idGrupStudiu int unique auto_increment primary key,
     descriereGrupStudiu char(50),
     id_participant_activitate int,
     foreign key(id_participant_activitate) references ParticipantActivitate(idParticipantActivitate)
 );
 
-ALTER TABLE SuperAdministrator ADD COLUMN username char(255) unique;
-ALTER TABLE Administrator ADD COLUMN username char(255) unique;
-ALTER TABLE Profesor ADD COLUMN username char(255) unique;
-ALTER TABLE Student ADD COLUMN username char(255) unique;
-
-ALTER TABLE SuperAdministrator ADD COLUMN parola char(255);
-ALTER TABLE Administrator ADD COLUMN parola char(255);
-ALTER TABLE Profesor ADD COLUMN parola char(255);
-ALTER TABLE Student ADD COLUMN parola char(255);
-
 CREATE TABLE IF NOT EXISTS Rol(
-	idRol int unique auto_increment primary key,
+	  idRol int unique auto_increment primary key,
     numeRol char(15)
 );
 
@@ -110,6 +108,8 @@ INSERT INTO Rol(numeRol) VALUES
 
 CREATE TABLE IF NOT EXISTS Utilizator(
     idUtilizator int unique auto_increment primary key,
+    username char(255) unique not null,
+    cnp char(20) unique not null,
     username char(255) unique,
     parola char(255),
     id_rol int,
@@ -168,12 +168,12 @@ CREATE PROCEDURE AddNewSuperAdministrator(
     IN adresa_param CHAR(50),
     IN nrTelefon_param CHAR(15),
     IN email_param CHAR(40),
-    IN parola_param CHAR(255),
-    IN username_param CHAR(255)
+    IN username_param CHAR(255),
+    IN parola_param CHAR(255)
 )
 BEGIN
-    INSERT INTO SuperAdministrator(cnp, nume, adresa, nrTelefon, email, parola, idRol, username)
-    VALUES(cnp_param, nume_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'SuperAdmin'), username_param);
+    INSERT INTO SuperAdministrator(cnp, nume, adresa, nrTelefon, email, username, parola, idRol)
+    VALUES(cnp_param, nume_param, adresa_param, nrTelefon_param, email_param, username_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'SuperAdmin'));
 END //
 DELIMITER ;
 
@@ -185,12 +185,12 @@ CREATE PROCEDURE AddNewAdministrator(
     IN adresa_param CHAR(50),
     IN nrTelefon_param CHAR(15),
     IN email_param CHAR(40),
-    IN parola_param CHAR(255),
-    IN username_param CHAR(255)
+    IN username_param CHAR(255),
+    IN parola_param CHAR(255)
 )
 BEGIN
-    INSERT INTO Administrator(cnp, nume, adresa, nrTelefon, email, parola, idRol, username)
-    VALUES(cnp_param, nume_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Admin'), username_param);
+    INSERT INTO Administrator(cnp, nume, adresa, nrTelefon, email, username, parola, idRol)
+    VALUES(cnp_param, nume_param, adresa_param, nrTelefon_param, email_param, username_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'Admin'));
 END //
 DELIMITER ;
 
@@ -205,12 +205,12 @@ CREATE PROCEDURE AddNewProfessor(
     IN adresa_param CHAR(50),
     IN nrTelefon_param CHAR(15),
     IN email_param CHAR(40),
-    IN parola_param CHAR(255),
-    IN username_param CHAR(255)
+    IN username_param CHAR(255),
+    IN parola_param CHAR(255)
 )
 BEGIN
-    INSERT INTO Profesor(cnp, nume, departament, nrMinOre, nrMaxOre, adresa, nrTelefon, email, parola, idRol, username)
-    VALUES(cnp_param, nume_param, departament_param, nrMinOre_param, nrMaxOre_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Profesor'), username_param);
+    INSERT INTO Profesor(cnp, nume, departament, nrMinOre, nrMaxOre, adresa, nrTelefon, email, username, parola, idRol)
+    VALUES(cnp_param, nume_param, departament_param, nrMinOre_param, nrMaxOre_param, adresa_param, nrTelefon_param, email_param, username_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'Profesor'));
 END //
 DELIMITER ;
 
@@ -224,12 +224,12 @@ CREATE PROCEDURE AddNewStudent(
     IN adresa_param CHAR(50),
     IN nrTelefon_param CHAR(15),
     IN email_param CHAR(40),
-    IN parola_param CHAR(255),
-    IN username_param CHAR(255)
+    IN username_param CHAR(255),
+    IN parola_param CHAR(255)
 )
 BEGIN
-    INSERT INTO Student(cnp, nume, anStudiu, numarOre, adresa, nrTelefon, email, parola, idRol, username)
-    VALUES(cnp_param, nume_param, anStudiu_param, numarOre_param, adresa_param, nrTelefon_param, email_param, parola_param, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Student'), username_param);
+    INSERT INTO Student(cnp, nume, anStudiu, numarOre, adresa, nrTelefon, email, username, parola, idRol)
+    VALUES(cnp_param, nume_param, anStudiu_param, numarOre_param, adresa_param, nrTelefon_param, email_param, username_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'Student'));
 END //
 DELIMITER ;
 
@@ -238,32 +238,77 @@ CREATE TRIGGER InsertSuperAdmin
 AFTER INSERT ON SuperAdministrator
 FOR EACH ROW
 BEGIN
-    INSERT INTO Utilizator(username, parola, id_rol)
-    VALUES (NEW.username, NEW.parola, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'SuperAdmin'));
+    INSERT INTO Utilizator(username, cnp, parola, id_rol)
+    VALUES (NEW.username, NEW.cnp, NEW.parola, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'SuperAdmin'));
 END;
 //
+
 CREATE TRIGGER InsertAdmin
 AFTER INSERT ON Administrator
 FOR EACH ROW
 BEGIN
-    INSERT INTO Utilizator(username, parola, id_rol)
-    VALUES (NEW.username, NEW.parola, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Admin'));
+    INSERT INTO Utilizator(username, cnp, parola, id_rol)
+    VALUES (NEW.username, NEW.cnp, NEW.parola, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Admin'));
 END;
 //
+
 CREATE TRIGGER InsertProfesor
 AFTER INSERT ON Profesor
 FOR EACH ROW
 BEGIN
-    INSERT INTO Utilizator(username, parola, id_rol)
-    VALUES (NEW.username, NEW.parola, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Profesor'));
+    INSERT INTO Utilizator(username, cnp, parola, id_rol)
+    VALUES (NEW.username, NEW.cnp, NEW.parola, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Profesor'));
 END;
 //
+
 CREATE TRIGGER InsertStudent
 AFTER INSERT ON Student
 FOR EACH ROW
 BEGIN
-    INSERT INTO Utilizator(username, parola, id_rol)
-    VALUES (NEW.username, NEW.parola, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Student'));
+    INSERT INTO Utilizator(username, cnp, parola, id_rol)
+    VALUES (NEW.username, NEW.cnp, NEW.parola, (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Student'));
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER UpdateSuperAdmin
+AFTER UPDATE ON SuperAdministrator
+FOR EACH ROW
+BEGIN
+    UPDATE Utilizator
+    SET cnp = NEW.cnp, username = NEW.username, parola = NEW.parola
+    WHERE id_rol = (SELECT idRol FROM Rol WHERE BINARY numeRol = 'SuperAdmin') AND cnp = OLD.cnp;
+END;
+//
+
+CREATE TRIGGER UpdateAdmin
+AFTER UPDATE ON Administrator
+FOR EACH ROW
+BEGIN
+    UPDATE Utilizator
+    SET cnp = NEW.cnp, username = NEW.username, parola = NEW.parola
+    WHERE id_rol = (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Admin') AND cnp = OLD.cnp;
+END;
+//
+
+CREATE TRIGGER UpdateProfesor
+AFTER UPDATE ON Profesor
+FOR EACH ROW
+BEGIN
+    UPDATE Utilizator
+    SET cnp = NEW.cnp, username = NEW.username, parola = NEW.parola
+    WHERE id_rol = (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Profesor') AND cnp = OLD.cnp;
+END;
+//
+
+CREATE TRIGGER UpdateStudent
+AFTER UPDATE ON Student
+FOR EACH ROW
+BEGIN
+    UPDATE Utilizator
+    SET cnp = NEW.cnp, username = NEW.username, parola = NEW.parola
+    WHERE id_rol = (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Student') AND cnp = OLD.cnp;
 END;
 //
 DELIMITER ;
@@ -276,6 +321,7 @@ BEGIN
     DELETE FROM Utilizator WHERE username = OLD.username;
 END;
 //
+
 CREATE TRIGGER DeleteAdmin
 AFTER DELETE ON Administrator
 FOR EACH ROW
@@ -283,6 +329,7 @@ BEGIN
     DELETE FROM Utilizator WHERE username = OLD.username;
 END;
 //
+
 CREATE TRIGGER DeleteProfesor
 AFTER DELETE ON Profesor
 FOR EACH ROW
@@ -290,6 +337,7 @@ BEGIN
     DELETE FROM Utilizator WHERE username = OLD.username;
 END;
 //
+
 CREATE TRIGGER DeleteStudent
 AFTER DELETE ON Student
 FOR EACH ROW
@@ -299,15 +347,13 @@ END;
 //
 DELIMITER ;
 
-call addNewSuperAdministrator("0000000000000", "Vlad Durdeu", "Str Principala nr 1", "0755333444", "johnsmith0@random.org", "Calicats", "Vlad");
-call addNewSuperAdministrator( "1111111111111", "Alex Stancu", "Str Principala nr 2", "0755333445", "johnsmith1@random.org", "Calicats", "Stancu");
-call addNewSuperAdministrator("2222222222222", "Lion Moroz", "Str Principala nr 3", "0755333446", "johnsmith2@random.org", "Calicats", "Lion");
-
-ALTER TABLE SuperAdministrator AUTO_INCREMENT = 1;
-DELETE FROM SuperAdministrator;
-ALTER TABLE Utilizator AUTO_INCREMENT = 1;
-DELETE FROM Utilizator;
+call addNewSuperAdministrator("0000000000000", "Vlad Durdeu", "Str Principala nr 1", "0755333444", "johnsmith0@random.org", "Vlad", "Calicats");
+call addNewSuperAdministrator( "1111111111111", "Alex Stancu", "Str Principala nr 2", "0755333445", "johnsmith1@random.org", "Stancu", "Calicats");
+call addNewSuperAdministrator("2222222222222", "Lion Moroz", "Str Principala nr 3", "0755333446", "johnsmith2@random.org", "Lion", "Calicats");
 
 SELECT * FROM SuperAdministrator;
-SELECT * FROM Student;
 SELECT * FROM Utilizator;
+
+DELETE FROM SuperAdministrator;
+ALTER TABLE SuperAdministrator AUTO_INCREMENT = 1;
+ALTER TABLE Utilizator AUTO_INCREMENT = 1;
