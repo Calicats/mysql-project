@@ -1,19 +1,15 @@
 package com.example.controllers;
 
-import com.example.*;
 import com.example.platforma.Main;
 import com.example.sql.Connect;
 import com.example.sql.Query;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.sql.Connection;
 
-public class AfterLoginController{
+public class ControlPanelController {
     @FXML
     private Button personalDataButton;
     @FXML
@@ -39,19 +35,37 @@ public class AfterLoginController{
     private String tableName;
     private boolean show = true;
 
-    public void initUser(String username, String tableName) {
+    /***
+     * "Constructor", in ghilimele
+     * @param username numele utilizatorului logat
+     * @param tableName tabela de care apartine utilizatorul
+     */
+
+    public void initUser(String username, String tableName)
+    {
         this.username = username;
         this.tableName = tableName;
 
         greetUser.setText("Bine ai venit, " + this.username + "!");
     }
 
-    public void onUserLogout() throws IOException{
+    /***
+     * Intoarcere la scena de logare
+     * @throws IOException exceptia pe care o arunca metoda
+     */
+
+    public void onUserLogout() throws IOException
+    {
         Main main = new Main();
         System.out.println("Bye, " + username);
 
         main.changeScene("logare.fxml", username, tableName, 600, 400);
     }
+
+    /***
+     * Modifica scena la gestionare
+     * @throws IOException exceptia pe care o arunca metoda
+     */
 
     public void onManageUsers() throws IOException
     {
@@ -59,7 +73,23 @@ public class AfterLoginController{
         main.changeScene("gestionareUtilizatori.fxml", username, tableName, 1024, 768);
     }
 
-    public void onShowPersonalData() {
+    /***
+     * Modifica scena la cautare
+     * @throws IOException exceptia pe care o arunca metoda
+     */
+
+    public void onFindUsers() throws IOException
+    {
+        Main main = new Main();
+        main.changeScene("cautareUtilizatori.fxml", username, tableName, 1024, 768);
+    }
+
+    /***
+     * Daca apesi pe butonul de Date Personale, iti afiseaza datele personale, cu toggle
+     */
+
+    public void onShowPersonalData()
+    {
         try
         {
             if(show)
@@ -71,7 +101,6 @@ public class AfterLoginController{
                 String emailString = Query.getSingleInfo(connection, tableName, username, "email");
                 String nrTelefonString = Query.getSingleInfo(connection, tableName, username, "nrTelefon");
 
-                greetUser.setVisible(true);
                 nume.setVisible(true);
                 cnp.setVisible(true);
                 adresa.setVisible(true);
@@ -93,6 +122,7 @@ public class AfterLoginController{
                 email.setVisible(false);
                 nrTelefon.setVisible(false);
             }
+
             show = !show;
         }
         catch(Exception e)
@@ -100,10 +130,4 @@ public class AfterLoginController{
             e.printStackTrace();
         }
     }
-
-    public void onFindUsers() throws IOException{
-        Main main = new Main();
-        main.changeScene("cautareUtilizatori.fxml", username, tableName, 1024, 768);
-    }
-
 }

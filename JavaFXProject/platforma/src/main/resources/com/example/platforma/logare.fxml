@@ -37,7 +37,7 @@
             </Label>
             <TextField fx:id="username" layoutX="103.0" layoutY="187.0" promptText="Nume utilizator" />
             <PasswordField fx:id="parola" layoutX="104.0" layoutY="244.0" promptText="Parola" />
-            <Button fx:id="loginButton" layoutX="104.0" layoutY="308.0" mnemonicParsing="false" onAction="#userLogin" text="Logare">
+            <Button fx:id="loginButton" layoutX="104.0" layoutY="308.0" mnemonicParsing="false" onAction="#onUserLogin" text="Logare">
                <font>
                   <Font size="15.0" />
                </font>

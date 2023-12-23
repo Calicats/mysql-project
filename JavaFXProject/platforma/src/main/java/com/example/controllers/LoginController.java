@@ -6,9 +6,7 @@ import com.example.sql.Query;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import java.io.IOException;
 import java.sql.Connection;
-import java.util.HashMap;
 
 public class LoginController {
 
@@ -21,11 +19,12 @@ public class LoginController {
     @FXML
     private PasswordField parola;
 
-    public void userLogin() {
-        checkLogin();
-    }
-
-    private void checkLogin() {
+    /***
+     * Apeleaza un select din tabela Utilizator din db_platforma, si vede daca utilizatorul apartine
+     * unei tabele
+     */
+    public void onUserLogin()
+    {
         try
         {
             Main main = new Main();
@@ -43,12 +42,12 @@ public class LoginController {
                 if(tableName != null)
                 {
                     System.out.println(usernameString + " logged in as " + tableName);
-                    main.changeScene("dupaLogare.fxml", usernameString, tableName, 1024, 768);
+                    main.changeScene("panouAdministrativ.fxml", usernameString, tableName, 1024, 768);
                 }
                 else
                 {
                     loginMessage.setText("Date incorecte!");
-                    System.out.println("null");
+                    System.out.println("Incorrect login!");
                 }
             }
         }

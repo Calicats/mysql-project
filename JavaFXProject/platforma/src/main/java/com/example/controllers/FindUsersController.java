@@ -30,6 +30,12 @@ public class FindUsersController {
     private String username;
     private String tableName;
 
+    /***
+     * "Constructor", in ghilimele
+     * @param username numele utilizatorului logat
+     * @param tableName tabela de care apartine utilizatorul
+     */
+
     public void initUser(String username, String tableName)
     {
         this.username = username;
@@ -42,13 +48,23 @@ public class FindUsersController {
         selectTableComboBox.setItems(tablesList);
     }
 
+    /***
+     * Intoarcere la panoul administrativ
+     * @throws IOException exceptia pe care o arunca metoda
+     */
+
     public void onBackButton() throws IOException
     {
         Main main = new Main();
-        main.changeScene("dupaLogare.fxml", username, tableName, 1024, 768);
+        main.changeScene("panouAdministrativ.fxml", username, tableName, 1024, 768);
     }
 
-    public void onSelectTable() {
+    /***
+     * Afiseaza tabela pe care ai selectat-o in combo box
+     */
+
+    public void onSelectTable()
+    {
         table.getItems().clear();
         table.getColumns().clear();
         findUsernameField.clear();
@@ -63,7 +79,10 @@ public class FindUsersController {
         try
         {
             Connection connection = Connect.getConnection();
+            // genereaza un tabel, fara id-uri
+            // adica in tabel vezi toata informatia, dar fara id-uri
             String[] columns = Query.getColumnNames(connection, tableName);
+
             if(columns == null)
             {
                 System.out.println("null");
@@ -79,6 +98,10 @@ public class FindUsersController {
             e.printStackTrace();
         }
     }
+
+    /***
+     * Afiseaza in tabela detaliile utilizatorului cautat
+     */
 
     public void onSearchUsername()
     {
@@ -97,6 +120,7 @@ public class FindUsersController {
         {
             Connection connection = Connect.getConnection();
             String findUsernameString = findUsernameField.getText();
+
             if(findUsernameString.isEmpty())
             {
                 foundUser.setText("Introdu un utilizator!");
@@ -130,8 +154,15 @@ public class FindUsersController {
         }
     }
 
-    private void generateTable(String[] columns) {
-        for (String columnName : columns) {
+    /***
+     * Genereaza celulele tabelului
+     * @param columns coloanele tabelului
+     */
+
+    private void generateTable(String[] columns)
+    {
+        for (String columnName: columns)
+        {
             TableColumn<User, String> column = new TableColumn<>(columnName);
 
             column.setCellValueFactory(cellData ->
@@ -140,6 +171,13 @@ public class FindUsersController {
             table.getColumns().add(column);
         }
     }
+
+    /***
+     * Metoda ajutatoare la construirea celulelor tabelei
+     * @param user utilizatorul
+     * @param propertyName numele coloanei
+     * @return atributul sub forma de String
+     */
 
     private String getUserPropertyValue(User user, String propertyName) {
         if(user instanceof SuperAdministrator)
@@ -259,23 +297,26 @@ public class FindUsersController {
         return null;
     }
 
-    private void populateTable(Connection connection, String tableName) {
+    /***
+     * Populeaza o tabela
+     * @param connection conexiunea la baza de date
+     * @param tableName tabela populata
+     */
+
+    private void populateTable(Connection connection, String tableName)
+    {
         ObservableList<User> list = FXCollections.observableArrayList();
+        // toata informatia dintr-un tabel sub forma de matrice de String-uri
         String[][] userInfo = Query.getTableInfo(connection, tableName);
 
         if(userInfo == null)
         {
-            System.out.println("null");
+            System.out.println("Tabela vida!");
         }
         else
         {
-            for (String[] row : userInfo)
+            for (String[] row: userInfo)
             {
-                for(String value : row)
-                {
-                    System.out.print(value + "\t");
-                }
-                System.out.println();
                 User user = rowToUserInfo(row, tableName);
                 list.add(user);
             }
@@ -283,8 +324,17 @@ public class FindUsersController {
         }
     }
 
-    private User rowToUserInfo(String[] row, String tableName) {
-        switch (tableName) {
+    /***
+     *
+     * @param row informatia sub forma de Array de String-uri
+     * @param tableName numele tabelei din care face parte
+     * @return un nou utilizator
+     */
+
+    private User rowToUserInfo(String[] row, String tableName)
+    {
+        switch(tableName)
+        {
             case "Superadministrator":
                 return new SuperAdministrator(Integer.parseInt(row[0]), row[1], row[2], row[3],
                         row[4], row[5], row[6], row[7], Integer.parseInt(row[8]));
@@ -296,8 +346,9 @@ public class FindUsersController {
                         Integer.parseInt(row[4]), Integer.parseInt(row[5]), row[6], row[7],
                         row[8], row[9], row[10], Integer.parseInt(row[11]));
             case "Student":
-                return new Student(Integer.parseInt(row[0]), row[1], row[2], Integer.parseInt(row[3]), Integer.parseInt(row[4]),
-                        row[5], row[6], row[7], row[8], row[9],Integer.parseInt(row[10]));
+                return new Student(Integer.parseInt(row[0]), row[1], row[2], Integer.parseInt(row[3]),
+                        Integer.parseInt(row[4]), row[5], row[6], row[7], row[8], row[9],
+                        Integer.parseInt(row[10]));
             default:
                 return null;
         }

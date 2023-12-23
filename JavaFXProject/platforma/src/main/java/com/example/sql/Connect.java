@@ -4,10 +4,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class Connect {
+
     private static String jdbcUrl = "jdbc:mysql://localhost:3306/db_platforma";
     private static String usernameDB = "root";
     private static String passwordDB = "Sharldevil16!";
-    public static Connection getConnection() {
+
+    /***
+     * Conectare la db_platforma
+     * @return conexiunea la db_platforma
+     */
+    public static Connection getConnection()
+    {
         try
         {
             return DriverManager.getConnection(jdbcUrl, usernameDB, passwordDB);

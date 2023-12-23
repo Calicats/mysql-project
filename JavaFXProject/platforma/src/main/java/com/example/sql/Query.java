@@ -4,6 +4,15 @@ import java.sql.*;
 import java.util.*;
 
 public class Query {
+
+    /***
+     *
+     * @param connection conexiunea la db_platforma
+     * @param username utilizatorul introdus
+     * @param password parola introdusa
+     * @return tabela din care face parte utilizatorul
+     */
+
     public static String validateUser(Connection connection, String username, String password) {
         String query = "SELECT id_rol FROM utilizator WHERE BINARY username = ? AND BINARY parola = ?";
 
@@ -40,6 +49,15 @@ public class Query {
         return null;
     }
 
+    /***
+     *
+     * @param connection conexiunea la db_platforma
+     * @param tableName numele tabelei
+     * @param username numele utilizatorului
+     * @param info informatia pe care vrei sa o returnezi
+     * @return rezultatul interogarii, sub forma de String
+     */
+
     public static String getSingleInfo(Connection connection, String tableName, String username, String info)
     {
         String query = "SELECT " + info + " FROM " + tableName + " WHERE username = ?";
@@ -62,6 +80,14 @@ public class Query {
 
         return null;
     }
+
+    /***
+     *
+     * @param connection conexiunea la db_platforma
+     * @param tableName tabela de care apartine utilizatorul
+     * @param username utilizator
+     * @return toate detaliile utilizatorului
+     */
 
     public static String[] getAllInfoOnUser(Connection connection, String tableName, String username)
     {
@@ -92,13 +118,23 @@ public class Query {
         return null;
     }
 
-    public static String[] getColumnNames(Connection connection, String tableName) {
-        try {
+    /***
+     *
+     * @param connection conexiunea la db_platforma
+     * @param tableName numele tabelei
+     * @return numele coloanelor tabelei, fara id-uri, sub forma de Array de String-uri
+     */
+
+    public static String[] getColumnNames(Connection connection, String tableName)
+    {
+        try
+        {
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet resultSet = metaData.getColumns(null, "db_platforma", tableName, null);
 
             int columnCount = 0;
-            while (resultSet.next()) {
+            while (resultSet.next())
+            {
                 String columnName = resultSet.getString("COLUMN_NAME");
                 if(!columnName.contains("id"))
                 {
@@ -111,7 +147,8 @@ public class Query {
             String[] columnNames = new String[columnCount];
 
             int i = 0;
-            while (resultSet.next()) {
+            while (resultSet.next())
+            {
                 String columnName = resultSet.getString("COLUMN_NAME");
                 if(!columnName.contains("id"))
                 {
@@ -120,12 +157,21 @@ public class Query {
             }
 
             return columnNames;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
 
         return null;
     }
+
+    /***
+     *
+     * @param connection conexiunea la db_platforma
+     * @param tableName numele tabelei
+     * @return toata informatia dintr-o tabela, cu id-uri cu tot
+     */
 
     public static String[][] getTableInfo(Connection connection, String tableName)
     {
@@ -165,73 +211,41 @@ public class Query {
         return null;
     }
 
-    private static String getQueryForTableInfo(String tableName) {
-        String query = null;
-        if(tableName.equals("Superadministrator"))
+    /***
+     * Metoda ajutatoare pentru getTableInfo
+     * @param tableName numele tabelei
+     * @return interogarea necesara pentru getTableInfo
+     */
+
+    private static String getQueryForTableInfo(String tableName)
+    {
+        String query = switch(tableName)
         {
-            query = "SELECT * FROM superadministrator";
-        }
-        else if(tableName.equals("Administrator"))
-        {
-            query = "SELECT * FROM administrator";
-        }
-        else if(tableName.equals("Profesor"))
-        {
-            query = "SELECT * FROM profesor";
-        }
-        else if(tableName.equals("Student"))
-        {
-            query = "SELECT * FROM student";
-        }
+            case "Superadministrator" -> "SELECT * FROM superadministrator";
+            case "Administrator" -> "SELECT * FROM administrator";
+            case "Profesor" -> "SELECT * FROM profesor";
+            case "Student" -> "SELECT * FROM student";
+            default -> null;
+        };
         return query;
     }
+
+    /***
+     * Metoda ajutatoare pentru getAllInfoOnUser
+     * @param tableName numele tabelei
+     * @return interogarea necesara pentru getAllInfoOnUser
+     */
 
     private static String getQueryForAllInfoOnUser(String tableName)
     {
-        String query = null;
-        if(tableName.equals("Superadministrator"))
+        String query = switch(tableName)
         {
-            query = "SELECT * FROM superadministrator WHERE username = ?";
-        }
-        else if(tableName.equals("Administrator"))
-        {
-            query = "SELECT * FROM administrator WHERE username = ?";
-        }
-        else if(tableName.equals("Profesor"))
-        {
-            query = "SELECT * FROM profesor WHERE username = ?";
-        }
-        else if(tableName.equals("Student"))
-        {
-            query = "SELECT * FROM student WHERE username = ?";
-        }
-        return query;
-    }
-
-    public static int getId(Connection connection, String tableName, String username) throws Exception
-    {
-        String id = switch (tableName) {
-            case "superadministrator" -> "idSuperAdmin";
-            case "administrator" -> "idAdmin";
-            case "profesor" -> "idProfesor";
-            case "student" -> "idStudent";
+            case "Superadministrator" -> "SELECT * FROM superadministrator WHERE username = ?";
+            case "Administrator" -> "SELECT * FROM administrator WHERE username = ?";
+            case "Profesor" -> "SELECT * FROM profesor WHERE username = ?";
+            case "Student" -> "SELECT * FROM student WHERE username = ?";
             default -> null;
         };
-        if(id == null)
-        {
-            throw new IllegalAccessException("Nu s-a gasit tabela!");
-        }
-
-        String query = "SELECT " + id + " FROM " + tableName + " WHERE username = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, username);
-        ResultSet resultSet = preparedStatement.executeQuery();
-
-        if(resultSet.next())
-        {
-            return resultSet.getInt(id);
-        }
-
-        return 0;
+        return query;
     }
 }

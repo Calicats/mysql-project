@@ -3,7 +3,22 @@ package com.example.sql;
 import java.sql.*;
 
 public class Insert {
-    public static void addSuperAdmin(Connection connection, String cnp, String nume, String adresa, String nrTelefon, String email, String username, String parola) throws Exception{
+
+    /***
+     * Adauga un Superadministrator
+     * @param connection conexiunea la db_platforma
+     * @param cnp cnp
+     * @param nume nume
+     * @param adresa adresa
+     * @param nrTelefon numar de telefon
+     * @param email email
+     * @param username username
+     * @param parola parola
+     * @throws Exception exceptia pe care o arunca metoda
+     */
+
+    public static void addSuperAdmin(Connection connection, String cnp, String nume, String adresa, String nrTelefon, String email, String username, String parola) throws Exception
+    {
         String procedureCall = "{CALL AddNewSuperAdministrator(?, ?, ?, ?, ?, ?, ?)}";
         CallableStatement statement = connection.prepareCall(procedureCall);
         statement.setString(1, cnp);
@@ -16,7 +31,21 @@ public class Insert {
         statement.execute();
     }
 
-    public static void addAdmin(Connection connection, String cnp, String nume, String adresa, String nrTelefon, String email, String username, String parola) throws Exception{
+    /***
+     * Adauga un administrator
+     * @param connection conexiunea la db_platforma
+     * @param cnp cnp
+     * @param nume nume
+     * @param adresa adresa
+     * @param nrTelefon numar de telefon
+     * @param email email
+     * @param username username
+     * @param parola parola
+     * @throws Exception exceptia pe care o arunca metoda
+     */
+
+    public static void addAdmin(Connection connection, String cnp, String nume, String adresa, String nrTelefon, String email, String username, String parola) throws Exception
+    {
         String procedureCall = "{CALL AddNewAdministrator(?, ?, ?, ?, ?, ?, ?)}";
         CallableStatement statement = connection.prepareCall(procedureCall);
         statement.setString(1, cnp);
@@ -29,7 +58,24 @@ public class Insert {
         statement.execute();
     }
 
-    public static void addProfessor(Connection connection, String cnp, String nume, String departament, int nrMinOre, int nrMaxOre, String adresa, String nrTelefon, String email, String username, String parola) throws Exception{
+    /***
+     * Adauga un Profesor
+     * @param connection conexiunea la db_platforma
+     * @param cnp cnp
+     * @param nume nume
+     * @param departament departament
+     * @param nrMinOre numar min de ore sustinute
+     * @param nrMaxOre numar max de ore sustinute
+     * @param adresa adresa
+     * @param nrTelefon numar de telefon
+     * @param email email
+     * @param username username
+     * @param parola parola
+     * @throws Exception exceptia pe care o arunca metoda
+     */
+
+    public static void addProfessor(Connection connection, String cnp, String nume, String departament, int nrMinOre, int nrMaxOre, String adresa, String nrTelefon, String email, String username, String parola) throws Exception
+    {
         String procedureCall = "{CALL AddNewProfessor(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
         CallableStatement statement = connection.prepareCall(procedureCall);
         statement.setString(1, cnp);
@@ -45,7 +91,23 @@ public class Insert {
         statement.execute();
     }
 
-    public static void addStudent(Connection connection, String cnp, String nume, int anStudiu, int numarOre, String adresa, String nrTelefon, String email, String username, String parola) throws Exception{
+    /***
+     * Adauga un student
+     * @param connection conexiunea la db_platforma
+     * @param cnp cnp
+     * @param nume nume
+     * @param anStudiu an studiu
+     * @param numarOre numarul de ore sustinute
+     * @param adresa adresa
+     * @param nrTelefon numar de telefon
+     * @param email email
+     * @param username username
+     * @param parola parola
+     * @throws Exception exceptia pe care o arunca metoda
+     */
+
+    public static void addStudent(Connection connection, String cnp, String nume, int anStudiu, int numarOre, String adresa, String nrTelefon, String email, String username, String parola) throws Exception
+    {
         String procedureCall = "{CALL AddNewStudent(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
         CallableStatement statement = connection.prepareCall(procedureCall);
         statement.setString(1, cnp);

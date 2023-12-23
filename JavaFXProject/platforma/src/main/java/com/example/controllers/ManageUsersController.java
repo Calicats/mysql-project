@@ -2,6 +2,7 @@ package com.example.controllers;
 
 import com.example.platforma.Main;
 import com.example.sql.Connect;
+import com.example.sql.Delete;
 import com.example.sql.Insert;
 import com.example.sql.Update;
 import javafx.collections.FXCollections;
@@ -60,6 +61,12 @@ public class ManageUsersController {
     private String username;
     private String tableName;
 
+    /***
+     * "Constructor", in ghilimele
+     * @param username numele utilizatorului logat
+     * @param tableName tabela de care apartine utilizatorul
+     */
+
     public void initUser(String username, String tableName)
     {
         this.username = username;
@@ -92,11 +99,21 @@ public class ManageUsersController {
         makeAdditionalFieldsInvisible();
     }
 
+    /***
+     * Intoarcere la panoul administrativ
+     * @throws IOException exceptia pe care o arunca metoda
+     */
+
     public void onBackButton() throws IOException
     {
         Main main = new Main();
-        main.changeScene("dupaLogare.fxml", username, tableName, 1024, 768);
+        main.changeScene("panouAdministrativ.fxml", username, tableName, 1024, 768);
     }
+
+    /***
+     * Modifica textul butonului pe ce ai selectat in combo box
+     * ComboBox = un fel de drop-down menu
+     */
 
     public void onSelectOperation()
     {
@@ -110,9 +127,16 @@ public class ManageUsersController {
         modifyUserField.setText("");
         modifyUserLabel.setText("");
         setUsernameAndPasswordEditable(true);
+        deleteOperation(false);
 
         if(buttonText.equals("Modifica") || buttonText.equals("Sterge"))
         {
+            if(buttonText.equals("Sterge"))
+            {
+                // seteaza toate campurile ineditabile, mai putin cel de introducere de utilizator
+                deleteOperation(true);
+            }
+
             modifyUserLabel.setVisible(true);
             modifyUserField.setVisible(true);
             modifyUserField.setText("");
@@ -123,6 +147,11 @@ public class ManageUsersController {
 
         clearAllFields();
     }
+
+    /***
+     * Logica din spatele butonului de operatie (Adauga, Modifica, Stergere)
+     * Am ales sa nu poti modifica username-ul si parola
+     */
 
     public void onOperationButton()
     {
@@ -144,241 +173,298 @@ public class ManageUsersController {
             return;
         }
 
-        String numeString = nameField.getText();
         String cnpString = cnpField.getText();
+        String numeString = nameField.getText();
         String adresaString = adresaField.getText();
         String emailString = emailField.getText();
         String nrTelefonString = nrTelefonField.getText();
         String usernameString = usernameField.getText();
         String parolaString = parolaField.getText();
-        List<String> entries = Arrays.asList(cnpString, numeString, adresaString, nrTelefonString, emailString, usernameString, parolaString);
+        List<String> entries = new ArrayList<>(Arrays.asList(cnpString, numeString, adresaString, nrTelefonString, emailString, usernameString, parolaString));
 
-        if (operationName == null)
+        if(operationName == null)
         {
             errorHandling.setText("Selecteaza o operatie!");
             return;
         }
 
-        if (operationName.equals("Adauga"))
+        switch (operationName)
         {
-            switch (tableName)
+            case "Adauga" ->
             {
-                case "Superadministrator" ->
+                if(oneIsEmpty(numeString, cnpString, adresaString, emailString, nrTelefonString, usernameString, parolaString))
                 {
-                    if (oneIsEmpty(numeString, cnpString, adresaString, emailString, nrTelefonString, usernameString, parolaString))
-                    {
-                        errorHandling.setText("Introdu date in toate campurile!");
-                        return;
-                    }
-
-                    boolean ex = false;
-
-                    try
-                    {
-                        Insert.addSuperAdmin(connection, cnpString, numeString, adresaString, nrTelefonString, emailString, usernameString, parolaString);
-                    }
-                    catch(Exception e)
-                    {
-                        errorHandling.setText(e.getMessage());
-                        ex = true;
-                        e.printStackTrace();
-                    }
-
-                    if (!ex)
-                    {
-                        errorHandling.setTextFill(Color.rgb(0, 255, 0));
-                        errorHandling.setText("Superadministrator adaugat cu succes!");
-                    }
-
+                    errorHandling.setText("Introdu date in toate campurile!");
                     clearAllFields();
+                    return;
                 }
 
-                case "Administrator" ->
+                switch (tableName)
                 {
-                    if (oneIsEmpty(numeString, cnpString, adresaString, emailString, nrTelefonString, usernameString, parolaString))
+                    case "Superadministrator" ->
                     {
-                        errorHandling.setText("Introdu date in toate campurile!");
-                        return;
-                    }
+                        boolean ex = false;
 
-                    boolean ex = false;
-
-                    try
-                    {
-                        Insert.addAdmin(connection, cnpString, numeString, adresaString, nrTelefonString, emailString, usernameString, parolaString);
-                    }
-                    catch(Exception e)
-                    {
-                        errorHandling.setText(e.getMessage());
-                        ex = true;
-                        e.printStackTrace();
-                    }
-
-                    if (!ex) {
-                        errorHandling.setTextFill(Color.rgb(0, 255, 0));
-                        errorHandling.setText("Administrator adaugat cu succes!");
-                    }
-                    clearAllFields();
-                }
-
-                case "Profesor" ->
-                {
-                    String departamentString = additionalField1.getText();
-                    String nrMinOreString = additionalField2.getText();
-                    String nrMaxOreString = additionalField3.getText();
-
-                    if (departamentString.isEmpty() || nrMinOreString.isEmpty() || nrMaxOreString.isEmpty())
-                    {
-                        errorHandling.setText("Introdu date in toate campurile!");
-                        return;
-                    }
-
-                    int nrMinOre = Integer.parseInt(nrMinOreString);
-                    int nrMaxOre = Integer.parseInt(nrMaxOreString);
-
-                    boolean ex = false;
-
-                    try
-                    {
-                        Insert.addProfessor(connection, cnpString, numeString, departamentString, nrMinOre, nrMaxOre, adresaString, nrTelefonString, emailString, usernameString, parolaString);
-                    }
-                    catch(Exception e)
-                    {
-                        errorHandling.setText(e.getMessage());
-                        ex = true;
-                        e.printStackTrace();
-                    }
-
-                    if (!ex)
-                    {
-                        errorHandling.setTextFill(Color.rgb(0, 255, 0));
-                        errorHandling.setText("Profesor adaugat cu succes!");
-                    }
-                    clearAllFields();
-                }
-
-                case "Student" ->
-                {
-                    String anStudiuString = additionalField1.getText();
-                    String numarOreString = additionalField2.getText();
-
-                    if (anStudiuString.isEmpty() || numarOreString.isEmpty())
-                    {
-                        errorHandling.setText("Introdu date in toate campurile!");
-                        return;
-                    }
-
-                    int anStudiu = Integer.parseInt(anStudiuString);
-                    int numarOre = Integer.parseInt(numarOreString);
-
-                    boolean ex = false;
-
-                    try
-                    {
-                        Insert.addStudent(connection, cnpString, numeString, anStudiu, numarOre, adresaString, nrTelefonString, emailString, usernameString, parolaString);
-                    }
-                    catch(Exception e)
-                    {
-                        errorHandling.setText(e.getMessage());
-                        ex = true;
-                        e.printStackTrace();
-                    }
-
-                    if (!ex)
-                    {
-                        errorHandling.setTextFill(Color.rgb(0, 255, 0));
-                        errorHandling.setText("Student adaugat cu succes!");
-                    }
-
-                    clearAllFields();
-                }
-            }
-        }
-        else if(operationName.equals("Modifica"))
-        {
-            String modifyUserString = modifyUserField.getText();
-
-            List<String> columnsList = getColumnsList(tableName);
-            List<String> validEntries = new ArrayList<>();
-
-            int emptyCount = 0;
-            for(String value: entries)
-            {
-                if(!value.isEmpty())
-                {
-                    validEntries.add(value);
-                }
-                else
-                {
-                    validEntries.add("null");
-                    ++emptyCount;
-                }
-            }
-
-            if(emptyCount == 7 || emptyCount == 9 || emptyCount == 10)
-            {
-                errorHandling.setText("Introdu cel putin o data valida!");
-                return;
-            }
-
-            boolean ex = false;
-            int rowsAffected = 0;
-
-            for(int i = 0; i < validEntries.size(); ++i)
-            {
-                if(!validEntries.get(i).equals("null"))
-                {
-                    String columnName = columnsList.get(i);
-                    if(columnName.equals("username") || columnName.equals("parola"))
-                    {
-                        continue;
-                    }
-
-                    String newValue = validEntries.get(i);
-                    try
-                    {
-                        int updated = 0;
-                        if(columnName.equals("nrMinOre") || columnName.equals("nrMaxOre") || columnName.equals("numarOre") || columnName.equals("anStudiu"))
+                        try
                         {
-                            updated = Update.updateEntry(connection, modifyUserString, tableName, columnName, Integer.parseInt(newValue));
+                            Insert.addSuperAdmin(connection, cnpString, numeString, adresaString, nrTelefonString, emailString, usernameString, parolaString);
                         }
-                        else
+                        catch(Exception e)
                         {
-                            updated = Update.updateEntry(connection, modifyUserString, tableName, columnName, newValue);
+                            errorHandling.setText(e.getMessage());
+                            ex = true;
+                            e.printStackTrace();
                         }
 
-                        if(updated > 0)
+                        if(!ex)
                         {
-                            ++rowsAffected;
+                            errorHandling.setTextFill(Color.rgb(0, 255, 0));
+                            errorHandling.setText("Superadministrator adaugat cu succes!");
                         }
+
+                        clearAllFields();
                     }
 
-                    catch (Exception e)
+                    case "Administrator" ->
                     {
-                        errorHandling.setText(e.getMessage());
-                        ex = true;
-                        e.printStackTrace();
+                        boolean ex = false;
+
+                        try
+                        {
+                            Insert.addAdmin(connection, cnpString, numeString, adresaString, nrTelefonString, emailString, usernameString, parolaString);
+                        }
+                        catch(Exception e)
+                        {
+                            errorHandling.setText(e.getMessage());
+                            ex = true;
+                            e.printStackTrace();
+                        }
+
+                        if(!ex)
+                        {
+                            errorHandling.setTextFill(Color.rgb(0, 255, 0));
+                            errorHandling.setText("Administrator adaugat cu succes!");
+                        }
+
+                        clearAllFields();
+                    }
+
+                    case "Profesor" ->
+                    {
+                        String departamentString = additionalField1.getText();
+                        String nrMinOreString = additionalField2.getText();
+                        String nrMaxOreString = additionalField3.getText();
+
+                        if(departamentString.isEmpty() || nrMinOreString.isEmpty() || nrMaxOreString.isEmpty())
+                        {
+                            errorHandling.setText("Introdu date in toate campurile!");
+                            clearAllFields();
+                            return;
+                        }
+
+                        int nrMinOre = Integer.parseInt(nrMinOreString);
+                        int nrMaxOre = Integer.parseInt(nrMaxOreString);
+
+                        boolean ex = false;
+
+                        try
+                        {
+                            Insert.addProfessor(connection, cnpString, numeString, departamentString, nrMinOre, nrMaxOre, adresaString, nrTelefonString, emailString, usernameString, parolaString);
+                        }
+                        catch(Exception e)
+                        {
+                            errorHandling.setText(e.getMessage());
+                            ex = true;
+                            e.printStackTrace();
+                        }
+
+                        if(!ex)
+                        {
+                            errorHandling.setTextFill(Color.rgb(0, 255, 0));
+                            errorHandling.setText("Profesor adaugat cu succes!");
+                        }
+
+                        clearAllFields();
+                    }
+
+                    case "Student" ->
+                    {
+                        String anStudiuString = additionalField1.getText();
+                        String numarOreString = additionalField2.getText();
+
+                        if(anStudiuString.isEmpty() || numarOreString.isEmpty())
+                        {
+                            errorHandling.setText("Introdu date in toate campurile!");
+                            clearAllFields();
+                            return;
+                        }
+
+                        int anStudiu = Integer.parseInt(anStudiuString);
+                        int numarOre = Integer.parseInt(numarOreString);
+
+                        boolean ex = false;
+
+                        try
+                        {
+                            Insert.addStudent(connection, cnpString, numeString, anStudiu, numarOre, adresaString, nrTelefonString, emailString, usernameString, parolaString);
+                        }
+                        catch(Exception e)
+                        {
+                            errorHandling.setText(e.getMessage());
+                            ex = true;
+                            e.printStackTrace();
+                        }
+
+                        if(!ex)
+                        {
+                            errorHandling.setTextFill(Color.rgb(0, 255, 0));
+                            errorHandling.setText("Student adaugat cu succes!");
+                        }
+
+                        clearAllFields();
                     }
                 }
             }
-
-            if(rowsAffected == 0)
+            case "Modifica" ->
             {
-                errorHandling.setText("Introdu un utilizator valid!");
+                String modifyUserString = modifyUserField.getText();
+                List<String> columnsList = getColumnsList(tableName);
+                List<String> validEntries = new ArrayList<>();
+
+                if(tableName.equals("Profesor"))
+                {
+                    // adauga campurile departament, nrMinOre, nrMaxOre
+                    entries.add(2, additionalField1.getText());
+                    entries.add(3, additionalField2.getText());
+                    entries.add(4, additionalField3.getText());
+                }
+                else if(tableName.equals("Student"))
+                {
+                    // adauga campurile anStudiu, numarOre
+                    entries.add(2, additionalField1.getText());
+                    entries.add(3, additionalField2.getText());
+                }
+
+                int emptyCount = 0;
+
+                for (String value : entries)
+                {
+                    if(!value.isEmpty())
+                    {
+                        validEntries.add(value);
+                    }
+                    else
+                    {
+                        validEntries.add("null");
+                        ++emptyCount;
+                    }
+                }
+
+                // toate campurile is goale daca si numai daca
+                // emptyCount = (numarul de coloane din tabel) - 2 (id-ul tabelei si id-ul rolului)
+
+                if(emptyCount == 7 || emptyCount == 9 || emptyCount == 10)
+                {
+                    errorHandling.setText("Introdu cel putin o data valida!");
+                    clearAllFields();
+                    return;
+                }
+
+                boolean ex = false;
+                int rowsAffected = 0;
+
+                for (int i = 0; i < validEntries.size(); ++i)
+                {
+                    if (!validEntries.get(i).equals("null"))
+                    {
+                        String columnName = columnsList.get(i);
+                        String newValue = validEntries.get(i);
+
+                        if(columnName.equals("username") || columnName.equals("parola"))
+                        {
+                            continue;
+                        }
+
+                        try
+                        {
+                            int updated = 0;
+                            if(columnName.equals("nrMinOre") || columnName.equals("nrMaxOre") || columnName.equals("numarOre") || columnName.equals("anStudiu"))
+                            {
+                                updated = Update.updateEntry(connection, modifyUserString, tableName, columnName, Integer.parseInt(newValue));
+                            }
+                            else
+                            {
+                                updated = Update.updateEntry(connection, modifyUserString, tableName, columnName, newValue);
+                            }
+
+                            if (updated > 0)
+                            {
+                                ++rowsAffected;
+                            }
+                        }
+                        catch(Exception e)
+                        {
+                            errorHandling.setText(e.getMessage());
+                            ex = true;
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                if(rowsAffected == 0)
+                {
+                    errorHandling.setText("Introdu un utilizator valid!");
+                    clearAllFields();
+                    return;
+                }
+
+                if(!ex)
+                {
+                    errorHandling.setTextFill(Color.rgb(0, 255, 0));
+                    errorHandling.setText("Modificare efectuata cu succes!");
+                }
+
                 clearAllFields();
-                return;
             }
-
-            if(!ex)
+            case "Sterge" ->
             {
-                errorHandling.setTextFill(Color.rgb(0, 255, 0));
-                errorHandling.setText("Modificare efectuata cu succes!");
+                String modifyUserString = modifyUserField.getText();
+
+                if(modifyUserString.equals(this.username))
+                {
+                    errorHandling.setText("Nu te poti sterge pe tine insuti!");
+                    clearAllFields();
+                    return;
+                }
+
+                try
+                {
+                    int affectedRows = Delete.deleteUser(connection, modifyUserString, tableName);
+
+                    if(affectedRows > 0)
+                    {
+                        errorHandling.setTextFill(Color.rgb(0, 255, 0));
+                        errorHandling.setText("Stergere efectuata cu succes!");
+                    }
+                    else
+                    {
+                        errorHandling.setText("Introdu un utilizator valid!");
+                    }
+
+                    clearAllFields();
+                }
+                catch (Exception e)
+                {
+                    errorHandling.setText(e.getMessage());
+                    clearAllFields();
+                }
             }
-
-            clearAllFields();
         }
-
     }
+
+    /***
+     * Metoda care afiseaza campurile necesare introducerii datelor
+     */
 
     public void onSelectTable()
     {
@@ -431,11 +517,20 @@ public class ManageUsersController {
         }
     }
 
+    /***
+     * Necesar pentru modificare/stergere
+     * @param expr true/false
+     */
+
     private void setUsernameAndPasswordEditable(boolean expr)
     {
         usernameField.setEditable(expr);
         parolaField.setEditable(expr);
     }
+
+    /***
+     * Campurile din profesor si student le seteaza invisibile
+     */
 
     private void makeAdditionalFieldsInvisible()
     {
@@ -454,32 +549,45 @@ public class ManageUsersController {
         additionalLabel3.setText("");
     }
 
+    /***
+     * Functie care construieste lista de coloane a tabelului selectat in combo box
+     * @param tableName numele tabelului
+     * @return lista de coloane a tabelului
+     */
+
     private List<String> getColumnsList(String tableName)
     {
         List<String> columnsList = new ArrayList<>();
 
-        if(tableName.equals("Superadministrator") || tableName.equals("Administrator"))
+        switch (tableName)
         {
-            String[] columns = {"cnp", "nume", "adresa", "nrTelefon", "email", "username", "parola"};
-            columnsList = Arrays.asList(columns);
-        }
-        else if(tableName.equals("Profesor"))
-        {
-            String[] columns = {"cnp", "nume", "departament", "nrMinOre", "nrMaxOre", "adresa", "nrTelefon", "email", "username", "parola"};
-            columnsList = Arrays.asList(columns);
-        }
-        else if(tableName.equals("Student"))
-        {
-            String[] columns = {"cnp", "nume", "anStudiu", "numarOre", "adresa", "nrTelefon", "email", "username", "parola"};
-            columnsList = Arrays.asList(columns);
+            case "Superadministrator", "Administrator" ->
+            {
+                String[] columns = {"cnp", "nume", "adresa", "nrTelefon", "email", "username", "parola"};
+                columnsList = Arrays.asList(columns);
+            }
+            case "Profesor" ->
+            {
+                String[] columns = {"cnp", "nume", "departament", "nrMinOre", "nrMaxOre", "adresa", "nrTelefon", "email", "username", "parola"};
+                columnsList = Arrays.asList(columns);
+            }
+            case "Student" ->
+            {
+                String[] columns = {"cnp", "nume", "anStudiu", "numarOre", "adresa", "nrTelefon", "email", "username", "parola"};
+                columnsList = Arrays.asList(columns);
+            }
         }
         return columnsList;
     }
 
+    /***
+     * Sterge tot ce s-a introdus in campuri
+     */
+
     private void clearAllFields()
     {
-        nameField.clear();
         cnpField.clear();
+        nameField.clear();
         adresaField.clear();
         emailField.clear();
         nrTelefonField.clear();
@@ -489,6 +597,25 @@ public class ManageUsersController {
         additionalField2.clear();
         additionalField3.clear();
         modifyUserField.clear();
+    }
+
+    /***
+     * Seteaza toate campurile ineditable, mai putin cel de introducere de utilizator
+     * @param expr = true/false
+     */
+
+    private void deleteOperation(boolean expr)
+    {
+        cnpField.setEditable(!expr);
+        nameField.setEditable(!expr);
+        adresaField.setEditable(!expr);
+        emailField.setEditable(!expr);
+        nrTelefonField.setEditable(!expr);
+        usernameField.setEditable(!expr);
+        parolaField.setEditable(!expr);
+        additionalField1.setEditable(!expr);
+        additionalField2.setEditable(!expr);
+        additionalField3.setEditable(!expr);
     }
 
     private boolean oneIsEmpty(String numeString, String cnpString, String adresaString, String emailString, String nrTelefonString, String usernameString, String parolaString)
