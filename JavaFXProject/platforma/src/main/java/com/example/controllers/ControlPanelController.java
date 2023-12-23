@@ -18,7 +18,6 @@ public class ControlPanelController {
     private Button findUsersButton;
     @FXML
     private Button logoutButton;
-
     @FXML
     private Label greetUser;
     @FXML

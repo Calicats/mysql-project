@@ -112,7 +112,6 @@ public class ManageUsersController {
 
     /***
      * Modifica textul butonului pe ce ai selectat in combo box
-     * ComboBox = un fel de drop-down menu
      */
 
     public void onSelectOperation()
@@ -327,8 +326,11 @@ public class ManageUsersController {
             }
             case "Modifica" ->
             {
+                // modifyUserString = numele utilizatorului ce vrei sa il modifici
                 String modifyUserString = modifyUserField.getText();
+                // columnList = lista de coloane
                 List<String> columnsList = getColumnsList(tableName);
+                // validEntries = lista de intrari valide, care nu sunt "null"
                 List<String> validEntries = new ArrayList<>();
 
                 if(tableName.equals("Profesor"))
@@ -345,25 +347,23 @@ public class ManageUsersController {
                     entries.add(3, additionalField2.getText());
                 }
 
-                int emptyCount = 0;
+                int entriesCount = 0;
 
                 for (String value : entries)
                 {
                     if(!value.isEmpty())
                     {
                         validEntries.add(value);
+                        ++entriesCount;
                     }
                     else
                     {
                         validEntries.add("null");
-                        ++emptyCount;
                     }
                 }
 
-                // toate campurile is goale daca si numai daca
-                // emptyCount = (numarul de coloane din tabel) - 2 (id-ul tabelei si id-ul rolului)
-
-                if(emptyCount == 7 || emptyCount == 9 || emptyCount == 10)
+                // daca nu avem intrari, afisam un mesaj corespunzator
+                if(entriesCount == 0)
                 {
                     errorHandling.setText("Introdu cel putin o data valida!");
                     clearAllFields();
@@ -382,6 +382,7 @@ public class ManageUsersController {
 
                         if(columnName.equals("username") || columnName.equals("parola"))
                         {
+                            // ignor coloanele username si parola
                             continue;
                         }
 
@@ -390,10 +391,12 @@ public class ManageUsersController {
                             int updated = 0;
                             if(columnName.equals("nrMinOre") || columnName.equals("nrMaxOre") || columnName.equals("numarOre") || columnName.equals("anStudiu"))
                             {
+                                // adaug un int
                                 updated = Update.updateEntry(connection, modifyUserString, tableName, columnName, Integer.parseInt(newValue));
                             }
                             else
                             {
+                                // adaug un string
                                 updated = Update.updateEntry(connection, modifyUserString, tableName, columnName, newValue);
                             }
 
@@ -428,6 +431,7 @@ public class ManageUsersController {
             }
             case "Sterge" ->
             {
+                // modifyUserString = numele utilizatorului ce vrei sa il stergi
                 String modifyUserString = modifyUserField.getText();
 
                 if(modifyUserString.equals(this.username))
