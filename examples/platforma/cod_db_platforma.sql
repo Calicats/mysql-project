@@ -268,6 +268,45 @@ END;
 DELIMITER ;
 
 DELIMITER //
+CREATE TRIGGER UpdateSuperAdmin
+AFTER UPDATE ON SuperAdministrator
+FOR EACH ROW
+BEGIN
+    UPDATE Utilizator
+    SET cnp = NEW.cnp, username = NEW.username, parola = NEW.parola
+    WHERE id_rol = (SELECT idRol FROM Rol WHERE BINARY numeRol = 'SuperAdmin') AND cnp = OLD.cnp;
+END;
+//
+CREATE TRIGGER UpdateAdmin
+AFTER UPDATE ON Administrator
+FOR EACH ROW
+BEGIN
+    UPDATE Utilizator
+    SET cnp = NEW.cnp, username = NEW.username, parola = NEW.parola
+    WHERE id_rol = (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Admin') AND cnp = OLD.cnp;
+END;
+//
+CREATE TRIGGER UpdateProfesor
+AFTER UPDATE ON Profesor
+FOR EACH ROW
+BEGIN
+    UPDATE Utilizator
+    SET cnp = NEW.cnp, username = NEW.username, parola = NEW.parola
+    WHERE id_rol = (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Profesor') AND cnp = OLD.cnp;
+END;
+//
+CREATE TRIGGER UpdateStudent
+AFTER UPDATE ON Student
+FOR EACH ROW
+BEGIN
+    UPDATE Utilizator
+    SET cnp = NEW.cnp, username = NEW.username, parola = NEW.parola
+    WHERE id_rol = (SELECT idRol FROM Rol WHERE BINARY numeRol = 'Student') AND cnp = OLD.cnp;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
 CREATE TRIGGER DeleteSuperAdmin
 AFTER DELETE ON SuperAdministrator
 FOR EACH ROW
@@ -305,8 +344,6 @@ call addNewSuperAdministrator("2222222222222", "Lion Moroz", "Str Principala nr 
 SELECT * FROM SuperAdministrator;
 SELECT * FROM Utilizator;
 
-SELECT Profesor.cnp, Profesor.nume, Profesor.departament, Profesor.nrMinOre, Profesor.nrMaxOre, Profesor.adresa, Profesor.nrTelefon, Profesor.email, Profesor.username, Profesor.parola,
-ActivitateProfesor.tipActivitate AS Course_Type, ActivitateProfesor.descriere AS Course_Description
-FROM Profesor
-JOIN ActivitateProfesor ON Profesor.idProfesor = ActivitateProfesor.id_profesor;
-
+DELETE FROM SuperAdministrator;
+ALTER TABLE SuperAdministrator AUTO_INCREMENT = 1;
+ALTER TABLE Utilizator AUTO_INCREMENT = 1;
