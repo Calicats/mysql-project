@@ -363,6 +363,16 @@ END;
 //
 DELIMITER ;
 
+DELIMITER //
+CREATE TRIGGER DeleteActivitiesOnProfesor
+AFTER DELETE ON Profesor
+FOR EACH ROW
+BEGIN
+    DELETE FROM ActivitateProfesor WHERE id_profesor = OLD.idProfesor;
+END;
+//
+DELIMITER ;
+
 call addNewSuperAdministrator("0000000000000", "Vlad Durdeu", "Str Principala nr 1", "0755333444", "johnsmith0@random.org", "Vlad", "Calicats");
 call addNewSuperAdministrator( "1111111111111", "Alex Stancu", "Str Principala nr 2", "0755333445", "johnsmith1@random.org", "Stancu", "Calicats");
 call addNewSuperAdministrator("2222222222222", "Lion Moroz", "Str Principala nr 3", "0755333446", "johnsmith2@random.org", "Lion", "Calicats");
@@ -376,6 +386,7 @@ call addNewActivitateProfesor("profesormate", "Seminar", "Seminar 1: Relatii");
 SELECT * FROM SuperAdministrator;
 SELECT * FROM Utilizator;
 SELECT * FROM Profesor;
+SELECT * FROM ActivitateProfesor;
 
 SELECT 
     P.nume,
