@@ -25,6 +25,8 @@ public class ManageUsersController {
     @FXML
     private Button backButton;
     @FXML
+    private Button addActivitateButton;
+    @FXML
     private TextField cnpField;
     @FXML
     private TextField emailField;
@@ -110,6 +112,12 @@ public class ManageUsersController {
         main.changeScene("panouAdministrativ.fxml", username, tableName, 1024, 768);
     }
 
+    public void onAddActivitate() throws IOException
+    {
+        Main main = new Main();
+        main.changeScene("adaugaActivitate.fxml", username, tableName, 1024, 768);
+    }
+
     /***
      * Modifica textul butonului pe ce ai selectat in combo box
      */
@@ -159,7 +167,7 @@ public class ManageUsersController {
         errorHandling.setTextFill(Color.RED);
         errorHandling.setText("");
 
-        if (tableName == null)
+        if(tableName == null)
         {
             errorHandling.setText("Selecteaza o tabela!");
             return;
@@ -461,6 +469,7 @@ public class ManageUsersController {
                 {
                     errorHandling.setText(e.getMessage());
                     clearAllFields();
+                    e.printStackTrace();
                 }
             }
         }

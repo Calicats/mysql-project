@@ -181,6 +181,25 @@ public class Query {
     }
 
     /***
+     * Metoda care returneaza daca exista utilizatorul in tabela specificata
+     * @param connection conexiunea la db_platforma
+     * @param username username
+     * @param tableName numele tabelei
+     * @return true (exista user-ul in tabela) / false (nu exista user-ul in tabela)
+     * @throws Exception exceptie pe care o poate arunca metoda
+     */
+
+    public static boolean userExistsInTable(Connection connection, String username, String tableName) throws Exception
+    {
+        String query = "SELECT username FROM " + tableName + " WHERE BINARY username = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, username);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
+    /***
      * Creaza tabela de activitate profesor
      * @param connection conexiunea la db_platforma
      * @return tabela cu coloanele nume, username, tipActivitate, descriere

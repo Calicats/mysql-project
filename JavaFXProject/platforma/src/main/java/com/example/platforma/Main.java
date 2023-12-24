@@ -1,5 +1,6 @@
 package com.example.platforma;
 
+import com.example.controllers.AddActivitateController;
 import com.example.controllers.ControlPanelController;
 import com.example.controllers.FindUsersController;
 import com.example.controllers.ManageUsersController;
@@ -67,6 +68,13 @@ public class Main extends Application {
                     {
                         currentStage.setTitle("Gestionare utilizatori");
                         ManageUsersController controller = fxmlLoader.getController();
+                        controller.initUser(username, tableName);
+                    }
+
+                    case "adaugaActivitate.fxml" ->
+                    {
+                        currentStage.setTitle("Adauga activitate profesor");
+                        AddActivitateController controller = fxmlLoader.getController();
                         controller.initUser(username, tableName);
                     }
 

@@ -14,7 +14,12 @@
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #6F2282;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackButton" prefHeight="104.0" prefWidth="146.0" style="-fx-background-color: transparent;" text="Inapoi" textFill="WHITE">
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackButton" prefHeight="100.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="Inapoi" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Button fx:id="addActivitateButton" mnemonicParsing="false" onAction="#onAddActivitate" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Adauga activitate profesor" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
