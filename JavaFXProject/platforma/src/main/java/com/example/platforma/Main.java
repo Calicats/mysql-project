@@ -50,28 +50,32 @@ public class Main extends Application {
 
         if(username != null && tableName != null)
         {
-            switch (fxml) {
-                case "logare.fxml" -> currentStage.setTitle("Logare platforma");
-
-                case "panouAdministrativ.fxml" ->
+            if(tableName.equals("superadministrator") || tableName.equals("administrator"))
+            {
+                switch (fxml)
                 {
-                    currentStage.setTitle("Platforma scolara");
-                    ControlPanelController controller = fxmlLoader.getController();
-                    controller.initUser(username, tableName);
-                }
+                    case "logare.fxml" -> currentStage.setTitle("Logare platforma");
 
-                case "gestionareUtilizatori.fxml" ->
-                {
-                    currentStage.setTitle("Gestionare utilizatori");
-                    ManageUsersController controller = fxmlLoader.getController();
-                    controller.initUser(username, tableName);
-                }
+                    case "panouAdministrativ.fxml" ->
+                    {
+                        currentStage.setTitle("Platforma scolara");
+                        ControlPanelController controller = fxmlLoader.getController();
+                        controller.initUser(username, tableName);
+                    }
 
-                case "cautareUtilizatori.fxml" ->
-                {
-                    currentStage.setTitle("Cautare utilizatori");
-                    FindUsersController controller = fxmlLoader.getController();
-                    controller.initUser(username, tableName);
+                    case "gestionareUtilizatori.fxml" ->
+                    {
+                        currentStage.setTitle("Gestionare utilizatori");
+                        ManageUsersController controller = fxmlLoader.getController();
+                        controller.initUser(username, tableName);
+                    }
+
+                    case "cautareUtilizatori.fxml" ->
+                    {
+                        currentStage.setTitle("Cautare utilizatori");
+                        FindUsersController controller = fxmlLoader.getController();
+                        controller.initUser(username, tableName);
+                    }
                 }
             }
         }

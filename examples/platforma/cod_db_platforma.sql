@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS Profesor(
 
 CREATE TABLE IF NOT EXISTS Student(
     idStudent int unique auto_increment primary key,
-	  cnp char(20) unique not null,
+	cnp char(20) unique not null,
     nume char(30),
     anStudiu int,
     numarOre int,
@@ -52,16 +52,16 @@ CREATE TABLE IF NOT EXISTS Student(
 
 # aici tin activitatea profesorilor (curs, seminar, lab)
 CREATE TABLE IF NOT EXISTS ActivitateProfesor(
-	  idActivitateProfesor int unique auto_increment primary key,
-    tipActivitate char(15),
-    descriere char(50),
+	idActivitateProfesor int unique auto_increment primary key,
+    tipActivitate char(255),
+    descriere char(255),
     id_profesor int,
     foreign key(id_profesor) references Profesor(idProfesor)
 );
 
 # aici tin cine participa la activitate
 CREATE TABLE IF NOT EXISTS ParticipantActivitate(
-	  idParticipantActivitate int unique auto_increment primary key,
+	idParticipantActivitate int unique auto_increment primary key,
     nrMaximStudenti int,
     id_activitate_profesor int,
     id_student int,
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS ParticipantActivitate(
 
 # aici tin calendarul desfasurarii activitatilor
 CREATE TABLE IF NOT EXISTS CalendarActivitate(
-	  idCalendarActivitate int unique auto_increment primary key,
+	idCalendarActivitate int unique auto_increment primary key,
     dataDesfasurareActivitate date,
     id_participant_activitate int,
     foreign key(id_participant_activitate) references ParticipantActivitate(idParticipantActivitate)
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS CalendarActivitate(
 
 # aici tin notele studentilor
 CREATE TABLE IF NOT EXISTS NoteStudent(
-	  idNota int unique auto_increment primary key,
+	idNota int unique auto_increment primary key,
     nota int,
     id_student int,
     id_participant_activitate int,
@@ -89,14 +89,14 @@ CREATE TABLE IF NOT EXISTS NoteStudent(
 
 # aici tin marele grup de whatsapp cu un profesor
 CREATE TABLE IF NOT EXISTS GrupStudiu(
-	 idGrupStudiu int unique auto_increment primary key,
+	idGrupStudiu int unique auto_increment primary key,
     descriereGrupStudiu char(50),
     id_participant_activitate int,
     foreign key(id_participant_activitate) references ParticipantActivitate(idParticipantActivitate)
 );
 
 CREATE TABLE IF NOT EXISTS Rol(
-	  idRol int unique auto_increment primary key,
+	idRol int unique auto_increment primary key,
     numeRol char(15)
 );
 
@@ -196,7 +196,7 @@ DELIMITER ;
 
 # procedura pentru adaugarea unui profesor
 DELIMITER //
-CREATE PROCEDURE AddNewProfessor(
+CREATE PROCEDURE AddNewProfesor(
     IN cnp_param CHAR(20),
     IN nume_param CHAR(30),
     IN departament_param CHAR(50),
@@ -230,6 +230,22 @@ CREATE PROCEDURE AddNewStudent(
 BEGIN
     INSERT INTO Student(cnp, nume, anStudiu, numarOre, adresa, nrTelefon, email, username, parola, idRol)
     VALUES(cnp_param, nume_param, anStudiu_param, numarOre_param, adresa_param, nrTelefon_param, email_param, username_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'Student'));
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE AddNewActivitateProfesor(
+    IN username_param CHAR(255),
+    IN tipActivitate_param CHAR(255),
+    IN descriere_param CHAR(255)
+)
+BEGIN
+    DECLARE id_profesor INT;
+
+    SELECT idProfesor INTO id_profesor FROM Profesor WHERE username = username_param;
+
+    INSERT INTO ActivitateProfesor(tipActivitate, descriere, id_profesor)
+    VALUES(tipActivitate_param, descriere_param, id_profesor);
 END //
 DELIMITER ;
 
@@ -351,9 +367,28 @@ call addNewSuperAdministrator("0000000000000", "Vlad Durdeu", "Str Principala nr
 call addNewSuperAdministrator( "1111111111111", "Alex Stancu", "Str Principala nr 2", "0755333445", "johnsmith1@random.org", "Stancu", "Calicats");
 call addNewSuperAdministrator("2222222222222", "Lion Moroz", "Str Principala nr 3", "0755333446", "johnsmith2@random.org", "Lion", "Calicats");
 
+call addNewActivitateProfesor("profesor", "Curs", "Curs 1: Introducere");
+call addNewActivitateProfesor("profesor", "Seminar", "Seminar 1: Introducere");
+
+call addNewActivitateProfesor("profesormate", "Curs", "Curs 1: Relatii");
+call addNewActivitateProfesor("profesormate", "Seminar", "Seminar 1: Relatii");
+
 SELECT * FROM SuperAdministrator;
 SELECT * FROM Utilizator;
+SELECT * FROM Profesor;
+
+SELECT 
+    P.nume,
+    P.username,
+    AP.tipActivitate,
+    AP.descriere
+FROM 
+    Profesor P
+JOIN 
+    ActivitateProfesor AP ON P.idProfesor = AP.id_profesor;
 
 DELETE FROM SuperAdministrator;
+DELETE FROM ActivitateProfesor;
+ALTER TABLE ActivitateProfesor AUTO_INCREMENT = 1;
 ALTER TABLE SuperAdministrator AUTO_INCREMENT = 1;
 ALTER TABLE Utilizator AUTO_INCREMENT = 1;

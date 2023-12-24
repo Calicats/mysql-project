@@ -268,7 +268,7 @@ public class ManageUsersController {
 
                         try
                         {
-                            Insert.addProfessor(connection, cnpString, numeString, departamentString, nrMinOre, nrMaxOre, adresaString, nrTelefonString, emailString, usernameString, parolaString);
+                            Insert.addProfesor(connection, cnpString, numeString, departamentString, nrMinOre, nrMaxOre, adresaString, nrTelefonString, emailString, usernameString, parolaString);
                         }
                         catch(Exception e)
                         {

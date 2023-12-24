@@ -59,7 +59,7 @@ public class Insert {
     }
 
     /***
-     * Adauga un Profesor
+     * Adauga un profesor
      * @param connection conexiunea la db_platforma
      * @param cnp cnp
      * @param nume nume
@@ -74,9 +74,9 @@ public class Insert {
      * @throws Exception exceptia pe care o arunca metoda
      */
 
-    public static void addProfessor(Connection connection, String cnp, String nume, String departament, int nrMinOre, int nrMaxOre, String adresa, String nrTelefon, String email, String username, String parola) throws Exception
+    public static void addProfesor(Connection connection, String cnp, String nume, String departament, int nrMinOre, int nrMaxOre, String adresa, String nrTelefon, String email, String username, String parola) throws Exception
     {
-        String procedureCall = "{CALL AddNewProfessor(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        String procedureCall = "{CALL AddNewProfesor(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
         CallableStatement statement = connection.prepareCall(procedureCall);
         statement.setString(1, cnp);
         statement.setString(2, nume);
@@ -119,6 +119,16 @@ public class Insert {
         statement.setString(7, email);
         statement.setString(8, username);
         statement.setString(9, parola);
+        statement.execute();
+    }
+
+    public static void addNewActivitateProfesor(Connection connection, String username, String tipActivitate, String descriere) throws Exception
+    {
+        String procedureCall = "{CALL AddNewActivitateProfesor(?, ?, ?)}";
+        CallableStatement statement = connection.prepareCall(procedureCall);
+        statement.setString(1, username);
+        statement.setString(2, tipActivitate);
+        statement.setString(3, descriere);
         statement.execute();
     }
 }

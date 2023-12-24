@@ -167,20 +167,45 @@ public class Query {
     }
 
     /***
-     *
+     * Creaza tabela de utilizatori
      * @param connection conexiunea la db_platforma
      * @param tableName numele tabelei
-     * @return toata informatia dintr-o tabela, cu id-uri cu tot
+     * @return toata informatia din tabela de utilizatori
      */
 
-    public static String[][] getTableInfo(Connection connection, String tableName)
+    public static String[][] getUsersTableInfo(Connection connection, String tableName)
     {
         String query = getQueryForTableInfo(tableName);
 
+        return getInfoFromQuery(connection, query);
+    }
+
+    /***
+     * Creaza tabela de activitate profesor
+     * @param connection conexiunea la db_platforma
+     * @return tabela cu coloanele nume, username, tipActivitate, descriere
+     */
+
+    public static String[][] getActivitateTableInfo(Connection connection)
+    {
+        String query = "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere " +
+                "FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor";
+        return getInfoFromQuery(connection, query);
+    }
+
+    /***
+     * Metoda ajutatoare pentru a crea tabelele de utilizatori si activitate profesor
+     * @param connection conexiunea la db_platforma
+     * @param query interogarea
+     * @return una din tabelele specificate
+     */
+
+    private static String[][] getInfoFromQuery(Connection connection, String query) {
         try
         {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
+
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
 
@@ -190,9 +215,9 @@ public class Query {
             {
                 String[] rowData = new String[columnCount];
 
-                for(int i = 0; i < columnCount; i++)
+                for(int i = 1; i <= columnCount; i++)
                 {
-                    rowData[i] = resultSet.getString(i + 1);
+                    rowData[i - 1] = resultSet.getString(i);
                 }
 
                 rows.add(rowData);
@@ -207,7 +232,6 @@ public class Query {
         {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -238,12 +262,15 @@ public class Query {
 
     private static String getQueryForAllInfoOnUser(String tableName)
     {
+        // am pus cu uppercase ca asa ii un combobox
         String query = switch(tableName)
         {
             case "Superadministrator" -> "SELECT * FROM superadministrator WHERE username = ?";
             case "Administrator" -> "SELECT * FROM administrator WHERE username = ?";
             case "Profesor" -> "SELECT * FROM profesor WHERE username = ?";
             case "Student" -> "SELECT * FROM student WHERE username = ?";
+            case "activitateprofesor" -> "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere " +
+                    "FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor WHERE username = ?";
             default -> null;
         };
         return query;
