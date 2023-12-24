@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import java.sql.Connection;
 
 public class LoginController {
-
     @FXML
     private Button loginButton;
     @FXML

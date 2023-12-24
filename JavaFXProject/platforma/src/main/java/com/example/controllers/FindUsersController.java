@@ -257,10 +257,10 @@ public class FindUsersController {
      * @param column coloana
      */
 
-    private void removeEllipses(TableColumn<ActivitateProfesor, String> column) {
+    private void removeEllipses(TableColumn<ActivitateProfesor, String> column)
+    {
         column.setMinWidth(200);
     }
-
 
     /***
      * Metoda ajutatoare la construirea celulelor tabelei

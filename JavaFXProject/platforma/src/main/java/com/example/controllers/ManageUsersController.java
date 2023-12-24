@@ -115,7 +115,7 @@ public class ManageUsersController {
     public void onAddActivitate() throws IOException
     {
         Main main = new Main();
-        main.changeScene("adaugaActivitate.fxml", username, tableName, 1024, 768);
+        main.changeScene("gestionareActivitate.fxml", username, tableName, 1024, 768);
     }
 
     /***
@@ -170,6 +170,7 @@ public class ManageUsersController {
         if(tableName == null)
         {
             errorHandling.setText("Selecteaza o tabela!");
+            selectOperationComboBox.setValue(null);
             return;
         }
 
@@ -192,10 +193,11 @@ public class ManageUsersController {
         if(operationName == null)
         {
             errorHandling.setText("Selecteaza o operatie!");
+            selectOperationComboBox.setValue(null);
             return;
         }
 
-        switch (operationName)
+        switch(operationName)
         {
             case "Adauga" ->
             {
@@ -203,6 +205,7 @@ public class ManageUsersController {
                 {
                     errorHandling.setText("Introdu date in toate campurile!");
                     clearAllFields();
+                    selectOperationComboBox.setValue(null);
                     return;
                 }
 
@@ -230,6 +233,7 @@ public class ManageUsersController {
                         }
 
                         clearAllFields();
+                        selectOperationComboBox.setValue(null);
                     }
 
                     case "Administrator" ->
@@ -266,6 +270,7 @@ public class ManageUsersController {
                         {
                             errorHandling.setText("Introdu date in toate campurile!");
                             clearAllFields();
+                            selectOperationComboBox.setValue(null);
                             return;
                         }
 
@@ -292,6 +297,7 @@ public class ManageUsersController {
                         }
 
                         clearAllFields();
+                        selectOperationComboBox.setValue(null);
                     }
 
                     case "Student" ->
@@ -303,6 +309,7 @@ public class ManageUsersController {
                         {
                             errorHandling.setText("Introdu date in toate campurile!");
                             clearAllFields();
+                            selectOperationComboBox.setValue(null);
                             return;
                         }
 
@@ -329,9 +336,11 @@ public class ManageUsersController {
                         }
 
                         clearAllFields();
+                        selectOperationComboBox.setValue(null);
                     }
                 }
             }
+
             case "Modifica" ->
             {
                 // modifyUserString = numele utilizatorului ce vrei sa il modifici
@@ -375,6 +384,7 @@ public class ManageUsersController {
                 {
                     errorHandling.setText("Introdu cel putin o data valida!");
                     clearAllFields();
+                    selectOperationComboBox.setValue(null);
                     return;
                 }
 
@@ -426,6 +436,7 @@ public class ManageUsersController {
                 {
                     errorHandling.setText("Introdu un utilizator valid!");
                     clearAllFields();
+                    selectOperationComboBox.setValue(null);
                     return;
                 }
 
@@ -436,7 +447,9 @@ public class ManageUsersController {
                 }
 
                 clearAllFields();
+                selectOperationComboBox.setValue(null);
             }
+
             case "Sterge" ->
             {
                 // modifyUserString = numele utilizatorului ce vrei sa il stergi
@@ -446,6 +459,7 @@ public class ManageUsersController {
                 {
                     errorHandling.setText("Nu te poti sterge pe tine insuti!");
                     clearAllFields();
+                    selectOperationComboBox.setValue(null);
                     return;
                 }
 
@@ -464,6 +478,7 @@ public class ManageUsersController {
                     }
 
                     clearAllFields();
+                    selectOperationComboBox.setValue(null);
                 }
                 catch (Exception e)
                 {

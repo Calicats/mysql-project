@@ -19,7 +19,7 @@
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="addActivitateButton" mnemonicParsing="false" onAction="#onAddActivitate" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Adauga activitate profesor" textFill="WHITE">
+            <Button fx:id="addActivitateButton" mnemonicParsing="false" onAction="#onAddActivitate" prefHeight="100.0" prefWidth="224.0" style="-fx-background-color: transparent;" text="Gestionare activitate profesor" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>

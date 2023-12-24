@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controllers.ManageActivitateController">
+   <left>
+      <AnchorPane prefHeight="668.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="23.0" layoutY="73.0" text="Selecteaza operatia">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="23.0" layoutY="107.0" text="Introdu utilizator profesor">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="selectActivitateLabel" layoutX="23.0" layoutY="167.0" text="Alege un tip de activitate">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="descriptionLabel" layoutX="23.0" layoutY="201.0" text="Introdu descrierea activitatii">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="selectOperationComboBox" layoutX="269.0" layoutY="71.0" onAction="#onSelectOperation" prefWidth="150.0" />
+            <TextField fx:id="usernameProfesorField" layoutX="269.0" layoutY="105.0" promptText="Nume utilizator" />
+            <ComboBox fx:id="selectActivitateComboBox" layoutX="269.0" layoutY="165.0" prefWidth="150.0" />
+            <TextField fx:id="descriptionActivitateField" layoutX="269.0" layoutY="199.0" promptText="Descriere activitate" />
+            <Button fx:id="operationButton" layoutX="458.0" layoutY="71.0" mnemonicParsing="false" onAction="#onOperationButton" text="Selecteaza o operatie" />
+            <Label fx:id="errorHandling" layoutX="599.0" layoutY="76.0" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="foundUser" layoutX="560.0" layoutY="110.0" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="selectNewActivitateLabel" layoutX="23.0" layoutY="235.0" text="Alege un tip de activitate noua">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="newDescriptionLabel" layoutX="23.0" layoutY="269.0" text="Introdu descrierea noua a activitatii">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="selectNewActivitateComboBox" layoutX="269.0" layoutY="233.0" prefWidth="150.0" />
+            <TextField fx:id="newDescriptionActivitateField" layoutX="269.0" layoutY="267.0" promptText="Descriere activitate" />
+            <Button fx:id="findUsernameButton" layoutX="458.0" layoutY="105.0" mnemonicParsing="false" onAction="#onSearchUsername" text="Cauta utilizator" />
+            <TableView fx:id="tableActivitati" layoutX="458.0" layoutY="165.0" prefHeight="200.0" prefWidth="506.0">
+              <columns>
+                <TableColumn fx:id="numeColumn" prefWidth="75.0" text="nume" />
+                <TableColumn fx:id="usernameColumn" prefWidth="75.0" text="username" />
+                  <TableColumn fx:id="tipActivitateColumn" prefWidth="75.0" text="tipActivitate" />
+                  <TableColumn fx:id="descriereColumn" prefWidth="75.0" text="descriere" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+   </left>
+   <top>
+      <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #6F2282;" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackButton" prefHeight="104.0" prefWidth="146.0" style="-fx-background-color: transparent;" text="Inapoi" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </top>
+</BorderPane>
