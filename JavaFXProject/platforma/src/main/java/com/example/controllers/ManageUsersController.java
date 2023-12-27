@@ -170,7 +170,6 @@ public class ManageUsersController {
         if(tableName == null)
         {
             errorHandling.setText("Selecteaza o tabela!");
-            selectOperationComboBox.setValue(null);
             return;
         }
 
@@ -193,7 +192,6 @@ public class ManageUsersController {
         if(operationName == null)
         {
             errorHandling.setText("Selecteaza o operatie!");
-            selectOperationComboBox.setValue(null);
             return;
         }
 
@@ -205,7 +203,6 @@ public class ManageUsersController {
                 {
                     errorHandling.setText("Introdu date in toate campurile!");
                     clearAllFields();
-                    selectOperationComboBox.setValue(null);
                     return;
                 }
 
@@ -233,7 +230,6 @@ public class ManageUsersController {
                         }
 
                         clearAllFields();
-                        selectOperationComboBox.setValue(null);
                     }
 
                     case "Administrator" ->
@@ -309,7 +305,6 @@ public class ManageUsersController {
                         {
                             errorHandling.setText("Introdu date in toate campurile!");
                             clearAllFields();
-                            selectOperationComboBox.setValue(null);
                             return;
                         }
 
@@ -336,7 +331,6 @@ public class ManageUsersController {
                         }
 
                         clearAllFields();
-                        selectOperationComboBox.setValue(null);
                     }
                 }
             }
@@ -384,7 +378,6 @@ public class ManageUsersController {
                 {
                     errorHandling.setText("Introdu cel putin o data valida!");
                     clearAllFields();
-                    selectOperationComboBox.setValue(null);
                     return;
                 }
 
@@ -436,7 +429,6 @@ public class ManageUsersController {
                 {
                     errorHandling.setText("Introdu un utilizator valid!");
                     clearAllFields();
-                    selectOperationComboBox.setValue(null);
                     return;
                 }
 
@@ -447,7 +439,6 @@ public class ManageUsersController {
                 }
 
                 clearAllFields();
-                selectOperationComboBox.setValue(null);
             }
 
             case "Sterge" ->
@@ -478,7 +469,6 @@ public class ManageUsersController {
                     }
 
                     clearAllFields();
-                    selectOperationComboBox.setValue(null);
                 }
                 catch (Exception e)
                 {
@@ -587,7 +577,7 @@ public class ManageUsersController {
     {
         List<String> columnsList = new ArrayList<>();
 
-        switch (tableName)
+        switch(tableName)
         {
             case "Superadministrator", "Administrator" ->
             {

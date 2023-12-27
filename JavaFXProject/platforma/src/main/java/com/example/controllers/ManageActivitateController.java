@@ -135,7 +135,6 @@ public class ManageActivitateController {
         if(usernameString.isEmpty())
         {
             errorHandling.setText("Introdu un utilizator!");
-            selectOperationComboBox.setValue(null);
             return;
         }
 
@@ -152,7 +151,6 @@ public class ManageActivitateController {
             {
                 errorHandling.setText("Introdu date in toate campurile!");
                 clearAllFields();
-                selectOperationComboBox.setValue(null);
                 return;
             }
 
@@ -162,7 +160,6 @@ public class ManageActivitateController {
             {
                 errorHandling.setText("Introdu un utilizator valid!");
                 clearAllFields();
-                selectOperationComboBox.setValue(null);
                 return;
             }
 
@@ -175,7 +172,6 @@ public class ManageActivitateController {
                     errorHandling.setTextFill(Color.rgb(0, 255, 0));
                     errorHandling.setText("Adaugare efectuata cu succes!");
                     clearAllFields();
-                    selectOperationComboBox.setValue(null);
                 }
 
                 case "Modifica" ->
@@ -187,7 +183,6 @@ public class ManageActivitateController {
                     {
                         errorHandling.setText("Introdu date in toate campurile!");
                         clearAllFields();
-                        selectOperationComboBox.setValue(null);
                         return;
                     }
 
@@ -214,7 +209,6 @@ public class ManageActivitateController {
                     {
                         errorHandling.setText("Introdu un utilizator valid!");
                         clearAllFields();
-                        selectOperationComboBox.setValue(null);
                         return;
                     }
 
@@ -222,7 +216,6 @@ public class ManageActivitateController {
                     errorHandling.setText("Modificare efectuata cu succes!");
 
                     clearAllFields();
-                    selectOperationComboBox.setValue(null);
                 }
 
                 case "Sterge" ->
@@ -233,7 +226,6 @@ public class ManageActivitateController {
                     {
                         errorHandling.setText("Introdu un utilizator valid!");
                         clearAllFields();
-                        selectOperationComboBox.setValue(null);
                         return;
                     }
 
@@ -241,7 +233,6 @@ public class ManageActivitateController {
                     errorHandling.setText("Stergere efectuata cu succes!");
 
                     clearAllFields();
-                    selectOperationComboBox.setValue(null);
                 }
             }
         }
@@ -268,7 +259,6 @@ public class ManageActivitateController {
         {
             foundUser.setText("Utilizatorul nu exista!");
             clearAllFields();
-            selectOperationComboBox.setValue(null);
             return;
         }
 
@@ -279,7 +269,6 @@ public class ManageActivitateController {
         tableActivitati.setItems(listActivitate);
 
         clearAllFields();
-        selectOperationComboBox.setValue(null);
     }
 
     /***
