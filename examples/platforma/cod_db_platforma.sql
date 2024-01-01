@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS ActivitateProfesor(
 	idActivitateProfesor int unique auto_increment primary key,
     tipActivitate char(255),
     descriere char(255),
+    nrMaximStudenti int,
     id_profesor int,
     foreign key(id_profesor) references Profesor(idProfesor)
 );
@@ -62,7 +63,6 @@ CREATE TABLE IF NOT EXISTS ActivitateProfesor(
 # aici tin cine participa la activitate
 CREATE TABLE IF NOT EXISTS ParticipantActivitate(
 	idParticipantActivitate int unique auto_increment primary key,
-    nrMaximStudenti int,
     id_activitate_profesor int,
     id_student int,
     foreign key(id_activitate_profesor) references ActivitateProfesor(idActivitateProfesor),
@@ -110,7 +110,6 @@ CREATE TABLE IF NOT EXISTS Utilizator(
     idUtilizator int unique auto_increment primary key,
     username char(255) unique not null,
     cnp char(20) unique not null,
-    username char(255) unique,
     parola char(255),
     id_rol int,
     
@@ -237,15 +236,16 @@ DELIMITER //
 CREATE PROCEDURE AddNewActivitateProfesor(
     IN username_param CHAR(255),
     IN tipActivitate_param CHAR(255),
-    IN descriere_param CHAR(255)
+    IN descriere_param CHAR(255),
+    IN nrMaximStudenti_param int
 )
 BEGIN
     DECLARE id_profesor INT;
 
     SELECT idProfesor INTO id_profesor FROM Profesor WHERE username = username_param;
 
-    INSERT INTO ActivitateProfesor(tipActivitate, descriere, id_profesor)
-    VALUES(tipActivitate_param, descriere_param, id_profesor);
+    INSERT INTO ActivitateProfesor(tipActivitate, descriere, nrMaximStudenti, id_profesor)
+    VALUES(tipActivitate_param, descriere_param, nrMaximStudenti, id_profesor);
 END //
 DELIMITER ;
 
@@ -392,11 +392,16 @@ SELECT
     P.nume,
     P.username,
     AP.tipActivitate,
-    AP.descriere
+    AP.descriere,
+    AP.nrMaximStudenti
 FROM 
     Profesor P
 JOIN 
     ActivitateProfesor AP ON P.idProfesor = AP.id_profesor;
+    
+SELECT P.nume, P.username, AP.tipActivitate, AP.descriere, AP.nrMaximStudenti
+FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor WHERE LOCATE("curs", AP.descriere) > 0;
+
 
 DELETE FROM SuperAdministrator;
 DELETE FROM ActivitateProfesor;

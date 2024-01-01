@@ -41,6 +41,7 @@
                   <TableColumn fx:id="usernameColumn" prefWidth="75.0" text="username" />
                   <TableColumn fx:id="tipActivitateColumn" prefWidth="75.0" text="tipActivitate" />
                   <TableColumn fx:id="descriereColumn" prefWidth="75.0" text="descriere" />
+                  <TableColumn fx:id="maxStudentColumn" prefWidth="105.0" text="nrMaximStudenti" />
                </columns>
             </TableView>
          </children>

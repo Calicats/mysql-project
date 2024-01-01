@@ -3,11 +3,11 @@ package com.example.controllers;
 import com.example.ActivitateProfesor;
 import com.example.platforma.Main;
 import com.example.sql.*;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
@@ -20,9 +20,15 @@ public class ManageActivitateController {
     @FXML
     private Button findUsernameButton;
     @FXML
+    private Button findActivityButton;
+    @FXML
     private Button backButton;
     @FXML
     private Label foundUser;
+    @FXML
+    private Label foundActivity;
+    @FXML
+    private TextField findActivityField;
     @FXML
     private TextField descriptionActivitateField;
     @FXML
@@ -31,6 +37,10 @@ public class ManageActivitateController {
     private ComboBox<String> selectActivitateComboBox;
     @FXML
     private TextField usernameProfesorField;
+    @FXML
+    private TextField maxStudentField;
+    @FXML
+    private TextField newMaxStudentField;
     @FXML
     private Label errorHandling;
     @FXML
@@ -42,7 +52,11 @@ public class ManageActivitateController {
     @FXML
     private Label newDescriptionLabel;
     @FXML
+    private Label newMaxStudentLabel;
+    @FXML
     private TableView<ActivitateProfesor> tableActivitati;
+    @FXML
+    private TableView<ActivitateProfesor> tableAllActivities;
     @FXML
     private TableColumn<ActivitateProfesor, String> numeColumn;
     @FXML
@@ -51,6 +65,12 @@ public class ManageActivitateController {
     private TableColumn<ActivitateProfesor, String> tipActivitateColumn;
     @FXML
     private TableColumn<ActivitateProfesor, String> descriereColumn;
+    @FXML
+    private TableColumn<ActivitateProfesor, String> nrMaximStudentiColumn;
+    @FXML
+    private TableColumn<ActivitateProfesor, String> tipActivitateAllColumn;
+    @FXML
+    private TableColumn<ActivitateProfesor, String> descriereAllColumn;
     private String username;
     private String tableName;
 
@@ -79,6 +99,7 @@ public class ManageActivitateController {
 
         setNewFieldsVisible(false);
         setActivitateTableVisible(false);
+        setAllActivitesTableVisible(false);
     }
 
     /***
@@ -112,6 +133,69 @@ public class ManageActivitateController {
         clearAllFields();
     }
 
+    public void onSelectActivitate()
+    {
+        setAllActivitesTableVisible(true);
+        generateAllActivitesTable();
+
+        try
+        {
+            Connection connection = Connect.getConnection();
+            String selectActivitateString = selectActivitateComboBox.getValue();
+            if(connection == null || selectActivitateString == null)
+            {
+                return;
+            }
+
+            String[][] tableInfo = Query.getAllActivitiesTableFromSelect(connection, selectActivitateString);
+
+            populateAllActivitiesTable(tableInfo);
+        }
+        catch(Exception e)
+        {
+            errorHandling.setText(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void onFindActivity()
+    {
+        setAllActivitesTableVisible(true);
+        generateAllActivitesTable();
+
+        try
+        {
+            Connection connection = Connect.getConnection();
+            String findActivityString = findActivityField.getText();
+            if(connection == null)
+            {
+                return;
+            }
+
+            if(findActivityString.isEmpty())
+            {
+                foundActivity.setText("Introdu o activitate!");
+                return;
+            }
+
+            if(!Query.existsActivity(connection, findActivityString))
+            {
+                foundActivity.setText("Introdu o activitate valida!");
+                return;
+            }
+
+            String[][] tableInfo = Query.getAllActivitiesTableFromSearch(connection, findActivityString);
+
+            populateAllActivitiesTable(tableInfo);
+            foundActivity.setText("");
+        }
+        catch(Exception e)
+        {
+            errorHandling.setText(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     /***
      * Logica din spatele butonului de operatii
      */
@@ -124,6 +208,7 @@ public class ManageActivitateController {
         String usernameString = usernameProfesorField.getText();
         String activitateString = selectActivitateComboBox.getValue();
         String descriptionString = descriptionActivitateField.getText();
+        String maxStudentString = maxStudentField.getText();
         String operationName = selectOperationComboBox.getValue();
 
         if(operationName == null)
@@ -147,7 +232,7 @@ public class ManageActivitateController {
                 return;
             }
 
-            if(activitateString == null || descriptionString.isEmpty())
+            if(activitateString == null || descriptionString.isEmpty() || maxStudentString.isEmpty())
             {
                 errorHandling.setText("Introdu date in toate campurile!");
                 clearAllFields();
@@ -167,7 +252,7 @@ public class ManageActivitateController {
             {
                 case "Adauga" ->
                 {
-                    Insert.addActivitateProfesor(connection, usernameString, activitateString, descriptionString);
+                    Insert.addActivitateProfesor(connection, usernameString, activitateString, descriptionString, Integer.parseInt(maxStudentString));
 
                     errorHandling.setTextFill(Color.rgb(0, 255, 0));
                     errorHandling.setText("Adaugare efectuata cu succes!");
@@ -178,16 +263,17 @@ public class ManageActivitateController {
                 {
                     String newActivitateString = selectNewActivitateComboBox.getValue();
                     String newDescriptionString = newDescriptionActivitateField.getText();
+                    String newMaxStudentString = newMaxStudentField.getText();
 
-                    if(newActivitateString == null && newDescriptionString.isEmpty())
+                    if(newActivitateString == null && newDescriptionString.isEmpty() && newMaxStudentString.isEmpty())
                     {
-                        errorHandling.setText("Introdu date in toate campurile!");
+                        errorHandling.setText("Introdu date in cel putin un camp!");
                         clearAllFields();
                         return;
                     }
 
-                    List<String> newEntriesList = getNewEntriesList(newActivitateString, newDescriptionString);
-                    String[] columns = {"tipActivitate", "descriere"};
+                    List<String> newEntriesList = getNewEntriesList(newActivitateString, newDescriptionString, newMaxStudentString);
+                    String[] columns = {"tipActivitate", "descriere", "nrMaximStudenti"};
                     int rowsAffected = 0;
 
                     for(int i = 0; i < newEntriesList.size(); ++i)
@@ -257,7 +343,7 @@ public class ManageActivitateController {
 
         if(activitateInfo == null)
         {
-            foundUser.setText("Utilizatorul nu exista!");
+            foundUser.setText("Utilizatorul cautat nu are nicio activitate!");
             clearAllFields();
             return;
         }
@@ -279,7 +365,8 @@ public class ManageActivitateController {
 
     private ActivitateProfesor rowToActivitateProfesor(String[] row)
     {
-        return new ActivitateProfesor(row[0], row[1], row[2], row[3]);
+        int maxStudent = Integer.parseInt(row[4]);
+        return new ActivitateProfesor(row[0], row[1], row[2], row[3], maxStudent);
     }
 
     /***
@@ -288,14 +375,32 @@ public class ManageActivitateController {
 
     private void generateTableActivitati()
     {
-        numeColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("nume"));
-        usernameColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("username"));
-        tipActivitateColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("tipActivitate"));
-        descriereColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("descriere"));
+        numeColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(getPropertyValue(cellData.getValue(), "nume")));
+        usernameColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(getPropertyValue(cellData.getValue(), "username")));
+        tipActivitateColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(getPropertyValue(cellData.getValue(), "tipActivitate")));
+        descriereColumn.setCellValueFactory(cellData ->
+            new SimpleStringProperty(getPropertyValue(cellData.getValue(), "descriere")));
+        nrMaximStudentiColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(getPropertyValue(cellData.getValue(), "nrMaximStudenti")));
+
         removeEllipses(numeColumn);
         removeEllipses(usernameColumn);
         removeEllipses(tipActivitateColumn);
         removeEllipses(descriereColumn);
+        removeEllipses(nrMaximStudentiColumn);
+    }
+
+    public void generateAllActivitesTable()
+    {
+        tipActivitateAllColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(getPropertyValue(cellData.getValue(), "tipActivitate")));
+        descriereAllColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(getPropertyValue(cellData.getValue(), "descriere")));
+        removeEllipses(tipActivitateAllColumn);
+        removeEllipses(descriereAllColumn);
     }
 
     /***
@@ -312,10 +417,11 @@ public class ManageActivitateController {
      * Genereaza o lista cu intrarile noi
      * @param newActivitateString noua activitate
      * @param newDescriptionString noua descriere a activitatii
+     * @param newMaxStudentString nou nr maxim de studenti
      * @return lista de intrari noi
      */
 
-    private List<String> getNewEntriesList(String newActivitateString, String newDescriptionString)
+    private List<String> getNewEntriesList(String newActivitateString, String newDescriptionString, String newMaxStudentString)
     {
         List<String> newEntriesList = new ArrayList<>();
         if(newActivitateString != null)
@@ -336,7 +442,46 @@ public class ManageActivitateController {
             newEntriesList.add("null");
         }
 
+        if(!newMaxStudentString.isEmpty())
+        {
+            newEntriesList.add(newMaxStudentString);
+        }
+        else
+        {
+            newEntriesList.add("null");
+        }
+
         return newEntriesList;
+    }
+
+    private String getPropertyValue(ActivitateProfesor activitateProfesor, String propertyName)
+    {
+        return switch (propertyName)
+        {
+            case "nume" -> activitateProfesor.getNume();
+            case "username" -> activitateProfesor.getUsername();
+            case "tipActivitate" -> activitateProfesor.getTipActivitate();
+            case "descriere" -> activitateProfesor.getDescriere();
+            case "nrMaximStudenti" -> String.valueOf(activitateProfesor.getNrMaximStudenti());
+            default -> null;
+        };
+    }
+
+    public void populateAllActivitiesTable(String[][] info)
+    {
+        ObservableList<ActivitateProfesor> list = FXCollections.observableArrayList();
+        if(info == null)
+        {
+            return;
+        }
+
+        for(String[] row: info)
+        {
+            ActivitateProfesor activitateProfesor = rowToActivitateProfesor(row);
+            list.add(activitateProfesor);
+        }
+
+        tableAllActivities.setItems(list);
     }
 
     private void clearAllFields()
@@ -346,6 +491,8 @@ public class ManageActivitateController {
         selectNewActivitateComboBox.setValue(null);
         descriptionActivitateField.clear();
         newDescriptionActivitateField.clear();
+        maxStudentField.clear();
+        newMaxStudentField.clear();
     }
 
     private void setNewFieldsVisible(boolean expr)
@@ -354,6 +501,8 @@ public class ManageActivitateController {
         selectNewActivitateLabel.setVisible(expr);
         newDescriptionActivitateField.setVisible(expr);
         newDescriptionLabel.setVisible(expr);
+        newMaxStudentField.setVisible(expr);
+        newMaxStudentLabel.setVisible(expr);
     }
 
     private void setActivitateTableVisible(boolean expr)
@@ -364,5 +513,14 @@ public class ManageActivitateController {
         usernameColumn.setVisible(expr);
         tipActivitateColumn.setVisible(expr);
         descriereColumn.setVisible(expr);
+        nrMaximStudentiColumn.setVisible(expr);
+    }
+
+    private void setAllActivitesTableVisible(boolean expr)
+    {
+        tableAllActivities.getItems().clear();
+        tableAllActivities.setVisible(expr);
+        tipActivitateAllColumn.setVisible(expr);
+        descriereAllColumn.setVisible(expr);
     }
 }

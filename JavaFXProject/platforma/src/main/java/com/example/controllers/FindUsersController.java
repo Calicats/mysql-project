@@ -39,6 +39,8 @@ public class FindUsersController {
     private TableColumn<ActivitateProfesor, String> tipActivitateColumn;
     @FXML
     private TableColumn<ActivitateProfesor, String> descriereColumn;
+    @FXML
+    private TableColumn<ActivitateProfesor, String> maxStudentColumn;
     private String username;
     private String tableName;
 
@@ -216,6 +218,7 @@ public class FindUsersController {
         usernameColumn.setVisible(expr);
         tipActivitateColumn.setVisible(expr);
         descriereColumn.setVisible(expr);
+        maxStudentColumn.setVisible(expr);
     }
 
     /***
@@ -225,7 +228,7 @@ public class FindUsersController {
 
     private void generateTableUsers(String[] columns)
     {
-        for (String columnName: columns)
+        for(String columnName: columns)
         {
             TableColumn<User, String> column = new TableColumn<>(columnName);
 
@@ -246,10 +249,12 @@ public class FindUsersController {
         usernameColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("username"));
         tipActivitateColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("tipActivitate"));
         descriereColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("descriere"));
+        maxStudentColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("nrMaximStudenti"));
         removeEllipses(numeColumn);
         removeEllipses(usernameColumn);
         removeEllipses(tipActivitateColumn);
         removeEllipses(descriereColumn);
+        removeEllipses(maxStudentColumn);
     }
 
     /***
@@ -259,7 +264,7 @@ public class FindUsersController {
 
     private void removeEllipses(TableColumn<ActivitateProfesor, String> column)
     {
-        column.setMinWidth(200);
+        column.setMinWidth(150);
     }
 
     /***
@@ -397,7 +402,7 @@ public class FindUsersController {
     {
         ObservableList<User> list = FXCollections.observableArrayList();
         // toata informatia dintr-un tabel sub forma de matrice de String-uri
-        String[][] userInfo = Query.getUsersTableInfo(connection, tableName);
+        String[][] userInfo = Query.getTableInfo(connection, tableName);
 
         if(userInfo == null)
         {
@@ -478,6 +483,6 @@ public class FindUsersController {
 
     private ActivitateProfesor rowToActivitateProfesor(String[] row)
     {
-        return new ActivitateProfesor(row[0], row[1], row[2], row[3]);
+        return new ActivitateProfesor(row[0], row[1], row[2], row[3], Integer.parseInt(row[4]));
     }
 }

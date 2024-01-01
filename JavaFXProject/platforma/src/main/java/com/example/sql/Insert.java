@@ -122,13 +122,14 @@ public class Insert {
         statement.execute();
     }
 
-    public static void addActivitateProfesor(Connection connection, String username, String tipActivitate, String descriere) throws Exception
+    public static void addActivitateProfesor(Connection connection, String username, String tipActivitate, String descriere, int nrMaximStudenti) throws Exception
     {
-        String procedureCall = "{CALL AddNewActivitateProfesor(?, ?, ?)}";
+        String procedureCall = "{CALL AddNewActivitateProfesor(?, ?, ?, ?)}";
         CallableStatement statement = connection.prepareCall(procedureCall);
         statement.setString(1, username);
         statement.setString(2, tipActivitate);
         statement.setString(3, descriere);
+        statement.setInt(4, nrMaximStudenti);
         statement.execute();
     }
 }

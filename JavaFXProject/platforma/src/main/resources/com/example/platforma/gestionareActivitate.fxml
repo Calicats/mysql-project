@@ -25,21 +25,21 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="selectActivitateLabel" layoutX="23.0" layoutY="167.0" text="Alege un tip de activitate">
+            <Label fx:id="selectActivitateLabel" layoutX="24.0" layoutY="220.0" text="Alege un tip de activitate">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="descriptionLabel" layoutX="23.0" layoutY="201.0" text="Introdu descrierea activitatii">
+            <Label fx:id="descriptionLabel" layoutX="24.0" layoutY="254.0" text="Introdu descrierea activitatii">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
             <ComboBox fx:id="selectOperationComboBox" layoutX="269.0" layoutY="71.0" onAction="#onSelectOperation" prefWidth="150.0" />
             <TextField fx:id="usernameProfesorField" layoutX="269.0" layoutY="105.0" promptText="Nume utilizator" />
-            <ComboBox fx:id="selectActivitateComboBox" layoutX="269.0" layoutY="165.0" prefWidth="150.0" />
-            <TextField fx:id="descriptionActivitateField" layoutX="269.0" layoutY="199.0" promptText="Descriere activitate" />
-            <Button fx:id="operationButton" layoutX="458.0" layoutY="71.0" mnemonicParsing="false" onAction="#onOperationButton" text="Selecteaza o operatie" />
+            <ComboBox fx:id="selectActivitateComboBox" layoutX="270.0" layoutY="218.0" onAction="#onSelectActivitate" prefWidth="150.0" />
+            <TextField fx:id="descriptionActivitateField" layoutX="270.0" layoutY="252.0" promptText="Descriere activitate" />
+            <Button fx:id="operationButton" layoutX="434.0" layoutY="71.0" mnemonicParsing="false" onAction="#onOperationButton" text="Selecteaza o operatie" />
             <Label fx:id="errorHandling" layoutX="599.0" layoutY="76.0" textFill="RED">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -50,27 +50,58 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="selectNewActivitateLabel" layoutX="23.0" layoutY="235.0" text="Alege un tip de activitate noua">
+            <Label fx:id="selectNewActivitateLabel" layoutX="24.0" layoutY="359.0" text="Alege un tip de activitate noua">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="newDescriptionLabel" layoutX="23.0" layoutY="269.0" text="Introdu descrierea noua a activitatii">
+            <Label fx:id="newDescriptionLabel" layoutX="24.0" layoutY="393.0" text="Introdu descrierea noua a activitatii">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <ComboBox fx:id="selectNewActivitateComboBox" layoutX="269.0" layoutY="233.0" prefWidth="150.0" />
-            <TextField fx:id="newDescriptionActivitateField" layoutX="269.0" layoutY="267.0" promptText="Descriere activitate" />
-            <Button fx:id="findUsernameButton" layoutX="458.0" layoutY="105.0" mnemonicParsing="false" onAction="#onSearchUsername" text="Cauta utilizator" />
-            <TableView fx:id="tableActivitati" layoutX="458.0" layoutY="165.0" prefHeight="200.0" prefWidth="506.0">
+            <ComboBox fx:id="selectNewActivitateComboBox" layoutX="270.0" layoutY="357.0" prefWidth="150.0" />
+            <TextField fx:id="newDescriptionActivitateField" layoutX="270.0" layoutY="391.0" promptText="Descriere activitate" />
+            <Button fx:id="findUsernameButton" layoutX="434.0" layoutY="105.0" mnemonicParsing="false" onAction="#onSearchUsername" text="Cauta" />
+            <TableView fx:id="tableActivitati" layoutX="505.0" layoutY="141.0" prefHeight="200.0" prefWidth="506.0">
               <columns>
                 <TableColumn fx:id="numeColumn" prefWidth="75.0" text="nume" />
-                <TableColumn fx:id="usernameColumn" prefWidth="75.0" text="username" />
-                  <TableColumn fx:id="tipActivitateColumn" prefWidth="75.0" text="tipActivitate" />
-                  <TableColumn fx:id="descriereColumn" prefWidth="75.0" text="descriere" />
+                <TableColumn fx:id="usernameColumn" prefWidth="96.0" text="username" />
+                  <TableColumn fx:id="tipActivitateColumn" prefWidth="84.0" text="tipActivitate" />
+                  <TableColumn fx:id="descriereColumn" prefWidth="88.0" text="descriere" />
+                  <TableColumn fx:id="nrMaximStudentiColumn" prefWidth="120.0" text="nrMaximStudenti" />
               </columns>
             </TableView>
+            <Label fx:id="maxStudentLabel" layoutX="24.0" layoutY="288.0" text="Introdu numarul maxim de studenti">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="maxStudentField" layoutX="270.0" layoutY="288.0" promptText="Numar maxim studenti" />
+            <Label fx:id="newMaxStudentLabel" layoutX="23.0" layoutY="427.0" text="Introdu numarul maxim de studenti">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="newMaxStudentField" layoutX="270.0" layoutY="425.0" promptText="Numar maxim studenti" />
+            <TableView fx:id="tableAllActivities" layoutX="505.0" layoutY="357.0" prefHeight="200.0" prefWidth="506.0">
+              <columns>
+                <TableColumn fx:id="tipActivitateAllColumn" prefWidth="107.19992065429688" text="tipActivitate" />
+                <TableColumn fx:id="descriereAllColumn" prefWidth="146.39996337890625" text="descriere" />
+              </columns>
+            </TableView>
+            <Label layoutX="24.0" layoutY="141.0" text="Cauta o activitate">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="findActivityField" layoutX="270.0" layoutY="141.0" promptText="Nume activitate" />
+            <Button fx:id="findActivityButton" layoutX="434.0" layoutY="141.0" mnemonicParsing="false" onAction="#onFindActivity" text="Cauta" />
+            <Label fx:id="foundActivity" layoutX="270.0" layoutY="167.0" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </left>

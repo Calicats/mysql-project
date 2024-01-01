@@ -47,13 +47,15 @@ public class Main extends Application {
     {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml));
         Scene scene = new Scene(fxmlLoader.load(), row, col);
+
         currentStage.setScene(scene);
+        currentStage.setResizable(false);
 
         if(username != null && tableName != null)
         {
             if(tableName.equals("superadministrator") || tableName.equals("administrator"))
             {
-                switch (fxml)
+                switch(fxml)
                 {
                     case "logare.fxml" -> currentStage.setTitle("Logare platforma");
 

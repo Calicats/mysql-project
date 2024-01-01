@@ -293,7 +293,6 @@ public class ManageUsersController {
                         }
 
                         clearAllFields();
-                        selectOperationComboBox.setValue(null);
                     }
 
                     case "Student" ->
@@ -450,7 +449,6 @@ public class ManageUsersController {
                 {
                     errorHandling.setText("Nu te poti sterge pe tine insuti!");
                     clearAllFields();
-                    selectOperationComboBox.setValue(null);
                     return;
                 }
 
@@ -568,7 +566,7 @@ public class ManageUsersController {
     }
 
     /***
-     * Functie care construieste lista de coloane a tabelului selectat in combo box
+     * Metoda care construieste lista de coloane a tabelului selectat in combo box
      * @param tableName numele tabelului
      * @return lista de coloane a tabelului
      */

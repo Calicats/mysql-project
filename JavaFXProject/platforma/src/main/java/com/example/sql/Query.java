@@ -23,22 +23,17 @@ public class Query {
             preparedStatement.setString(2, password);
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next())
+            if(resultSet.next())
             {
                 int id_rol = resultSet.getInt("id_rol");
-                switch(id_rol)
+                return switch (id_rol)
                 {
-                    case 1:
-                        return "superadministrator";
-                    case 2:
-                        return "administrator";
-                    case 3:
-                        return "profesor";
-                    case 4:
-                        return "student";
-                    default:
-                        return null;
-                }
+                    case 1 -> "superadministrator";
+                    case 2 -> "administrator";
+                    case 3 -> "profesor";
+                    case 4 -> "student";
+                    default -> null;
+                };
             }
         }
         catch (Exception e)
@@ -173,7 +168,7 @@ public class Query {
      * @return toata informatia din tabela de utilizatori
      */
 
-    public static String[][] getUsersTableInfo(Connection connection, String tableName)
+    public static String[][] getTableInfo(Connection connection, String tableName)
     {
         String query = getQueryForTableInfo(tableName);
 
@@ -199,6 +194,16 @@ public class Query {
         return resultSet.next();
     }
 
+    public static boolean existsActivity(Connection connection, String descriere) throws Exception
+    {
+        String query = "SELECT descriere FROM activitateprofesor WHERE LOCATE(?, descriere) > 0";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, descriere);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
     /***
      * Creaza tabela de activitate profesor
      * @param connection conexiunea la db_platforma
@@ -207,8 +212,9 @@ public class Query {
 
     public static String[][] getActivitateTableInfo(Connection connection)
     {
-        String query = "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere " +
+        String query = "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere, AP.nrMaximStudenti " +
                 "FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor";
+
         return getInfoFromQuery(connection, query);
     }
 
@@ -219,7 +225,8 @@ public class Query {
      * @return una din tabelele specificate
      */
 
-    private static String[][] getInfoFromQuery(Connection connection, String query) {
+    private static String[][] getInfoFromQuery(Connection connection, String query)
+    {
         try
         {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -228,24 +235,7 @@ public class Query {
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
 
-            List<String[]> rows = new ArrayList<>();
-
-            while (resultSet.next())
-            {
-                String[] rowData = new String[columnCount];
-
-                for(int i = 1; i <= columnCount; i++)
-                {
-                    rowData[i - 1] = resultSet.getString(i);
-                }
-
-                rows.add(rowData);
-            }
-
-            String[][] result = new String[rows.size()][];
-            rows.toArray(result);
-
-            return result;
+            return generateTable(resultSet, columnCount);
         }
         catch(Exception e)
         {
@@ -254,15 +244,65 @@ public class Query {
         return null;
     }
 
+    public static String[][] getAllActivitiesTableFromSelect(Connection connection, String tipActivitate) throws Exception
+    {
+        String query = "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere, AP.nrMaximStudenti " +
+                "FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor WHERE tipActivitate = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, tipActivitate);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        return generateTable(resultSet, columnCount);
+    }
+
+    public static String[][] getAllActivitiesTableFromSearch(Connection connection, String descriere) throws Exception
+    {
+        String query = "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere, AP.nrMaximStudenti " +
+                "FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor WHERE LOCATE(?, AP.descriere) > 0";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, descriere);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        return generateTable(resultSet, columnCount);
+    }
+
+    private static String[][] generateTable(ResultSet resultSet, int columnCount) throws Exception
+    {
+        List<String[]> rows = new ArrayList<>();
+
+        while(resultSet.next())
+        {
+            String[] rowData = new String[columnCount];
+
+            for(int i = 1; i <= columnCount; i++)
+            {
+                rowData[i - 1] = resultSet.getString(i);
+            }
+
+            rows.add(rowData);
+        }
+
+        String[][] result = new String[rows.size()][];
+        rows.toArray(result);
+
+        return result;
+    }
+
     /***
      * Metoda ajutatoare pentru getTableInfo
-     * @param tableName numele tabelei
+     * @param str numele tabelei
      * @return interogarea necesara pentru getTableInfo
      */
 
-    private static String getQueryForTableInfo(String tableName)
+    private static String getQueryForTableInfo(String str)
     {
-        String query = switch(tableName)
+        return switch(str)
         {
             case "Superadministrator" -> "SELECT * FROM superadministrator";
             case "Administrator" -> "SELECT * FROM administrator";
@@ -270,7 +310,6 @@ public class Query {
             case "Student" -> "SELECT * FROM student";
             default -> null;
         };
-        return query;
     }
 
     /***
@@ -282,16 +321,15 @@ public class Query {
     private static String getQueryForAllInfoOnUser(String tableName)
     {
         // am pus cu uppercase ca asa ii un combobox
-        String query = switch(tableName)
+        return switch(tableName)
         {
-            case "Superadministrator" -> "SELECT * FROM superadministrator WHERE username = ?";
-            case "Administrator" -> "SELECT * FROM administrator WHERE username = ?";
-            case "Profesor" -> "SELECT * FROM profesor WHERE username = ?";
-            case "Student" -> "SELECT * FROM student WHERE username = ?";
-            case "activitateprofesor" -> "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere " +
+            case "Superadministrator" -> "SELECT * FROM superadministrator WHERE LOCATE(?, username) > 0";
+            case "Administrator" -> "SELECT * FROM administrator WHERE LOCATE(?, username) > 0";
+            case "Profesor" -> "SELECT * FROM profesor WHERE LOCATE(?, username) > 0";
+            case "Student" -> "SELECT * FROM student WHERE LOCATE(?, username) > 0";
+            case "activitateprofesor" -> "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere, AP.nrMaximStudenti " +
                     "FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor WHERE username = ?";
             default -> null;
         };
-        return query;
     }
 }

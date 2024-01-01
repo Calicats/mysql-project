@@ -5,12 +5,22 @@ public class ActivitateProfesor {
     private String username;
     private String tipActivitate;
     private String descriere;
+    private int nrMaximStudenti;
 
-    public ActivitateProfesor(String nume, String username, String tipActivitate, String descriere) {
+    public ActivitateProfesor(String nume, String username, String tipActivitate, String descriere, int nrMaximStudenti) {
         this.nume = nume;
         this.username = username;
         this.tipActivitate = tipActivitate;
         this.descriere = descriere;
+        this.nrMaximStudenti = nrMaximStudenti;
+    }
+
+    public int getNrMaximStudenti() {
+        return nrMaximStudenti;
+    }
+
+    public void setNrMaximStudenti(int nrMaximStudenti) {
+        this.nrMaximStudenti = nrMaximStudenti;
     }
 
     public String getNume() {
