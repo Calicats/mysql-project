@@ -68,6 +68,8 @@ public class ManageActivitateController {
     @FXML
     private TableColumn<ActivitateProfesor, String> nrMaximStudentiColumn;
     @FXML
+    private TableColumn<ActivitateProfesor, String> usernameAllColumn;
+    @FXML
     private TableColumn<ActivitateProfesor, String> tipActivitateAllColumn;
     @FXML
     private TableColumn<ActivitateProfesor, String> descriereAllColumn;
@@ -395,10 +397,13 @@ public class ManageActivitateController {
 
     public void generateAllActivitesTable()
     {
+        usernameAllColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(getPropertyValue(cellData.getValue(), "username")));
         tipActivitateAllColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(getPropertyValue(cellData.getValue(), "tipActivitate")));
         descriereAllColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(getPropertyValue(cellData.getValue(), "descriere")));
+        removeEllipses(usernameAllColumn);
         removeEllipses(tipActivitateAllColumn);
         removeEllipses(descriereAllColumn);
     }

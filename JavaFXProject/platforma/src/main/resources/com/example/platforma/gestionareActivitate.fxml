@@ -86,8 +86,9 @@
             <TextField fx:id="newMaxStudentField" layoutX="270.0" layoutY="425.0" promptText="Numar maxim studenti" />
             <TableView fx:id="tableAllActivities" layoutX="505.0" layoutY="357.0" prefHeight="200.0" prefWidth="506.0">
               <columns>
-                <TableColumn fx:id="tipActivitateAllColumn" prefWidth="107.19992065429688" text="tipActivitate" />
-                <TableColumn fx:id="descriereAllColumn" prefWidth="146.39996337890625" text="descriere" />
+                  <TableColumn fx:id="usernameAllColumn" prefWidth="102.4000244140625" text="username" />
+                <TableColumn fx:id="descriereAllColumn" prefWidth="148.0" text="descriere" />
+                <TableColumn fx:id="tipActivitateAllColumn" prefWidth="104.0" text="tipActivitate" />
               </columns>
             </TableView>
             <Label layoutX="24.0" layoutY="141.0" text="Cauta o activitate">
