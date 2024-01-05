@@ -4,89 +4,56 @@ import com.example.platforma.Main;
 import com.example.sql.Connect;
 import com.example.sql.Query;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.sql.Connection;
 
-public class ControlPanelController {
-    @FXML
-    private Button personalDataButton;
-    @FXML
-    private Button manageUsersButton;
-    @FXML
-    private Button findUsersButton;
-    @FXML
-    private Button logoutButton;
-    @FXML
-    private Label greetUser;
-    @FXML
-    private Label nume;
-    @FXML
-    private Label cnp;
+public class StudentPanelController {
     @FXML
     private Label adresa;
     @FXML
+    private Label anStudiu;
+    @FXML
+    private Label cnp;
+    @FXML
     private Label email;
     @FXML
+    private Label greetUser;
+    @FXML
+    private Button logoutButton;
+    @FXML
     private Label nrTelefon;
+    @FXML
+    private Label numarOre;
+    @FXML
+    private Label nume;
+    @FXML
+    private Button personalDataButton;
+    
     private String username;
     private String tableName;
     private boolean show = true;
-
+    
     /***
      * "Constructor", in ghilimele
      * @param username numele utilizatorului logat
      * @param tableName tabela de care apartine utilizatorul
      */
-
+    
     public void initUser(String username, String tableName)
     {
         this.username = username;
         this.tableName = tableName;
-
+        
         greetUser.setText("Bine ai venit, " + this.username + "!");
-    }
-
-    /***
-     * Intoarcere la scena de logare
-     * @throws IOException exceptia pe care o arunca metoda
-     */
-
-    public void onUserLogout() throws IOException
-    {
-        Main main = new Main();
-        System.out.println("Bye, " + username);
-
-        main.changeScene("logare.fxml", username, tableName, 600, 400);
-    }
-
-    /***
-     * Modifica scena la gestionare
-     * @throws IOException exceptia pe care o arunca metoda
-     */
-
-    public void onManageUsers() throws IOException
-    {
-        Main main = new Main();
-        main.changeScene("gestionareUtilizatori.fxml", username, tableName, 1024, 768);
-    }
-
-    /***
-     * Modifica scena la cautare
-     * @throws IOException exceptia pe care o arunca metoda
-     */
-
-    public void onFindUsers() throws IOException
-    {
-        Main main = new Main();
-        main.changeScene("cautareUtilizatori.fxml", username, tableName, 1024, 768);
     }
 
     /***
      * Daca apesi pe butonul de Date Personale, iti afiseaza datele personale, cu toggle
      */
-
+    
     public void onShowPersonalData()
     {
         try
@@ -99,12 +66,10 @@ public class ControlPanelController {
                 String adresaString = Query.getSingleInfo(connection, tableName, username, "adresa");
                 String emailString = Query.getSingleInfo(connection, tableName, username, "email");
                 String nrTelefonString = Query.getSingleInfo(connection, tableName, username, "nrTelefon");
+                String anStudiuString = Query.getSingleInfo(connection, tableName, username, "anStudiu");
+                String numarOreString = Query.getSingleInfo(connection, tableName, username, "numarOre");
 
-                nume.setVisible(true);
-                cnp.setVisible(true);
-                adresa.setVisible(true);
-                email.setVisible(true);
-                nrTelefon.setVisible(true);
+                showData(true);
 
                 greetUser.setText("Bine ai venit, " + this.username + "!");
                 nume.setText("Nume: " + numeString);
@@ -112,14 +77,12 @@ public class ControlPanelController {
                 adresa.setText("Adresa: " + adresaString);
                 email.setText("Email: " + emailString);
                 nrTelefon.setText("Nr Telefon: " + nrTelefonString);
+                anStudiu.setText("An studiu: " + anStudiuString);
+                numarOre.setText("Numar ore: " + numarOreString);
             }
             else
             {
-                nume.setVisible(false);
-                cnp.setVisible(false);
-                adresa.setVisible(false);
-                email.setVisible(false);
-                nrTelefon.setVisible(false);
+                showData(false);
             }
 
             show = !show;
@@ -128,5 +91,27 @@ public class ControlPanelController {
         {
             e.printStackTrace();
         }
+    }
+
+    /***
+     * Intoarcere la scena de logare
+     * @throws IOException exceptia pe care o arunca metoda
+     */
+    
+    public void onLogoutButton() throws IOException
+    {
+        Main main = new Main();
+        main.changeScene("logare.fxml", username, tableName, 600, 400);
+    }
+
+    private void showData(boolean expr)
+    {
+        nume.setVisible(expr);
+        cnp.setVisible(expr);
+        adresa.setVisible(expr);
+        email.setVisible(expr);
+        nrTelefon.setVisible(expr);
+        anStudiu.setVisible(expr);
+        numarOre.setVisible(expr);
     }
 }

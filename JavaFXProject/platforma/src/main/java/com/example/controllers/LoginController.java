@@ -41,7 +41,12 @@ public class LoginController {
                 if(tableName != null)
                 {
                     System.out.println(usernameString + " logged in as " + tableName);
-                    main.changeScene("panouAdministrativ.fxml", usernameString, tableName, 1024, 768);
+                    switch(tableName)
+                    {
+                        case "superadministrator", "administrator" -> main.changeScene("panouAdministrativ.fxml", usernameString, tableName, 1024, 768);
+                        case "profesor" -> main.changeScene("panouProfesor.fxml", usernameString, tableName, 1024, 768);
+                        case "student" -> main.changeScene("panouStudent.fxml", usernameString, tableName, 1024, 768);
+                    }
                 }
                 else
                 {

@@ -1,9 +1,6 @@
 package com.example.platforma;
 
-import com.example.controllers.ManageActivitateController;
-import com.example.controllers.ControlPanelController;
-import com.example.controllers.FindUsersController;
-import com.example.controllers.ManageUsersController;
+import com.example.controllers.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -53,38 +50,67 @@ public class Main extends Application {
 
         if(username != null && tableName != null)
         {
-            if(tableName.equals("superadministrator") || tableName.equals("administrator"))
+            switch(tableName)
             {
-                switch(fxml)
+                case "superadministrator", "administrator" ->
                 {
-                    case "logare.fxml" -> currentStage.setTitle("Logare platforma");
-
-                    case "panouAdministrativ.fxml" ->
+                    switch(fxml)
                     {
-                        currentStage.setTitle("Platforma scolara");
-                        ControlPanelController controller = fxmlLoader.getController();
-                        controller.initUser(username, tableName);
+                        case "logare.fxml" -> currentStage.setTitle("Logare platforma");
+
+                        case "panouAdministrativ.fxml" ->
+                        {
+                            currentStage.setTitle("Panou administrativ");
+                            AdminPanelController controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
+
+                        case "gestionareUtilizatori.fxml" ->
+                        {
+                            currentStage.setTitle("Gestionare utilizatori");
+                            ManageUsersController controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
+
+                        case "gestionareActivitate.fxml" ->
+                        {
+                            currentStage.setTitle("Gestionare activitate profesor");
+                            ManageActivitateController controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
+
+                        case "cautareUtilizatori.fxml" ->
+                        {
+                            currentStage.setTitle("Cautare utilizatori");
+                            FindUsersController controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
                     }
-
-                    case "gestionareUtilizatori.fxml" ->
+                }
+                case "profesor" ->
+                {
+                    switch(fxml)
                     {
-                        currentStage.setTitle("Gestionare utilizatori");
-                        ManageUsersController controller = fxmlLoader.getController();
-                        controller.initUser(username, tableName);
+                        case "logare.fxml" -> currentStage.setTitle("Logare platforma");
+                        case "panouProfesor.fxml" ->
+                        {
+                            currentStage.setTitle("Panou profesor");
+                            ProfesorPanelController controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
                     }
-
-                    case "gestionareActivitate.fxml" ->
+                }
+                case "student" ->
+                {
+                    switch(fxml)
                     {
-                        currentStage.setTitle("Gestionare activitate profesor");
-                        ManageActivitateController controller = fxmlLoader.getController();
-                        controller.initUser(username, tableName);
-                    }
-
-                    case "cautareUtilizatori.fxml" ->
-                    {
-                        currentStage.setTitle("Cautare utilizatori");
-                        FindUsersController controller = fxmlLoader.getController();
-                        controller.initUser(username, tableName);
+                        case "logare.fxml" -> currentStage.setTitle("Logare platforma");
+                        case "panouStudent.fxml" ->
+                        {
+                            currentStage.setTitle("Panou student");
+                            StudentPanelController controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
                     }
                 }
             }
