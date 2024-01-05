@@ -1,4 +1,6 @@
-/* ENTRY POINT: DBPlatforma.java */
+package com.example;
+
+import com.example.sql.Connect;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +11,7 @@ import java.util.List;
 
 public class Rol {
     public Rol(int id) {
-        Connection connection = DBPlatforma.getConnection();
+        Connection connection = Connect.getConnection();
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Rol WHERE idRol = ?");
             stmt.setInt(1, id);
@@ -23,9 +25,14 @@ public class Rol {
         }
     }
 
+    public Rol(int id, String numeRol) {
+        this.id = id;
+        this.numeRol = numeRol;
+    }
+
     public static List<Rol> getTable() {
         List<Rol> list = new ArrayList<>();
-        Connection connection = DBPlatforma.getConnection();
+        Connection connection = Connect.getConnection();
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Rol");
             ResultSet rs = stmt.executeQuery();
@@ -59,9 +66,4 @@ public class Rol {
 
     int id;
     String numeRol;
-
-    private Rol(int id, String numeRol) {
-        this.id = id;
-        this.numeRol = numeRol;
-    }
 }

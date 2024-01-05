@@ -1,15 +1,18 @@
 package com.example;
 
 public class User {
-    private int id;
-    private String nume;
-    private String cnp;
-    private String adresa;
-    private String nrTelefon;
-    private String email;
-    private String username;
-    private String parola;
-    private int idRol;
+    protected int id;
+    protected String nume;
+    protected String cnp;
+    protected String adresa;
+    protected String nrTelefon;
+    protected String email;
+    protected String username;
+    protected String parola;
+    protected int idRol;
+
+    protected User() {
+    }
 
     public User(int id, String cnp, String nume, String adresa, String nrTelefon, String email, String username, String parola, int idRol) {
         this.id = id;

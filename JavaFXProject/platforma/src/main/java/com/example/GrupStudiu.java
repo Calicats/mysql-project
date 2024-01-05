@@ -1,4 +1,6 @@
-/* ENTRY POINT: DBPlatforma.java */
+package com.example;
+
+import com.example.sql.Connect;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +11,7 @@ import java.util.List;
 
 public class GrupStudiu {
     public GrupStudiu(int id) {
-        Connection connection = DBPlatforma.getConnection();
+        Connection connection = Connect.getConnection();
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM GrupStudiu WHERE idGrupStudiu = ?");
             stmt.setInt(1, id);
@@ -24,9 +26,15 @@ public class GrupStudiu {
         }
     }
 
+    private GrupStudiu(int id, String descriereGrupStudiu, int id_participant_activitate) {
+        this.id = id;
+        this.descriereGrupStudiu = descriereGrupStudiu;
+        this.id_participant_activitate = id_participant_activitate;
+    }
+
     public static List<GrupStudiu> getTable() {
         List<GrupStudiu> list = new ArrayList<>();
-        Connection connection = DBPlatforma.getConnection();
+        Connection connection = Connect.getConnection();
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NoteStudent");
             ResultSet rs = stmt.executeQuery();
@@ -67,10 +75,4 @@ public class GrupStudiu {
     private int id;
     private String descriereGrupStudiu;
     private int id_participant_activitate;
-
-    private GrupStudiu(int id, String descriereGrupStudiu, int id_participant_activitate) {
-        this.id = id;
-        this.descriereGrupStudiu = descriereGrupStudiu;
-        this.id_participant_activitate = id_participant_activitate;
-    }
 }

@@ -1,4 +1,4 @@
-/* ENTRY POINT: DBPlatforma.java */
+package com.example;
 
 public abstract class HumanUser {
     public int getId() {

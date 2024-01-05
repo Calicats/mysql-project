@@ -1,11 +1,32 @@
 package com.example;
 
+import com.example.sql.Connect;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ActivitateProfesor {
-    private String nume;
-    private String username;
-    private String tipActivitate;
-    private String descriere;
-    private int nrMaximStudenti;
+    public ActivitateProfesor(int id) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM ActivitateProfesor WHERE idActivitateProfesor = ?");
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            // TODO: Silently Fail instead of throwing exception?
+            this.id = rs.getInt("idActivitateProfesor");
+            tipActivitate = rs.getString("tipActivitate");
+            descriere = rs.getString("descriere");
+            nrMaximStudenti = rs.getInt("nrMaximStudenti");
+            id_profesor = rs.getInt("id_profesor");
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        }
+    }
 
     public ActivitateProfesor(String nume, String username, String tipActivitate, String descriere, int nrMaximStudenti) {
         this.nume = nume;
@@ -15,43 +36,79 @@ public class ActivitateProfesor {
         this.nrMaximStudenti = nrMaximStudenti;
     }
 
-    public int getNrMaximStudenti() {
-        return nrMaximStudenti;
+    public ActivitateProfesor(int id, String tipActivitate, String descriere, int nrMaximStudenti, int id_profesor) {
+        this.id = id;
+        this.tipActivitate = tipActivitate;
+        this.descriere = descriere;
+        this.nrMaximStudenti = nrMaximStudenti;
+        this.id_profesor = id_profesor;
     }
 
-    public void setNrMaximStudenti(int nrMaximStudenti) {
-        this.nrMaximStudenti = nrMaximStudenti;
+    public static List<ActivitateProfesor> getTable() {
+        List<ActivitateProfesor> list = new ArrayList<>();
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM ActivitateProfesor");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("idActivitateProfesor");
+                String tipActivitate = rs.getString("tipActivitate");
+                String descriere = rs.getString("descriere");
+                int nrMaximStudenti = rs.getInt("nrMaximStudenti");
+                int id_profesor = rs.getInt("id_profesor");
+                list.add(new ActivitateProfesor(id, tipActivitate, descriere, nrMaximStudenti, id_profesor));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        }
+        return list;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getNume() {
         return nume;
     }
 
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
-
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getTipActivitate() {
         return tipActivitate;
     }
 
-    public void setTipActivitate(String tipActivitate) {
-        this.tipActivitate = tipActivitate;
-    }
-
     public String getDescriere() {
         return descriere;
     }
 
-    public void setDescriere(String descriere) {
-        this.descriere = descriere;
+    public int getNrMaximStudenti() {
+        return nrMaximStudenti;
     }
+
+    public int getId_profesor() {
+        return id_profesor;
+    }
+
+    @Override
+    public String toString() {
+        return "ActivitateProfesor{" +
+                "id=" + id +
+                ", tipActivitate='" + tipActivitate + '\'' +
+                ", descriere='" + descriere + '\'' +
+                ", nrMaximStudenti=" + nrMaximStudenti +
+                ", id_profesor=" + id_profesor +
+                '}';
+    }
+
+    private int id;
+    private String nume;
+    private String username;
+    private String tipActivitate;
+    private String descriere;
+    private int nrMaximStudenti;
+    private int id_profesor;
 }
