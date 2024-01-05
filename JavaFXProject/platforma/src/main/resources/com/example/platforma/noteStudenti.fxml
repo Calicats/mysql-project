@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.controllers.NoteStudentiController">
+    <center>
+        <TableView fx:id="gradesTable" prefHeight="400.0" prefWidth="600.0">
+            <columns>
+                <TableColumn fx:id="notaColumn" prefWidth="100.0" text="Nota" />
+                <TableColumn fx:id="idParticipantActivitateColumn" prefWidth="150.0" text="Activitate" />
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>
