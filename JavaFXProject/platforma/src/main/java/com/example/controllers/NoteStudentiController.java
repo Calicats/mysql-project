@@ -1,14 +1,17 @@
 package com.example.controllers;
 
 import com.example.NoteStudent;
+import com.example.platforma.Main;
 import com.example.sql.Connect;
 import com.example.sql.Query;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,5 +44,9 @@ public class NoteStudentiController {
                 list.add(noteStudent);
             }
         }
+    }
+
+    public void closeScreen(ActionEvent actionEvent) throws IOException {
+        Main.main.changeScene("panouStudent.fxml", "student", "student", 1024, 768);
     }
 }

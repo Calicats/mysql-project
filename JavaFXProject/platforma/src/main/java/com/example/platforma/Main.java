@@ -12,6 +12,8 @@ public class Main extends Application {
 
     private static Stage currentStage;
 
+    public static Main main;
+
     /***
      * Metoda apelata o singura data, la deschiderea programului
      * @param stage numele fxml-ului cu care se deschide programul (logare.fxml)
@@ -120,6 +122,7 @@ public class Main extends Application {
 
     public static void main(String[] args)
     {
+        Main.main = new Main();
         launch();
     }
 }

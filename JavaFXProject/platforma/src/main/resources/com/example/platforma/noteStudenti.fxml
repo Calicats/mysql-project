@@ -14,7 +14,7 @@
         </TableView>
     </center>
    <left>
-      <Button fx:id="back" mnemonicParsing="false" onAction="closeScreen()" text="Back" textAlignment="CENTER" BorderPane.alignment="CENTER">
+      <Button fx:id="back" mnemonicParsing="false" onAction="#closeScreen" text="Back" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <font>
             <Font size="18.0" />
          </font>

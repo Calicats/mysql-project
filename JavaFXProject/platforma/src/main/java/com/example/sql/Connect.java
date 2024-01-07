@@ -7,7 +7,7 @@ public class Connect {
 
     private static String jdbcUrl = "jdbc:mysql://localhost:3306/db_platforma";
     private static String usernameDB = "root";
-    private static String passwordDB = "durdeu10";
+    private static String passwordDB = "";
 
     /***
      * Conectare la db_platforma
@@ -15,6 +15,10 @@ public class Connect {
      */
     public static Connection getConnection()
     {
+        if(passwordDB.isEmpty())
+        {
+            throw new RuntimeException("Please enter the password for the database! in src/main/java/com/example/sql/Connect.java");
+        }
         try
         {
             return DriverManager.getConnection(jdbcUrl, usernameDB, passwordDB);

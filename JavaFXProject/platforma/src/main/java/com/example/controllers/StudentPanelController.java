@@ -3,6 +3,7 @@ package com.example.controllers;
 import com.example.platforma.Main;
 import com.example.sql.Connect;
 import com.example.sql.Query;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,6 +17,8 @@ import java.io.IOException;
 import java.sql.Connection;
 
 public class StudentPanelController {
+    @FXML
+    public Button carnetButton;
     @FXML
     private Label adresa;
     @FXML
@@ -123,19 +126,9 @@ public class StudentPanelController {
     /**
      * Metoda care te duce la scena de afisare a notelor
      */
-    private void onShowGrades() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("com/example/platforma/noteStudenti.fxml"));
-        try {
-            Parent root = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setOpacity(1);
-            stage.setTitle("Afisare note");
-            stage.setScene(new Scene(root, 450, 450));
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
+
+    public void onShowNoteStudenti(ActionEvent actionEvent) throws IOException {
+        Main.main.changeScene("noteStudenti.fxml", username, tableName, 1024, 768);
     }
 }
