@@ -3,14 +3,22 @@ package com.example.controllers;
 import com.example.platforma.Main;
 import com.example.sql.Connect;
 import com.example.sql.Query;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.Connection;
 
 public class StudentPanelController {
+    @FXML
+    public Button carnetButton;
     @FXML
     private Label adresa;
     @FXML
@@ -113,5 +121,14 @@ public class StudentPanelController {
         nrTelefon.setVisible(expr);
         anStudiu.setVisible(expr);
         numarOre.setVisible(expr);
+    }
+
+    /**
+     * Metoda care te duce la scena de afisare a notelor
+     */
+
+
+    public void onShowNoteStudenti(ActionEvent actionEvent) throws IOException {
+        Main.main.changeScene("noteStudenti.fxml", username, tableName, 1024, 768);
     }
 }

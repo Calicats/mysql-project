@@ -12,6 +12,8 @@ public class Main extends Application {
 
     private static Stage currentStage;
 
+    public static Main main;
+
     /***
      * Metoda apelata o singura data, la deschiderea programului
      * @param stage numele fxml-ului cu care se deschide programul (logare.fxml)
@@ -19,8 +21,9 @@ public class Main extends Application {
      */
 
     @Override
-    public void start(Stage stage) throws IOException
-    {
+    public void start(Stage stage) throws IOException, ClassNotFoundException {
+        //Class.forName("com.mysql.cj.jdbc.Driver");
+
         currentStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("logare.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
@@ -119,6 +122,7 @@ public class Main extends Application {
 
     public static void main(String[] args)
     {
+        Main.main = new Main();
         launch();
     }
 }

@@ -18,6 +18,7 @@ public class LoginController {
     @FXML
     private PasswordField parola;
 
+
     /***
      * Apeleaza un select din tabela Utilizator din db_platforma, si vede daca utilizatorul apartine
      * unei tabele

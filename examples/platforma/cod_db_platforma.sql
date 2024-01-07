@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS SuperAdministrator(
 
 CREATE TABLE IF NOT EXISTS Administrator(
     idAdmin int unique auto_increment primary key,
-	  cnp char(20) unique not null,
+	cnp char(20) unique not null,
     nume char(30),
     adresa char(50),
     nrTelefon char(15),
@@ -121,10 +121,6 @@ ALTER TABLE Administrator ADD COLUMN idRol int, ADD FOREIGN KEY(idRol) REFERENCE
 ALTER TABLE Profesor ADD COLUMN idRol int, ADD FOREIGN KEY(idRol) REFERENCES Rol(idRol);
 ALTER TABLE Student ADD COLUMN idRol int, ADD FOREIGN KEY(idRol) REFERENCES Rol(idRol);
 
-CREATE USER 'Student' IDENTIFIED BY 'PASSWORD';
-CREATE USER 'Profesor' IDENTIFIED BY 'PASSWORD';
-CREATE USER 'Admin' IDENTIFIED BY 'PASSWORD';
-CREATE USER 'SuperAdmin' IDENTIFIED BY 'PASSWORD';
 
 # drepturi student
 GRANT SELECT ON db_platforma.Student TO 'Student'@'%';
@@ -229,6 +225,20 @@ CREATE PROCEDURE AddNewStudent(
 BEGIN
     INSERT INTO Student(cnp, nume, anStudiu, numarOre, adresa, nrTelefon, email, username, parola, idRol)
     VALUES(cnp_param, nume_param, anStudiu_param, numarOre_param, adresa_param, nrTelefon_param, email_param, username_param, parola_param, (SELECT idRol FROM Rol WHERE numeRol = 'Student'));
+END //
+DELIMITER ;
+
+# procedura pentru adaugarea unui student
+DELIMITER //
+CREATE PROCEDURE AddNoteStudent(
+    IN idNota int,
+    IN nota int,
+    IN id_student int,
+    IN id_participant_activitate int
+)
+BEGIN
+    INSERT INTO NoteStudent(idNota, nota, id_student, id_participant_activitate)
+    VALUES(idNota, nota, id_student, id_participant_activitate);
 END //
 DELIMITER ;
 
@@ -377,11 +387,16 @@ call addNewSuperAdministrator("0000000000000", "Vlad Durdeu", "Str Principala nr
 call addNewSuperAdministrator( "1111111111111", "Alex Stancu", "Str Principala nr 2", "0755333445", "johnsmith1@random.org", "Stancu", "Calicats");
 call addNewSuperAdministrator("2222222222222", "Lion Moroz", "Str Principala nr 3", "0755333446", "johnsmith2@random.org", "Lion", "Calicats");
 
-call addNewActivitateProfesor("profesor", "Curs", "Curs 1: Introducere");
-call addNewActivitateProfesor("profesor", "Seminar", "Seminar 1: Introducere");
+call AddNoteStudent("1", 10, "1", "1");
+call AddNoteStudent("2", 10, "1", "1");
+call AddNoteStudent("3", 8, "1", "2");
 
-call addNewActivitateProfesor("profesormate", "Curs", "Curs 1: Relatii");
-call addNewActivitateProfesor("profesormate", "Seminar", "Seminar 1: Relatii");
+
+call addNewActivitateProfesor("profesor", "Curs", "Curs 1: Introducere", 10);
+call addNewActivitateProfesor("profesor", "Seminar", "Seminar 1: Introducere", 10);
+
+call addNewActivitateProfesor("profesormate", "Curs", "Curs 1: Relatii", 10);
+call addNewActivitateProfesor("profesormate", "Seminar", "Seminar 1: Relatii", 10);
 
 SELECT * FROM SuperAdministrator;
 SELECT * FROM Utilizator;
