@@ -1,61 +1,78 @@
 package com.example;
 
-import java.util.Objects;
+import com.example.sql.Connect;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class CalendarActivitate {
-    private int idCalendarActivitate;
-    private String dataDesfasurareActivitate;
-    private int id_participant_activitate;
+    public CalendarActivitate(int id) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM CalendarActivitate WHERE idCalendarActivitate = ?");
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
 
-    public CalendarActivitate(int idCalendarActivitate, String dataDesfasurareActivitate, int id_participant_activitate) {
-        this.idCalendarActivitate = idCalendarActivitate;
+            this.id = rs.getInt("idCalendarActivitate");
+            dataDesfasurareActivitate = rs.getDate("dataDesfasurareActivitate");
+            id_participant_activitate = rs.getInt("id_participant_activitate");
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        }
+    }
+
+    public CalendarActivitate(int id, Date dataDesfasurareActivitate, int id_participant_activitate) {
+        this.id = id;
         this.dataDesfasurareActivitate = dataDesfasurareActivitate;
         this.id_participant_activitate = id_participant_activitate;
     }
 
-    public int getIdCalendarActivitate() {
-        return idCalendarActivitate;
+    public static List<CalendarActivitate> getTable() {
+        List<CalendarActivitate> list = new ArrayList<>();
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM ParticipantActivitate");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("idParticipantActivitate");
+                Date dataDesfasurareActivitate = rs.getDate("dataDesfasurareActivitate");
+                int id_participant_activitate = rs.getInt("id_participant_activitate");
+                list.add(new CalendarActivitate(id, dataDesfasurareActivitate, id_participant_activitate));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        }
+        return list;
     }
 
-    public void setIdCalendarActivitate(int idCalendarActivitate) {
-        this.idCalendarActivitate = idCalendarActivitate;
+    public int getId() {
+        return id;
     }
 
-    public String getDataDesfasurareActivitate() {
+    public Date getDataDesfasurareActivitate() {
         return dataDesfasurareActivitate;
-    }
-
-    public void setDataDesfasurareActivitate(String dataDesfasurareActivitate) {
-        this.dataDesfasurareActivitate = dataDesfasurareActivitate;
     }
 
     public int getId_participant_activitate() {
         return id_participant_activitate;
     }
 
-    public void setId_participant_activitate(int id_participant_activitate) {
-        this.id_participant_activitate = id_participant_activitate;
-    }
-
     @Override
     public String toString() {
         return "CalendarActivitate{" +
-                "idCalendarActivitate=" + idCalendarActivitate +
-                ", dataDesfasurareActivitate='" + dataDesfasurareActivitate + '\'' +
+                "id=" + id +
+                ", dataDesfasurareActivitate=" + dataDesfasurareActivitate +
                 ", id_participant_activitate=" + id_participant_activitate +
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CalendarActivitate that)) return false;
-        return idCalendarActivitate == that.idCalendarActivitate && id_participant_activitate == that.id_participant_activitate && Objects.equals(dataDesfasurareActivitate, that.dataDesfasurareActivitate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idCalendarActivitate, dataDesfasurareActivitate, id_participant_activitate);
-    }
+    private int id;
+    private Date dataDesfasurareActivitate;
+    private int id_participant_activitate;
 }
-

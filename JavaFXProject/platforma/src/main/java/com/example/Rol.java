@@ -1,37 +1,69 @@
 package com.example;
 
+import com.example.sql.Connect;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Rol {
-    private int idRol;
-    private String numeRol;
+    public Rol(int id) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Rol WHERE idRol = ?");
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
 
-    // Static initialization of predefined roles
-    private static final Rol SUPER_ADMIN_ROLE = new Rol(1, "SuperAdmin");
-    private static final Rol ADMIN_ROLE = new Rol(2, "Admin");
-    private static final Rol PROFESOR_ROLE = new Rol(3, "Profesor");
-    private static final Rol STUDENT_ROLE = new Rol(4, "Student");
+            // TODO: Silently Fail instead of throwing exception?
+            this.id = rs.getInt("idRol");
+            numeRol = rs.getString("numeRol");
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        }
+    }
 
-    // Constructor
-    public Rol(int idRol, String numeRol) {
-        this.idRol = idRol;
+    public Rol(int id, String numeRol) {
+        this.id = id;
         this.numeRol = numeRol;
     }
 
-    // Getters for predefined roles
-    public static Rol getSuperAdminRole() {
-        return SUPER_ADMIN_ROLE;
+    public static List<Rol> getTable() {
+        List<Rol> list = new ArrayList<>();
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Rol");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("idRol");
+                String numeRol = rs.getString("numeRol");
+                list.add(new Rol(id, numeRol));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        }
+        return list;
     }
 
-    public static Rol getAdminRole() {
-        return ADMIN_ROLE;
+    public int getId() {
+        return id;
     }
 
-    public static Rol getProfesorRole() {
-        return PROFESOR_ROLE;
+    public String getNumeRol() {
+        return numeRol;
     }
 
-    public static Rol getStudentRole() {
-        return STUDENT_ROLE;
+    @Override
+    public String toString() {
+        return "Rol{" +
+                "id=" + id +
+                ", numeRol='" + numeRol + '\'' +
+                '}';
     }
 
-    // Getters and Setters for the above fields
+    int id;
+    String numeRol;
 }
