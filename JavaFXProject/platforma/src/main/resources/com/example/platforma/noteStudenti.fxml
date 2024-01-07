@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.controllers.NoteStudentiController">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controllers.NoteStudentiController">
     <center>
-        <TableView fx:id="gradesTable" prefHeight="400.0" prefWidth="600.0">
+        <TableView fx:id="gradesTable" editable="true" prefHeight="390.0" prefWidth="563.0">
             <columns>
-                <TableColumn fx:id="notaColumn" prefWidth="100.0" text="Nota" />
-                <TableColumn fx:id="idParticipantActivitateColumn" prefWidth="150.0" text="Activitate" />
+                <TableColumn fx:id="notaColumn" prefWidth="169.80001145601273" text="Nota" />
+                <TableColumn fx:id="idParticipantActivitateColumn" prefWidth="161.60006713867188" text="Activitate" />
             </columns>
         </TableView>
     </center>
+   <left>
+      <Button fx:id="back" mnemonicParsing="false" onAction="closeScreen()" text="Back" textAlignment="CENTER" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+   </left>
 </BorderPane>

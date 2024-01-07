@@ -294,6 +294,21 @@ public class Query {
         return result;
     }
 
+    public static int getIdByUsername(Connection connection, String username) throws Exception
+    {
+        String query = "SELECT idUtilizator FROM utilizator WHERE username = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, username);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if(resultSet.next())
+        {
+            return resultSet.getInt("idUtilizator");
+        }
+
+        return -1;
+    }
+
     /***
      * Metoda ajutatoare pentru getTableInfo
      * @param str numele tabelei

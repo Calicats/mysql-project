@@ -19,8 +19,9 @@ public class Main extends Application {
      */
 
     @Override
-    public void start(Stage stage) throws IOException
-    {
+    public void start(Stage stage) throws IOException, ClassNotFoundException {
+        //Class.forName("com.mysql.cj.jdbc.Driver");
+
         currentStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("logare.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);

@@ -9,6 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+import java.util.List;
+import java.util.Objects;
+
 public class NoteStudentiController {
 
     @FXML
@@ -23,21 +26,20 @@ public class NoteStudentiController {
     @FXML
     private TableColumn<NoteStudent, Integer> idParticipantActivitateColumn;
 
-    public void initialize() {
-        // ... (other initialization code)
-
-
-        //String[][] string = Query.getTableInfo(Connect.getConnection(), "note_studenti");
-
-        // Create an ObservableList of NoteStudent objects
-        //ObservableList<NoteStudent> data = FXCollections.observableArrayList();
-
-        // Bind the columns to NoteStudent properties
-        //idNotaColumn.setCellValueFactory(cellData -> cellData.getValue().idNotaProperty().asObject());
-        //notaColumn.setCellValueFactory(cellData -> cellData.getValue().notaProperty().asObject());
-        //idParticipantActivitateColumn.setCellValueFactory(cellData -> cellData.getValue().idParticipantActivitateProperty().asObject());
-
-        // Set the TableView items with the created data
-        //gradesTable.setItems(data);
+    public void initialize(String username){
+        ObservableList<NoteStudent> list = FXCollections.observableArrayList();
+        List<NoteStudent> noteStudenti = NoteStudent.getTable();
+        // get the current user's id
+        int id=-1;
+        try{
+            id = Query.getIdByUsername(Objects.requireNonNull(Connect.getConnection()), username);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for (NoteStudent noteStudent : noteStudenti) {
+            if (noteStudent.getId_student() == id) {
+                list.add(noteStudent);
+            }
+        }
     }
 }
