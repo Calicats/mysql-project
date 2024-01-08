@@ -1,5 +1,7 @@
 package com.example.sql;
 
+import com.example.NoteStudent;
+
 import java.sql.*;
 
 public class Update {
@@ -53,5 +55,47 @@ public class Update {
         preparedStatement.setString(3, oldDescription);
         preparedStatement.setString(4, username);
         return preparedStatement.executeUpdate();
+    }
+
+    public static int updateEntryInNoteStudent(Connection connection, NoteStudent noteStudent)
+    {
+        /*
+        this.id = id;
+        this.nota = nota;
+        this.id_student = id_student;
+        this.id_participant_activitate = id_participant_activitate;
+         */
+        // will update the grade of the student if there is a grade for that student
+        // check if there is a grade for that student
+        NoteStudent.getTable(noteStudent.getId_student()).forEach(noteStudent1 -> {
+            if (noteStudent1.getId_participant_activitate() == noteStudent.getId_participant_activitate()) {
+                try {
+                    String update = "UPDATE notestudent SET nota = ? WHERE id_student = ? AND id_participant_activitate = ?";
+                    PreparedStatement preparedStatement = connection.prepareStatement(update);
+                    preparedStatement.setInt(1, noteStudent.getNota());
+                    preparedStatement.setInt(2, noteStudent.getId_student());
+                    preparedStatement.setInt(3, noteStudent.getId_participant_activitate());
+                    preparedStatement.executeUpdate();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        try {
+            // will insert a new grade if there is no grade for that student in that activity
+            String insert = "INSERT INTO notestudent VALUES (?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(insert);
+            preparedStatement.setInt(1, noteStudent.getId());
+            preparedStatement.setInt(2, noteStudent.getNota());
+            preparedStatement.setInt(3, noteStudent.getId_student());
+            preparedStatement.setInt(4, noteStudent.getId_participant_activitate());
+            return preparedStatement.executeUpdate();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

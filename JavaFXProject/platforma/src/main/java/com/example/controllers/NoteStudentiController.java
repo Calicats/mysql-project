@@ -44,6 +44,8 @@ public class NoteStudentiController {
                 list.add(noteStudent);
             }
         }
+        gradesTable.setItems(list);
+        // TO DO: save the grade in the database
     }
 
     public void closeScreen(ActionEvent actionEvent) throws IOException {

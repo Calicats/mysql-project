@@ -4,9 +4,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controllers.CatalogProfesoriController">
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controllers.CatalogProfesoriController">
    <children>
-      <SplitPane dividerPositions="0.25601604278074863" prefHeight="400.0" prefWidth="600.0">
+      <SplitPane dividerPositions="0.3708920187793427" prefHeight="562.0" prefWidth="1024.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
@@ -14,12 +14,12 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <Button layoutX="33.0" layoutY="5.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="82.0" text="Back" />
+                              <Button fx:id="backButton" layoutX="87.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBackToMainMenu" prefHeight="31.0" prefWidth="82.0" text="Back" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <TableView layoutX="-37.0" layoutY="81.0" prefHeight="349.6" prefWidth="148.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TableView id="cursuriTable" fx:id="cursuriTable" layoutX="-37.0" layoutY="81.0" prefHeight="349.6" prefWidth="148.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <columns>
                                   <TableColumn prefWidth="26.200014173984528" text="id" />
                                   <TableColumn prefWidth="124.20001029968262" text="Cursuri" />
@@ -33,36 +33,36 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="431.0">
                <children>
-                  <SplitPane dividerPositions="0.35080645161290325" layoutX="121.0" layoutY="147.0" orientation="VERTICAL" prefHeight="398.4" prefWidth="442.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.25928571428571423" layoutX="121.0" layoutY="147.0" orientation="VERTICAL" prefHeight="398.4" prefWidth="442.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="114.0" prefWidth="441.0">
                            <children>
-                              <ChoiceBox layoutX="125.0" layoutY="9.0" prefHeight="26.0" prefWidth="307.0" />
+                              <ChoiceBox fx:id="selectCurs" layoutX="125.0" layoutY="9.0" onContextMenuRequested="#loadCursuri" onMouseClicked="#selectCurs" prefHeight="26.0" prefWidth="307.0" />
                               <Label layoutX="8.0" layoutY="2.0" prefHeight="42.0" prefWidth="111.0" text="   Selecteaza cursul" textAlignment="CENTER" />
-                              <ChoiceBox layoutX="125.0" layoutY="50.0" prefHeight="26.0" prefWidth="307.0" />
+                              <ChoiceBox fx:id="selectStudent" layoutX="125.0" layoutY="50.0" onContextMenuRequested="#loadStudents" onMouseClicked="#selectStudent" prefHeight="26.0" prefWidth="307.0" />
                               <Label layoutX="8.0" layoutY="43.0" prefHeight="42.0" prefWidth="111.0" text="Selecteaza studentul" textAlignment="CENTER" />
-                              <Button layoutX="327.0" layoutY="85.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Save">
+                              <Button fx:id="saveGradeButton" layoutX="327.0" layoutY="85.0" mnemonicParsing="false" onAction="#saveGrade" prefHeight="31.0" prefWidth="100.0" text="Save">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
                               </Button>
-                              <TextField layoutX="122.0" layoutY="85.0" prefHeight="42.0" prefWidth="191.0" />
+                              <TextField fx:id="inputGrade" layoutX="122.0" layoutY="85.0" prefHeight="42.0" prefWidth="191.0" />
                               <Label layoutX="14.0" layoutY="85.0" prefHeight="42.0" prefWidth="100.0" text="Nota:">
                                  <font>
                                     <Font size="23.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="errorLabel" layoutX="445.0" layoutY="9.0" prefHeight="123.0" prefWidth="191.0" textFill="RED">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
                                  </font>
                               </Label>
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="441.0">
                            <children>
-                              <TreeTableView layoutX="88.0" layoutY="80.0" prefHeight="225.0" prefWidth="441.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <columns>
-                                  <TreeTableColumn prefWidth="92.20000606775284" text="Id" />
-                                  <TreeTableColumn prefWidth="264.5999755859375" text="Student" />
-                                    <TreeTableColumn minWidth="0.0" prefWidth="83.39996337890625" text="Nota" />
-                                </columns>
-                              </TreeTableView>
+                              <TableView fx:id="studentList" layoutX="88.0" layoutY="-67.0" prefHeight="419.0" prefWidth="639.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              </TableView>
                            </children></AnchorPane>
                     </items>
                   </SplitPane>
