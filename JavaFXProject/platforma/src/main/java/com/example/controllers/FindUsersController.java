@@ -156,10 +156,10 @@ public class FindUsersController {
                 return;
             }
 
-            String[] userInfo = Query.getAllInfoOnUser(connection, tableName, findUsernameString);
+            String[][] usersInfo = Query.getUsersFromUsersPanel(connection, findUsernameString, tableName);
             String[] columns = Query.getColumnNames(connection, tableName);
 
-            if(userInfo == null || columns == null)
+            if(usersInfo == null || columns == null)
             {
                 foundUser.setText("Utilizatorul nu exista!");
                 System.out.println("null");
@@ -170,27 +170,35 @@ public class FindUsersController {
             foundUser.setText("");
 
             generateTableUsers(columns);
-            listUsers.add(rowToUserInfo(userInfo, tableName));
+            for(String[] row: usersInfo)
+            {
+                listUsers.add(rowToUserInfo(row, tableName));
+            }
             tableUsers.setItems(listUsers);
 
             if(tableName.equals("Profesor"))
             {
-                String[] activitateInfo = Query.getAllInfoOnUser(connection, "activitateprofesor", findUsernameString);
+                String[][] activitateInfo = Query.getUsersFromActivityPanel(connection, findUsernameString);
 
                 if(activitateInfo == null)
                 {
-                    foundUser.setText("Utilizatorul nu exista!");
+                    foundUser.setText("Utilizatorul cautat nu are nicio activitate!");
                     return;
                 }
 
+                setActivitateTableVisible(true);
                 ObservableList<ActivitateProfesor> listActivitate = FXCollections.observableArrayList();
+                for(String[] row: activitateInfo)
+                {
+                    listActivitate.add(rowToActivitateProfesor(row));
+                }
                 foundUser.setText("");
-                listActivitate.add(rowToActivitateProfesor(activitateInfo));
                 tableActivitati.setItems(listActivitate);
             }
         }
         catch(Exception e)
         {
+            foundUser.setText(e.getMessage());
             e.printStackTrace();
         }
     }

@@ -186,7 +186,7 @@ public class Query {
 
     public static boolean userExistsInTable(Connection connection, String username, String tableName) throws Exception
     {
-        String query = "SELECT username FROM " + tableName + " WHERE BINARY username = ?";
+        String query = "SELECT username FROM " + tableName + " WHERE LOCATE(?, username) > 0";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, username);
 
@@ -216,6 +216,40 @@ public class Query {
                 "FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor";
 
         return getInfoFromQuery(connection, query);
+    }
+
+    public static String[][] getUsersFromActivityPanel(Connection connection, String username)
+    {
+        String query = "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere, AP.nrMaximStudenti " +
+                "FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor " +
+                "WHERE LOCATE(?, username) > 0";
+        return getInfoFromQueryWithUsername(connection, query, username);
+    }
+
+    public static String[][] getUsersFromUsersPanel(Connection connection, String username, String tableName)
+    {
+        String query = getQueryForAllInfoOnUser(tableName);
+        return getInfoFromQueryWithUsername(connection, query, username);
+    }
+
+    private static String[][] getInfoFromQueryWithUsername(Connection connection, String query, String username)
+    {
+        try
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            return generateTable(resultSet, columnCount);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /***

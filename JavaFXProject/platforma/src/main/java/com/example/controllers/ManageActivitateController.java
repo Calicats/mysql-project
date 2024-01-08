@@ -118,6 +118,10 @@ public class ManageActivitateController {
     public void onSelectOperation()
     {
         setNewFieldsVisible(false);
+        setAllActivitesTableVisible(false);
+        setActivitateTableVisible(false);
+        clearErrors();
+
         String operationName = selectOperationComboBox.getValue();
 
         if(operationName == null)
@@ -137,8 +141,10 @@ public class ManageActivitateController {
 
     public void onSelectActivitate()
     {
-        setAllActivitesTableVisible(true);
         generateAllActivitesTable();
+        setAllActivitesTableVisible(false);
+        setActivitateTableVisible(false);
+        clearErrors();
 
         try
         {
@@ -146,11 +152,15 @@ public class ManageActivitateController {
             String selectActivitateString = selectActivitateComboBox.getValue();
             if(connection == null || selectActivitateString == null)
             {
+                errorHandling.setText("Selecteaza o activitate!");
+                tableActivitati.getItems().clear();
+                tableAllActivities.getItems().clear();
                 return;
             }
 
             String[][] tableInfo = Query.getAllActivitiesTableFromSelect(connection, selectActivitateString);
 
+            setAllActivitesTableVisible(true);
             populateAllActivitiesTable(tableInfo);
         }
         catch(Exception e)
@@ -162,32 +172,41 @@ public class ManageActivitateController {
 
     public void onFindActivity()
     {
-        setAllActivitesTableVisible(true);
         generateAllActivitesTable();
+        setAllActivitesTableVisible(false);
+        setActivitateTableVisible(false);
+
+        String findActivityString = findActivityField.getText();
+
+        if(findActivityString.isEmpty())
+        {
+            foundActivity.setText("Introdu o activitate!");
+            clearAllFields();
+            tableActivitati.getItems().clear();
+            tableAllActivities.getItems().clear();
+            return;
+        }
 
         try
         {
             Connection connection = Connect.getConnection();
-            String findActivityString = findActivityField.getText();
             if(connection == null)
             {
-                return;
-            }
-
-            if(findActivityString.isEmpty())
-            {
-                foundActivity.setText("Introdu o activitate!");
                 return;
             }
 
             if(!Query.existsActivity(connection, findActivityString))
             {
                 foundActivity.setText("Introdu o activitate valida!");
+                clearAllFields();
+                tableActivitati.getItems().clear();
+                tableAllActivities.getItems().clear();
                 return;
             }
 
             String[][] tableInfo = Query.getAllActivitiesTableFromSearch(connection, findActivityString);
 
+            setAllActivitesTableVisible(true);
             populateAllActivitiesTable(tableInfo);
             foundActivity.setText("");
         }
@@ -204,6 +223,9 @@ public class ManageActivitateController {
 
     public void onOperationButton()
     {
+        setAllActivitesTableVisible(false);
+        setActivitateTableVisible(false);
+
         errorHandling.setTextFill(Color.RED);
         errorHandling.setText("");
 
@@ -216,12 +238,19 @@ public class ManageActivitateController {
         if(operationName == null)
         {
             errorHandling.setText("Selecteaza o operatie!");
+            clearAllFields();
+            foundUser.setText("");
+            foundActivity.setText("");
+            tableActivitati.getItems().clear();
+            tableAllActivities.getItems().clear();
             return;
         }
 
         if(usernameString.isEmpty())
         {
             errorHandling.setText("Introdu un utilizator!");
+            foundUser.setText("");
+            foundActivity.setText("");
             return;
         }
 
@@ -238,6 +267,10 @@ public class ManageActivitateController {
             {
                 errorHandling.setText("Introdu date in toate campurile!");
                 clearAllFields();
+                foundUser.setText("");
+                foundActivity.setText("");
+                tableActivitati.getItems().clear();
+                tableAllActivities.getItems().clear();
                 return;
             }
 
@@ -247,6 +280,8 @@ public class ManageActivitateController {
             {
                 errorHandling.setText("Introdu un utilizator valid!");
                 clearAllFields();
+                foundUser.setText("");
+                foundActivity.setText("");
                 return;
             }
 
@@ -259,6 +294,8 @@ public class ManageActivitateController {
                     errorHandling.setTextFill(Color.rgb(0, 255, 0));
                     errorHandling.setText("Adaugare efectuata cu succes!");
                     clearAllFields();
+                    foundUser.setText("");
+                    foundActivity.setText("");
                 }
 
                 case "Modifica" ->
@@ -271,6 +308,8 @@ public class ManageActivitateController {
                     {
                         errorHandling.setText("Introdu date in cel putin un camp!");
                         clearAllFields();
+                        tableActivitati.getItems().clear();
+                        tableAllActivities.getItems().clear();
                         return;
                     }
 
@@ -297,6 +336,8 @@ public class ManageActivitateController {
                     {
                         errorHandling.setText("Introdu un utilizator valid!");
                         clearAllFields();
+                        tableActivitati.getItems().clear();
+                        tableAllActivities.getItems().clear();
                         return;
                     }
 
@@ -304,6 +345,8 @@ public class ManageActivitateController {
                     errorHandling.setText("Modificare efectuata cu succes!");
 
                     clearAllFields();
+                    foundUser.setText("");
+                    foundActivity.setText("");
                 }
 
                 case "Sterge" ->
@@ -321,6 +364,8 @@ public class ManageActivitateController {
                     errorHandling.setText("Stergere efectuata cu succes!");
 
                     clearAllFields();
+                    foundUser.setText("");
+                    foundActivity.setText("");
                 }
             }
         }
@@ -338,25 +383,59 @@ public class ManageActivitateController {
 
     public void onSearchUsername()
     {
+        setAllActivitesTableVisible(false);
+        setActivitateTableVisible(false);
+
         generateTableActivitati();
         Connection connection = Connect.getConnection();
-        String findUsernameString = usernameProfesorField.getText();
-        String[] activitateInfo = Query.getAllInfoOnUser(connection, "activitateprofesor", findUsernameString);
-
-        if(activitateInfo == null)
+        if(connection == null)
         {
-            foundUser.setText("Utilizatorul cautat nu are nicio activitate!");
-            clearAllFields();
             return;
         }
 
-        setActivitateTableVisible(true);
-        ObservableList<ActivitateProfesor> listActivitate = FXCollections.observableArrayList();
-        foundUser.setText("");
-        listActivitate.add(rowToActivitateProfesor(activitateInfo));
-        tableActivitati.setItems(listActivitate);
+        String findUsernameString = usernameProfesorField.getText();
+        String[][] activitateInfo = Query.getUsersFromActivityPanel(connection, findUsernameString);
 
-        clearAllFields();
+        if(findUsernameString.isEmpty())
+        {
+            foundUser.setText("Introdu un utilizator!");
+            return;
+        }
+
+        try
+        {
+            if(!Query.userExistsInTable(connection, findUsernameString, "profesor"))
+            {
+                foundUser.setText("Introdu un utilizator valid!");
+                tableActivitati.getItems().clear();
+                tableAllActivities.getItems().clear();
+                return;
+            }
+
+            if(activitateInfo == null)
+            {
+                foundUser.setText("Utilizatorul cautat nu are nicio activitate!");
+                tableActivitati.getItems().clear();
+                tableAllActivities.getItems().clear();
+                return;
+            }
+
+            setActivitateTableVisible(true);
+            ObservableList<ActivitateProfesor> listActivitate = FXCollections.observableArrayList();
+            for(String[] row: activitateInfo)
+            {
+                listActivitate.add(rowToActivitateProfesor(row));
+            }
+            tableActivitati.setItems(listActivitate);
+
+            clearAllFields();
+            clearErrors();
+        }
+        catch(Exception e)
+        {
+            errorHandling.setText(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /***
@@ -492,12 +571,18 @@ public class ManageActivitateController {
     private void clearAllFields()
     {
         usernameProfesorField.clear();
-        selectActivitateComboBox.setValue(null);
-        selectNewActivitateComboBox.setValue(null);
+        findActivityField.clear();
         descriptionActivitateField.clear();
         newDescriptionActivitateField.clear();
         maxStudentField.clear();
         newMaxStudentField.clear();
+    }
+
+    private void clearErrors()
+    {
+        errorHandling.setText("");
+        foundUser.setText("");
+        foundActivity.setText("");
     }
 
     private void setNewFieldsVisible(boolean expr)
