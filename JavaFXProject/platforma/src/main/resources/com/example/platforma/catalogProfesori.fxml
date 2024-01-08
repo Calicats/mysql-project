@@ -14,7 +14,7 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <Button fx:id="backButton" layoutX="87.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBackToMainMenu" prefHeight="31.0" prefWidth="82.0" text="Back" />
+                              <Button fx:id="backButton" layoutX="146.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBackToMainMenu" prefHeight="31.0" prefWidth="82.0" text="Back" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
@@ -33,7 +33,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="431.0">
                <children>
-                  <SplitPane dividerPositions="0.25928571428571423" layoutX="121.0" layoutY="147.0" orientation="VERTICAL" prefHeight="398.4" prefWidth="442.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.2967857142857142" layoutX="121.0" layoutY="147.0" orientation="VERTICAL" prefHeight="398.4" prefWidth="442.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="114.0" prefWidth="441.0">
                            <children>
@@ -52,7 +52,7 @@
                                     <Font size="23.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="errorLabel" layoutX="445.0" layoutY="9.0" prefHeight="123.0" prefWidth="191.0" textFill="RED">
+                              <Label fx:id="errorLabel" layoutX="12.0" layoutY="134.0" prefHeight="26.0" prefWidth="424.0" textFill="RED">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
