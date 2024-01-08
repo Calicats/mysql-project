@@ -7,7 +7,7 @@ public class Connect {
 
     private static String jdbcUrl = "jdbc:mysql://localhost:3306/db_platforma";
     private static String usernameDB = "root";
-    private static String passwordDB = "";
+    private static String passwordDB = "durdeu10";
 
     /***
      * Conectare la db_platforma

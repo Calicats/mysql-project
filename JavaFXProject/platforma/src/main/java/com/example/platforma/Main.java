@@ -14,6 +14,7 @@ public class Main extends Application {
 
     public static Main main;
 
+
     /***
      * Metoda apelata o singura data, la deschiderea programului
      * @param stage numele fxml-ului cu care se deschide programul (logare.fxml)
@@ -101,6 +102,12 @@ public class Main extends Application {
                             ProfesorPanelController controller = fxmlLoader.getController();
                             controller.initUser(username, tableName);
                         }
+                        case "catalogProfesori.fxml" ->
+                        {
+                            currentStage.setTitle("Catalog profesori");
+                            CatalogProfesoriController controller = fxmlLoader.getController();
+                            controller.initialize(username, tableName);
+                        }
                     }
                 }
                 case "student" ->
@@ -113,6 +120,12 @@ public class Main extends Application {
                             currentStage.setTitle("Panou student");
                             StudentPanelController controller = fxmlLoader.getController();
                             controller.initUser(username, tableName);
+                        }
+                        case "noteStudenti.fxml" ->
+                        {
+                            currentStage.setTitle("Note studenti");
+                            NoteStudentiController controller = fxmlLoader.getController();
+                            controller.initialize(username);
                         }
                     }
                 }

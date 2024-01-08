@@ -54,6 +54,39 @@ public class NoteStudent {
         return list;
     }
 
+    public static List<NoteStudent> getTable(int id_student) {
+        List<NoteStudent> list = new ArrayList<>();
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NoteStudent WHERE id_student = ?");
+            stmt.setInt(1, id_student);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("idNota");
+                int nota = rs.getInt("nota");
+                int id_participant_activitate = rs.getInt("id_participant_activitate");
+                list.add(new NoteStudent(id, nota, id_student, id_participant_activitate));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        }
+        return list;
+    }
+
+    public static int getNextId() {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT MAX(idNota) FROM NoteStudent");
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            return rs.getInt(1) + 1;
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        }
+        return -1;
+    }
+
     public int getId() {
         return id;
     }

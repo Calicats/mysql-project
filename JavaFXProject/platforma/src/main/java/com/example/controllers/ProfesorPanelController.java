@@ -3,6 +3,7 @@ package com.example.controllers;
 import com.example.platforma.Main;
 import com.example.sql.Connect;
 import com.example.sql.Query;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.sql.Connection;
 
 public class ProfesorPanelController {
+    public Button catalogButton;
     @FXML
     private Label adresa;
     @FXML
@@ -120,5 +122,9 @@ public class ProfesorPanelController {
         departament.setVisible(expr);
         nrMinOre.setVisible(expr);
         nrMaxOre.setVisible(expr);
+    }
+
+    public void openCatalog(ActionEvent actionEvent) throws IOException {
+        Main.main.changeScene("catalogProfesori.fxml", username, tableName, 1024, 768);
     }
 }
