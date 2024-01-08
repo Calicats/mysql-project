@@ -127,6 +127,12 @@ public class Main extends Application {
                             NoteStudentiController controller = fxmlLoader.getController();
                             controller.initialize(username);
                         }
+                        case "inscriereActivitate.fxml" ->
+                        {
+                            currentStage.setTitle("Inscriere activitate");
+                            InscriereActivitateController controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
                     }
                 }
             }
