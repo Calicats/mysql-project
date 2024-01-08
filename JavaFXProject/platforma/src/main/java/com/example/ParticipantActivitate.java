@@ -32,6 +32,14 @@ public class ParticipantActivitate {
         this.id_student = id_student;
     }
 
+    public ParticipantActivitate(String usernameProfesor, String tipActivitate, String descriere, int nrStudenti)
+    {
+        this.usernameProfesor = usernameProfesor;
+        this.tipActivitate = tipActivitate;
+        this.descriere = descriere;
+        this.nrStudenti = nrStudenti;
+    }
+
     public static List<ParticipantActivitate> getTable() {
         List<ParticipantActivitate> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
@@ -63,6 +71,38 @@ public class ParticipantActivitate {
         return id_student;
     }
 
+    public String getUsernameProfesor() {
+        return usernameProfesor;
+    }
+
+    public void setUsernameProfesor(String usernameProfesor) {
+        this.usernameProfesor = usernameProfesor;
+    }
+
+    public String getTipActivitate() {
+        return tipActivitate;
+    }
+
+    public void setTipActivitate(String tipActivitate) {
+        this.tipActivitate = tipActivitate;
+    }
+
+    public String getDescriere() {
+        return descriere;
+    }
+
+    public void setDescriere(String descriere) {
+        this.descriere = descriere;
+    }
+
+    public int getNrStudenti() {
+        return nrStudenti;
+    }
+
+    public void setNrStudenti(int nrStudenti) {
+        this.nrStudenti = nrStudenti;
+    }
+
     @Override
     public String toString() {
         return "ParticipantActivitate{" +
@@ -75,4 +115,10 @@ public class ParticipantActivitate {
     private int id;
     private int id_activitate_profesor;
     private int id_student;
+
+    private String usernameProfesor;
+    private String tipActivitate;
+    private String descriere;
+    private int nrStudenti;
+
 }

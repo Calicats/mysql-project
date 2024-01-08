@@ -32,6 +32,8 @@ public class StudentPanelController {
     @FXML
     private Button logoutButton;
     @FXML
+    private Button enrollButton;
+    @FXML
     private Label nrTelefon;
     @FXML
     private Label numarOre;
@@ -110,6 +112,11 @@ public class StudentPanelController {
     {
         Main main = new Main();
         main.changeScene("logare.fxml", username, tableName, 600, 400);
+    }
+
+    public void onEnrollActivity() throws IOException
+    {
+        Main.main.changeScene("inscriereActivitate.fxml", username, tableName, 1024, 768);
     }
 
     private void showData(boolean expr)

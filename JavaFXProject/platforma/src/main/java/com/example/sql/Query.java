@@ -194,11 +194,32 @@ public class Query {
         return resultSet.next();
     }
 
-    public static boolean existsActivity(Connection connection, String descriere) throws Exception
+    public static boolean existsActivity(Connection connection, String tipActivitate) throws Exception
     {
-        String query = "SELECT descriere FROM activitateprofesor WHERE LOCATE(?, descriere) > 0";
+        String query = "SELECT tipActivitate FROM activitateprofesor WHERE LOCATE(?, tipActivitate) > 0";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, descriere);
+        preparedStatement.setString(1, tipActivitate);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
+    public static boolean existsActivitySensitive(Connection connection, String tipActivitate) throws Exception
+    {
+        String query = "SELECT tipActivitate FROM activitateprofesor WHERE tipActivitate = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, tipActivitate);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
+    public static boolean existsStudentInActivity(Connection connection, String usernameStudent) throws Exception
+    {
+        int idStudent = getIdByUsername(connection, "Student", usernameStudent);
+        String query = "SELECT id_student from participantactivitate where id_student = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, idStudent);
 
         ResultSet resultSet = preparedStatement.executeQuery();
         return resultSet.next();
@@ -214,6 +235,26 @@ public class Query {
     {
         String query = "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere, AP.nrMaximStudenti " +
                 "FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor";
+
+        return getInfoFromQuery(connection, query);
+    }
+
+    public static String[][] getParticipantiTableInfo(Connection connection)
+    {
+        String query = "SELECT " +
+                "P.username AS usernameProfesor, " +
+                "AP.tipActivitate, " +
+                "AP.descriere, " +
+                "COUNT(PA.id_student) AS nrStudenti " +
+                "FROM " +
+                "ActivitateProfesor AP " +
+                "JOIN " +
+                "Profesor P ON AP.id_profesor = P.idProfesor " +
+                "LEFT JOIN " +
+                "ParticipantActivitate PA ON AP.idActivitateProfesor = PA.id_activitate_profesor " +
+                "GROUP BY " +
+                "AP.idActivitateProfesor, P.username, AP.tipActivitate, AP.descriere";
+
 
         return getInfoFromQuery(connection, query);
     }
@@ -338,6 +379,38 @@ public class Query {
         if(resultSet.next())
         {
             return resultSet.getInt("idUtilizator");
+        }
+
+        return -1;
+    }
+
+    public static int getIdByUsername(Connection connection, String tableName, String username) throws Exception
+    {
+        String query = "SELECT id" + tableName + " FROM " + tableName + " WHERE username = ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, username);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next())
+        {
+            return resultSet.getInt(1);
+        }
+
+        return -1;
+    }
+
+    public static int getIdActivitateProfesor(Connection connection, int idProfesor) throws Exception
+    {
+        String query = "SELECT idActivitateProfesor FROM ActivitateProfesor WHERE id_profesor = ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, idProfesor);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next())
+        {
+            return resultSet.getInt(1);
         }
 
         return -1;
