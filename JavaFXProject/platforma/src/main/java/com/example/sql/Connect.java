@@ -17,6 +17,7 @@ public class Connect {
             Scanner contents = new Scanner(new File(filename));
             usernameDB = contents.next();
             passwordDB = contents.next();
+            contents.close();
         } catch (FileNotFoundException e) {
             System.err.println(filename + ": could not find the file specified");
         } catch (NoSuchElementException e) {
