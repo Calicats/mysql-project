@@ -132,4 +132,30 @@ public class Insert {
         statement.setInt(4, nrMaximStudenti);
         statement.execute();
     }
+
+    public static void addParticipantActivitate(Connection connection, String usernameProfesor, String usernameStudent) throws Exception
+    {
+        int idProfesor = Query.getIdByUsername(connection, "Profesor", usernameProfesor);
+        int idActivitateProfesor = Query.getIdActivitateProfesor(connection, idProfesor);
+        int idStudent = Query.getIdByUsername(connection, "Student", usernameStudent);
+
+        if(idProfesor == -1)
+        {
+            throw new RuntimeException("Could not fetch " + usernameProfesor + "'s id from Profesor table");
+        }
+        if(idStudent == -1)
+        {
+            throw new RuntimeException("Could not fetch " + usernameStudent +"'s id from Student table");
+        }
+        if(idActivitateProfesor == -1)
+        {
+            throw new RuntimeException("Could not fetch " + usernameProfesor + "'s id from ActivitateProfesor table");
+        }
+
+        String query = "INSERT INTO ParticipantActivitate (id_activitate_profesor, id_student) VALUES (?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, idActivitateProfesor);
+        preparedStatement.setInt(2, idStudent);
+        preparedStatement.executeUpdate();
+    }
 }

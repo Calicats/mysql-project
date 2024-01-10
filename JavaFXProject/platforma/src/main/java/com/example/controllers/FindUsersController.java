@@ -272,7 +272,7 @@ public class FindUsersController {
 
     private void removeEllipses(TableColumn<ActivitateProfesor, String> column)
     {
-        column.setMinWidth(150);
+        column.setMinWidth(200);
     }
 
     /***

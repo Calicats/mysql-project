@@ -28,9 +28,17 @@ public class ManageActivitateController {
     @FXML
     private Label foundActivity;
     @FXML
+    private Label activityNameLabel;
+    @FXML
+    private Label newActivityNameLabel;
+    @FXML
     private TextField findActivityField;
     @FXML
     private TextField descriptionActivitateField;
+    @FXML
+    private TextField activityNameField;
+    @FXML
+    private TextField newActivityNameField;
     @FXML
     private ComboBox<String> selectOperationComboBox;
     @FXML
@@ -102,6 +110,8 @@ public class ManageActivitateController {
         setNewFieldsVisible(false);
         setActivitateTableVisible(false);
         setAllActivitesTableVisible(false);
+        generateAllActivitesTable();
+        generateTableActivitati();
     }
 
     /***
@@ -141,9 +151,6 @@ public class ManageActivitateController {
 
     public void onSelectActivitate()
     {
-        generateAllActivitesTable();
-        setAllActivitesTableVisible(false);
-        setActivitateTableVisible(false);
         clearErrors();
 
         try
@@ -170,11 +177,9 @@ public class ManageActivitateController {
         }
     }
 
-    public void onFindActivity()
+    public void onSearchActivity()
     {
-        generateAllActivitesTable();
-        setAllActivitesTableVisible(false);
-        setActivitateTableVisible(false);
+        clearErrors();
 
         String findActivityString = findActivityField.getText();
 
@@ -208,6 +213,7 @@ public class ManageActivitateController {
 
             setAllActivitesTableVisible(true);
             populateAllActivitiesTable(tableInfo);
+            clearAllFieldsExceptUserAndActivity();
             foundActivity.setText("");
         }
         catch(Exception e)
@@ -223,14 +229,14 @@ public class ManageActivitateController {
 
     public void onOperationButton()
     {
-        setAllActivitesTableVisible(false);
-        setActivitateTableVisible(false);
+        clearErrors();
 
         errorHandling.setTextFill(Color.RED);
         errorHandling.setText("");
 
         String usernameString = usernameProfesorField.getText();
-        String activitateString = selectActivitateComboBox.getValue();
+        String tipActivitate = selectActivitateComboBox.getValue();
+        String activitateString = activityNameField.getText();
         String descriptionString = descriptionActivitateField.getText();
         String maxStudentString = maxStudentField.getText();
         String operationName = selectOperationComboBox.getValue();
@@ -263,7 +269,8 @@ public class ManageActivitateController {
                 return;
             }
 
-            if(activitateString == null || descriptionString.isEmpty() || maxStudentString.isEmpty())
+            if(tipActivitate == null || activitateString.isEmpty() ||
+                    descriptionString.isEmpty() || maxStudentString.isEmpty())
             {
                 errorHandling.setText("Introdu date in toate campurile!");
                 clearAllFields();
@@ -289,7 +296,8 @@ public class ManageActivitateController {
             {
                 case "Adauga" ->
                 {
-                    Insert.addActivitateProfesor(connection, usernameString, activitateString, descriptionString, Integer.parseInt(maxStudentString));
+                    String activityName = tipActivitate + " " + activitateString;
+                    Insert.addActivitateProfesor(connection, usernameString, activityName, descriptionString, Integer.parseInt(maxStudentString));
 
                     errorHandling.setTextFill(Color.rgb(0, 255, 0));
                     errorHandling.setText("Adaugare efectuata cu succes!");
@@ -300,20 +308,39 @@ public class ManageActivitateController {
 
                 case "Modifica" ->
                 {
-                    String newActivitateString = selectNewActivitateComboBox.getValue();
+                    String newTipActivitate = selectNewActivitateComboBox.getValue();
+                    String newActivityString = newActivityNameField.getText();
                     String newDescriptionString = newDescriptionActivitateField.getText();
                     String newMaxStudentString = newMaxStudentField.getText();
 
-                    if(newActivitateString == null && newDescriptionString.isEmpty() && newMaxStudentString.isEmpty())
+                    boolean modifyActivityEmpty = false;
+                    boolean modifyOthersEmpty = newTipActivitate == null && newMaxStudentString.isEmpty();
+
+                    if(newActivityString.isEmpty() || newDescriptionString.isEmpty())
                     {
-                        errorHandling.setText("Introdu date in cel putin un camp!");
+                        modifyActivityEmpty = true;
+                    }
+
+                    if(modifyActivityEmpty)
+                    {
+                        errorHandling.setText("Daca modifici activitatea, modifica ambele campuri legate de aceasta!");
                         clearAllFields();
                         tableActivitati.getItems().clear();
                         tableAllActivities.getItems().clear();
                         return;
                     }
 
-                    List<String> newEntriesList = getNewEntriesList(newActivitateString, newDescriptionString, newMaxStudentString);
+                    if(modifyOthersEmpty)
+                    {
+                        errorHandling.setText("Introdu date in cel putin un camp!");
+                        clearAllFields();
+                        tableActivitati.getItems().clear();
+                        tableAllActivities.getItems().clear();
+                    }
+
+                    String newActivity = newTipActivitate + " " + newActivityString;
+
+                    List<String> newEntriesList = getNewEntriesList(newActivity, newDescriptionString, newMaxStudentString);
                     String[] columns = {"tipActivitate", "descriere", "nrMaximStudenti"};
                     int rowsAffected = 0;
 
@@ -351,12 +378,15 @@ public class ManageActivitateController {
 
                 case "Sterge" ->
                 {
-                    int affectedRows = Delete.deleteActivitateProfesor(connection, usernameString, activitateString, descriptionString);
+                    String deletedActivity = tipActivitate + " " + activitateString;
+                    int affectedRows = Delete.deleteActivitateProfesor(connection, usernameString, deletedActivity, descriptionString);
 
                     if(affectedRows == 0)
                     {
                         errorHandling.setText("Introdu un utilizator valid!");
                         clearAllFields();
+                        tableActivitati.getItems().clear();
+                        tableAllActivities.getItems().clear();
                         return;
                     }
 
@@ -386,7 +416,6 @@ public class ManageActivitateController {
         setAllActivitesTableVisible(false);
         setActivitateTableVisible(false);
 
-        generateTableActivitati();
         Connection connection = Connect.getConnection();
         if(connection == null)
         {
@@ -428,7 +457,7 @@ public class ManageActivitateController {
             }
             tableActivitati.setItems(listActivitate);
 
-            clearAllFields();
+            clearAllFieldsExceptUserAndActivity();
             clearErrors();
         }
         catch(Exception e)
@@ -572,6 +601,18 @@ public class ManageActivitateController {
     {
         usernameProfesorField.clear();
         findActivityField.clear();
+        activityNameField.clear();
+        newActivityNameField.clear();
+        descriptionActivitateField.clear();
+        newDescriptionActivitateField.clear();
+        maxStudentField.clear();
+        newMaxStudentField.clear();
+    }
+
+    private void clearAllFieldsExceptUserAndActivity()
+    {
+        activityNameField.clear();
+        newActivityNameField.clear();
         descriptionActivitateField.clear();
         newDescriptionActivitateField.clear();
         maxStudentField.clear();
@@ -589,6 +630,8 @@ public class ManageActivitateController {
     {
         selectNewActivitateComboBox.setVisible(expr);
         selectNewActivitateLabel.setVisible(expr);
+        newActivityNameLabel.setVisible(expr);
+        newActivityNameField.setVisible(expr);
         newDescriptionActivitateField.setVisible(expr);
         newDescriptionLabel.setVisible(expr);
         newMaxStudentField.setVisible(expr);
