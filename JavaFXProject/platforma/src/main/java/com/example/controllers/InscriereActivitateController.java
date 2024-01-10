@@ -187,7 +187,7 @@ public class InscriereActivitateController {
                 return;
             }
 
-            if(Query.existsStudentInActivity(connection, studentLogat))
+            if(Query.existsStudentInActivity(connection, usernameProfesorString, studentLogat))
             {
                 errorHandling.setText("Esti deja inscris la activitatea introdusa!");
                 clearAllFields();
