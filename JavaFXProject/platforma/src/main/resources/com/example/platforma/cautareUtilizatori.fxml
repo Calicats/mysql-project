@@ -29,7 +29,7 @@
             <TextField fx:id="findUsernameField" layoutX="173.0" layoutY="115.0" promptText="Nume utilizator" />
             <Button fx:id="findUsernameButton" layoutX="336.0" layoutY="115.0" mnemonicParsing="false" onAction="#onSearchUsername" text="Cauta" />
             <Button fx:id="refreshButton" layoutX="336.0" layoutY="61.0" mnemonicParsing="false" onAction="#onRefreshButton" text="Refresh" />
-            <Label fx:id="foundUser" layoutX="174.0" layoutY="151.0" textFill="RED">
+            <Label fx:id="foundUser" layoutX="173.0" layoutY="151.0" textFill="RED">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -44,6 +44,18 @@
                   <TableColumn fx:id="maxStudentColumn" prefWidth="105.0" text="nrMaximStudenti" />
                </columns>
             </TableView>
+            <Label fx:id="searchActivityLabel" layoutX="24.0" layoutY="169.0" text="Nume activitate">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="searchActivityField" layoutX="173.0" layoutY="169.0" promptText="Nume activitate" />
+            <Button fx:id="searchActivityButton" layoutX="336.0" layoutY="169.0" mnemonicParsing="false" onAction="#onSearchActivity" text="Cauta" />
+            <Label fx:id="foundActivity" layoutX="174.0" layoutY="205.0" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </left>

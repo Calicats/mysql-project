@@ -21,11 +21,19 @@ public class FindUsersController {
     @FXML
     private Button findUsernameButton;
     @FXML
+    private Button searchActivityButton;
+    @FXML
+    private Label searchActivityLabel;
+    @FXML
     private TextField findUsernameField;
+    @FXML
+    private TextField searchActivityField;
     @FXML
     private ComboBox<String> selectTableComboBox;
     @FXML
     private Label foundUser;
+    @FXML
+    private Label foundActivity;
     @FXML
     private TableView<User> tableUsers;
     // tabela tableActivitati cu coloane hardcodate, ca tabela ii construita cu un JOIN
@@ -86,6 +94,7 @@ public class FindUsersController {
         tableUsers.getColumns().clear();
         findUsernameField.clear();
         foundUser.setText("");
+        foundActivity.setText("");
 
         setActivitateTableVisible(false);
 
@@ -142,32 +151,38 @@ public class FindUsersController {
         if(tableName == null)
         {
             foundUser.setText("Selecteaza o tabela!");
+            clearAllFields();
             return;
         }
 
         try
         {
             Connection connection = Connect.getConnection();
+            if(connection == null)
+            {
+                return;
+            }
+
             String findUsernameString = findUsernameField.getText();
 
             if(findUsernameString.isEmpty())
             {
                 foundUser.setText("Introdu un utilizator!");
+                clearAllFields();
                 return;
             }
 
             String[][] usersInfo = Query.getUsersFromUsersPanel(connection, findUsernameString, tableName);
             String[] columns = Query.getColumnNames(connection, tableName);
 
-            if(usersInfo == null || columns == null)
+            if(usersInfo == null || columns == null || !Query.userExistsInTable(connection, findUsernameString, tableName))
             {
                 foundUser.setText("Utilizatorul nu exista!");
-                System.out.println("null");
+                clearAllFields();
                 return;
             }
 
             ObservableList<User> listUsers = FXCollections.observableArrayList();
-            foundUser.setText("");
 
             generateTableUsers(columns);
             for(String[] row: usersInfo)
@@ -178,22 +193,18 @@ public class FindUsersController {
 
             if(tableName.equals("Profesor"))
             {
-                String[][] activitateInfo = Query.getUsersFromActivityPanel(connection, findUsernameString);
+                String[][] activitateInfo = Query.getActivityTableFromUsername(connection, findUsernameString);
 
-                if(activitateInfo == null)
+                if(activitateInfo == null || !Query.existsProfesorInActivity(connection, findUsernameString))
                 {
                     foundUser.setText("Utilizatorul cautat nu are nicio activitate!");
+                    clearAllFields();
                     return;
                 }
 
-                setActivitateTableVisible(true);
-                ObservableList<ActivitateProfesor> listActivitate = FXCollections.observableArrayList();
-                for(String[] row: activitateInfo)
-                {
-                    listActivitate.add(rowToActivitateProfesor(row));
-                }
+                showActivities(activitateInfo);
                 foundUser.setText("");
-                tableActivitati.setItems(listActivitate);
+                foundActivity.setText("");
             }
         }
         catch(Exception e)
@@ -201,6 +212,76 @@ public class FindUsersController {
             foundUser.setText(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    /***
+     * Cauta activitatea dupa un input
+     */
+
+    public void onSearchActivity()
+    {
+        String activityString = searchActivityField.getText();
+        if(activityString.isEmpty())
+        {
+            foundActivity.setText("Introdu o activitate!");
+            clearAllFields();
+            return;
+        }
+
+        try
+        {
+            Connection connection = Connect.getConnection();
+            if(connection == null)
+            {
+                return;
+            }
+
+            String[][] activitateInfo = Query.getActivityTableFromActivity(connection, activityString);
+
+            if(activitateInfo == null || !Query.existsActivity(connection, activityString))
+            {
+                foundActivity.setText("Activitatea cautata nu exista!");
+                clearAllFields();
+                return;
+            }
+
+            generateTableActivitati();
+            setActivitateTableVisible(true);
+
+            ObservableList<ActivitateProfesor> list = FXCollections.observableArrayList();
+            for(String[] row: activitateInfo)
+            {
+                ActivitateProfesor activitateProfesor = rowToActivitateProfesor(row);
+                list.add(activitateProfesor);
+            }
+
+            tableActivitati.setItems(list);
+            foundUser.setText("");
+            foundActivity.setText("");
+        }
+        catch(Exception e)
+        {
+            foundActivity.setText(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /***
+     * Afiseaza activitatile printr-un ObservableList care e mai apoi atasat la tabela
+     * @param activitateInfo tabela sub forma de String[][]
+     */
+
+    private void showActivities(String[][] activitateInfo)
+    {
+        setActivitateTableVisible(true);
+        ObservableList<ActivitateProfesor> listActivitate = FXCollections.observableArrayList();
+        for(String[] row: activitateInfo)
+        {
+            listActivitate.add(rowToActivitateProfesor(row));
+        }
+        foundUser.setText("");
+        foundActivity.setText("");
+        tableActivitati.setItems(listActivitate);
     }
 
     /***
@@ -216,6 +297,7 @@ public class FindUsersController {
         tableUsers.getColumns().clear();
         findUsernameField.clear();
         foundUser.setText("");
+        foundActivity.setText("");
     }
 
     private void setActivitateTableVisible(boolean expr)
@@ -492,5 +574,11 @@ public class FindUsersController {
     private ActivitateProfesor rowToActivitateProfesor(String[] row)
     {
         return new ActivitateProfesor(row[0], row[1], row[2], row[3], Integer.parseInt(row[4]));
+    }
+
+    private void clearAllFields()
+    {
+        findUsernameField.clear();
+        searchActivityField.clear();
     }
 }
