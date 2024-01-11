@@ -214,12 +214,16 @@ public class Query {
         return resultSet.next();
     }
 
-    public static boolean existsStudentInActivity(Connection connection, String usernameStudent) throws Exception
+    public static boolean existsStudentInActivity(Connection connection, String usernameProfesor, String usernameStudent) throws Exception
     {
         int idStudent = getIdByUsername(connection, "Student", usernameStudent);
-        String query = "SELECT id_student from participantactivitate where id_student = ?";
+        int idProfesor = getIdByUsername(connection, "Profesor", usernameProfesor);
+        int idActivitateProfesor = getIdActivitateProfesor(connection, idProfesor);
+
+        String query = "SELECT id_student FROM participantactivitate WHERE id_student = ? AND id_activitate_profesor = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1, idStudent);
+        preparedStatement.setInt(2, idActivitateProfesor);
 
         ResultSet resultSet = preparedStatement.executeQuery();
         return resultSet.next();
@@ -255,14 +259,17 @@ public class Query {
                 "GROUP BY " +
                 "AP.idActivitateProfesor, P.username, AP.tipActivitate, AP.descriere";
 
-
         return getInfoFromQuery(connection, query);
     }
 
     public static String[][] getUsersFromActivityPanel(Connection connection, String username)
     {
         String query = "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere, AP.nrMaximStudenti " +
-                "FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor " +
+                "FROM " +
+                "Profesor P " +
+                "JOIN " +
+                "ActivitateProfesor AP " +
+                "ON P.idProfesor = AP.id_profesor " +
                 "WHERE LOCATE(?, username) > 0";
         return getInfoFromQueryWithUsername(connection, query, username);
     }
@@ -270,6 +277,7 @@ public class Query {
     public static String[][] getUsersFromUsersPanel(Connection connection, String username, String tableName)
     {
         String query = getQueryForAllInfoOnUser(tableName);
+
         return getInfoFromQueryWithUsername(connection, query, username);
     }
 
@@ -323,6 +331,7 @@ public class Query {
     {
         String query = "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere, AP.nrMaximStudenti " +
                 "FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor WHERE tipActivitate = ?";
+
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, tipActivitate);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -337,6 +346,7 @@ public class Query {
     {
         String query = "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere, AP.nrMaximStudenti " +
                 "FROM Profesor P JOIN ActivitateProfesor AP ON P.idProfesor = AP.id_profesor WHERE LOCATE(?, AP.descriere) > 0";
+
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, descriere);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -372,6 +382,7 @@ public class Query {
     public static int getIdByUsername(Connection connection, String username) throws Exception
     {
         String query = "SELECT idUtilizator FROM utilizator WHERE username = ?";
+
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, username);
         ResultSet resultSet = preparedStatement.executeQuery();
