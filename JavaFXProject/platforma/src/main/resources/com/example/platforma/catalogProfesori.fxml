@@ -6,68 +6,86 @@
 
 <AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controllers.CatalogProfesoriController">
    <children>
-      <SplitPane dividerPositions="0.3708920187793427" prefHeight="562.0" prefWidth="1024.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <SplitPane dividerPositions="0.11139112903225809" orientation="VERTICAL" prefHeight="398.4" prefWidth="150.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                           <children>
-                              <Button fx:id="backButton" layoutX="146.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBackToMainMenu" prefHeight="31.0" prefWidth="82.0" text="Back" />
-                           </children>
-                        </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                           <children>
-                              <TableView id="cursuriTable" fx:id="cursuriTable" layoutX="-37.0" layoutY="81.0" prefHeight="349.6" prefWidth="148.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <columns>
-                                  <TableColumn prefWidth="26.200014173984528" text="id" />
-                                  <TableColumn prefWidth="124.20001029968262" text="Cursuri" />
-                                </columns>
+      <VBox prefHeight="768.0" prefWidth="1024.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+              <items>
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#goBackToMainMenu" prefHeight="31.0" prefWidth="82.0" text="Back" />
+              </items>
+            </ToolBar>
+            <SplitPane dividerPositions="0.3904538341158059" prefHeight="562.0" prefWidth="1024.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                     <children>
+                        <TableView id="cursuriTable" fx:id="cursuriTable" layoutX="-37.0" layoutY="81.0" prefHeight="349.6" prefWidth="148.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columns>
+                            <TableColumn prefWidth="26.200014173984528" text="id" />
+                            <TableColumn prefWidth="124.20001029968262" text="Cursuri" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="431.0">
+                     <children>
+                        <SplitPane dividerPositions="0.3592857142857142" layoutX="121.0" layoutY="147.0" orientation="VERTICAL" prefHeight="398.4" prefWidth="442.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="114.0" prefWidth="441.0">
+                                 <children>
+                                    <VBox layoutX="8.0" layoutY="2.0" prefHeight="163.2" prefWidth="639.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <ToolBar>
+                                             <items>
+                                                <Label prefHeight="42.0" prefWidth="111.0" text="   Selecteaza cursul" textAlignment="CENTER" />
+                                                <ChoiceBox fx:id="selectCurs" onContextMenuRequested="#loadCursuri" onMouseClicked="#selectCurs" prefHeight="26.0" prefWidth="307.0" />
+                                             </items>
+                                          </ToolBar>
+                                          <ToolBar>
+                                             <items>
+                                                <Label prefHeight="42.0" prefWidth="111.0" text="Selecteaza studentul" textAlignment="CENTER" />
+                                                <ChoiceBox fx:id="selectStudent" onContextMenuRequested="#loadStudents" onMouseClicked="#selectStudent" prefHeight="26.0" prefWidth="307.0" />
+                                             </items>
+                                          </ToolBar>
+                                          <ToolBar>
+                                             <items>
+                                                <Label prefHeight="42.0" prefWidth="100.0" text="Nota:">
+                                                   <font>
+                                                      <Font size="23.0" />
+                                                   </font>
+                                                </Label>
+                                                <TextField fx:id="inputGrade" prefHeight="42.0" prefWidth="224.0" />
+                                                <Button fx:id="saveGradeButton" mnemonicParsing="false" onAction="#saveGrade" prefHeight="31.0" prefWidth="100.0" text="Save">
+                                                   <font>
+                                                      <Font size="19.0" />
+                                                   </font>
+                                                </Button>
+                                             </items>
+                                          </ToolBar>
+                                          <ToolBar>
+                                             <items>
+                                                <Label fx:id="errorLabel" prefHeight="26.0" prefWidth="424.0" textFill="RED">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </items>
+                                          </ToolBar>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="441.0">
+                                 <children>
+                                    <TableView fx:id="studentList" layoutX="88.0" layoutY="-67.0" prefHeight="419.0" prefWidth="639.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                               </TableView>
-                           </children>
-                        </AnchorPane>
-                    </items>
-                  </SplitPane>
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="431.0">
-               <children>
-                  <SplitPane dividerPositions="0.2967857142857142" layoutX="121.0" layoutY="147.0" orientation="VERTICAL" prefHeight="398.4" prefWidth="442.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="114.0" prefWidth="441.0">
-                           <children>
-                              <ChoiceBox fx:id="selectCurs" layoutX="125.0" layoutY="9.0" onContextMenuRequested="#loadCursuri" onMouseClicked="#selectCurs" prefHeight="26.0" prefWidth="307.0" />
-                              <Label layoutX="8.0" layoutY="2.0" prefHeight="42.0" prefWidth="111.0" text="   Selecteaza cursul" textAlignment="CENTER" />
-                              <ChoiceBox fx:id="selectStudent" layoutX="125.0" layoutY="50.0" onContextMenuRequested="#loadStudents" onMouseClicked="#selectStudent" prefHeight="26.0" prefWidth="307.0" />
-                              <Label layoutX="8.0" layoutY="43.0" prefHeight="42.0" prefWidth="111.0" text="Selecteaza studentul" textAlignment="CENTER" />
-                              <Button fx:id="saveGradeButton" layoutX="327.0" layoutY="85.0" mnemonicParsing="false" onAction="#saveGrade" prefHeight="31.0" prefWidth="100.0" text="Save">
-                                 <font>
-                                    <Font size="19.0" />
-                                 </font>
-                              </Button>
-                              <TextField fx:id="inputGrade" layoutX="122.0" layoutY="85.0" prefHeight="42.0" prefWidth="191.0" />
-                              <Label layoutX="14.0" layoutY="85.0" prefHeight="42.0" prefWidth="100.0" text="Nota:">
-                                 <font>
-                                    <Font size="23.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="errorLabel" layoutX="12.0" layoutY="134.0" prefHeight="26.0" prefWidth="424.0" textFill="RED">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="441.0">
-                           <children>
-                              <TableView fx:id="studentList" layoutX="88.0" layoutY="-67.0" prefHeight="419.0" prefWidth="639.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                              </TableView>
-                           </children></AnchorPane>
-                    </items>
-                  </SplitPane>
-               </children></AnchorPane>
-        </items>
-      </SplitPane>
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
