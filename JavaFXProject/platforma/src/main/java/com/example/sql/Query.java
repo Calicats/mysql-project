@@ -229,6 +229,20 @@ public class Query {
         return resultSet.next();
     }
 
+    public static boolean existsProfesorInActivity(Connection connection, String usernameProfesor) throws Exception
+    {
+        int idProfesor = getIdByUsername(connection, "Profesor", usernameProfesor);
+        int idActivitateProfesor = getIdActivitateProfesor(connection, idProfesor);
+
+        String query = "SELECT id_profesor FROM participantactivitate WHERE id_profesor = ? AND id_activitate_profesor = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, idProfesor);
+        preparedStatement.setInt(2, idActivitateProfesor);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
     /***
      * Creaza tabela de activitate profesor
      * @param connection conexiunea la db_platforma
@@ -242,6 +256,12 @@ public class Query {
 
         return getInfoFromQuery(connection, query);
     }
+
+    /***
+     * Creaza tabela de participanti
+     * @param connection conexiunea la db_platforma
+     * @return tabela sub forma de String[][]
+     */
 
     public static String[][] getParticipantiTableInfo(Connection connection)
     {
@@ -262,7 +282,13 @@ public class Query {
         return getInfoFromQuery(connection, query);
     }
 
-    public static String[][] getUsersFromActivityPanel(Connection connection, String username)
+    /***
+     * Creaza rezultatul interogarii la tabela de activitati de la un username
+     * @param connection conexiunea la db_platforma
+     * @return tabela sub forma de String[][]
+     */
+
+    public static String[][] getActivityTableFromUsername(Connection connection, String username)
     {
         String query = "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere, AP.nrMaximStudenti " +
                 "FROM " +
@@ -271,22 +297,40 @@ public class Query {
                 "ActivitateProfesor AP " +
                 "ON P.idProfesor = AP.id_profesor " +
                 "WHERE LOCATE(?, username) > 0";
-        return getInfoFromQueryWithUsername(connection, query, username);
+        return getInfoFromQueryWithStringInput(connection, query, username);
+    }
+
+    /***
+     * Creaza rezultatul interogarii la tabela de activitati de la o activitate
+     * @param connection conexiunea la db_platforma
+     * @return tabela sub forma de String[][]
+     */
+
+    public static String[][] getActivityTableFromActivity(Connection connection, String activity)
+    {
+        String query = "SELECT P.nume, P.username, AP.tipActivitate, AP.descriere, AP.nrMaximStudenti " +
+                "FROM " +
+                "Profesor P " +
+                "JOIN " +
+                "ActivitateProfesor AP " +
+                "ON P.idProfesor = AP.id_profesor " +
+                "WHERE LOCATE(?, tipActivitate) > 0";
+        return getInfoFromQueryWithStringInput(connection, query, activity);
     }
 
     public static String[][] getUsersFromUsersPanel(Connection connection, String username, String tableName)
     {
         String query = getQueryForAllInfoOnUser(tableName);
 
-        return getInfoFromQueryWithUsername(connection, query, username);
+        return getInfoFromQueryWithStringInput(connection, query, username);
     }
 
-    private static String[][] getInfoFromQueryWithUsername(Connection connection, String query, String username)
+    private static String[][] getInfoFromQueryWithStringInput(Connection connection, String query, String string)
     {
         try
         {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, username);
+            preparedStatement.setString(1, string);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             ResultSetMetaData metaData = resultSet.getMetaData();

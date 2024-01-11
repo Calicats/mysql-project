@@ -235,7 +235,7 @@ public class InscriereActivitateController {
                 return;
             }
 
-            String[][] activitateInfo = Query.getUsersFromActivityPanel(connection, profesorString);
+            String[][] activitateInfo = Query.getActivityTableFromUsername(connection, profesorString);
             if(activitateInfo == null)
             {
                 foundUser.setText("Utilizatorul cautat nu are nicio activitate!");

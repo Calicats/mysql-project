@@ -423,7 +423,7 @@ public class ManageActivitateController {
         }
 
         String findUsernameString = usernameProfesorField.getText();
-        String[][] activitateInfo = Query.getUsersFromActivityPanel(connection, findUsernameString);
+        String[][] activitateInfo = Query.getActivityTableFromUsername(connection, findUsernameString);
 
         if(findUsernameString.isEmpty())
         {
