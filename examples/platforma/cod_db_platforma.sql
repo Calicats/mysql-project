@@ -51,57 +51,55 @@ CREATE TABLE IF NOT EXISTS Student(
 );
 
 
--- Table for the activities of teachers (course, seminar, lab)
+-- Tabel pentru activități (curs, seminar, laborator)
 CREATE TABLE IF NOT EXISTS Activitate (
-    idActivitate int UNIQUE AUTO_INCREMENT PRIMARY KEY,
-    tip ENUM('curs', 'seminar', 'laborator', 'examen', 'colocviu', 'grup de studiu'),
-    nume char(255),
-    descriere char(255),
-    nrMaximStudenti int,
+    idActivitate INT UNIQUE AUTO_INCREMENT PRIMARY KEY,
+    tip CHAR(255), # ENUM('curs', 'seminar', 'laborator', 'examen', 'colocviu', 'grup de studiu'),
+    nume CHAR(255),
+    descriere CHAR(255),
+    nrMaximStudenti INT,
     dataDesfasurare DATE,
-    ziua ENUM('LUNI', 'MARTI', 'MIERCURI', 'JOI', 'VINERI', 'SAMBATA', 'DUMINICA'),
-    frecventa ENUM('saptamanal', 'bisaptamanal', 'lunar', 'odata'),
+    ziua CHAR(255), # ENUM('LUNI', 'MARTI', 'MIERCURI', 'JOI', 'VINERI', 'SAMBATA', 'DUMINICA'),
+    frecventa CHAR(255), # ENUM('saptamanal', 'bisaptamanal', 'lunar', 'odata'),
     oraIncepere INT,
-    minuteIncepere INT,
     durata INT,
     procentNotaFinala INT
 );
--- Relationship table for mapping teachers to activities
-CREATE TABLE IF NOT EXISTS ActivitateProfesor (
-    idActivitateProfesor int UNIQUE AUTO_INCREMENT PRIMARY KEY,
-    idActivitate int,
-    idProfesor int,
-    FOREIGN KEY (idActivitate) REFERENCES Activitate(idActivitate),
-    FOREIGN KEY (idProfesor) REFERENCES Profesor(idProfesor)
+
+-- Tabel pentru subactivități (legate de activități)
+CREATE TABLE IF NOT EXISTS Subactivitate (
+    idSubactivitate INT UNIQUE AUTO_INCREMENT PRIMARY KEY,
+    idActivitate INT,
+    profesor CHAR(255),
+    tip CHAR(255),
+    data DATE,
+    ora INT,
+    nrMaximStudenti INT,
+    procent INT,
+    FOREIGN KEY (idActivitate) REFERENCES Activitate(idActivitate)
 );
 
-CREATE TABLE IF NOT EXISTS ActivitateStudent (
-    idActivitateStudent int UNIQUE AUTO_INCREMENT PRIMARY KEY,
-    idActivitate int,
-    idStudent int,
+-- Tabel pentru maparea studenților la activități
+CREATE TABLE IF NOT EXISTS ParticipantActivitate (
+    idParticipantActivitate INT UNIQUE AUTO_INCREMENT PRIMARY KEY,
+    idActivitate INT,
+    idSubactivitate INT,
+    idStudent INT,
+    nota INT,
     FOREIGN KEY (idActivitate) REFERENCES Activitate(idActivitate),
+    FOREIGN KEY (idSubactivitate) REFERENCES Subactivitate(idSubactivitate),
     FOREIGN KEY (idStudent) REFERENCES Student(idStudent)
 );
 
-# aici tin notele studentilor
-CREATE TABLE IF NOT EXISTS NoteStudent(
-	idNota int unique auto_increment primary key,
-    nota int,
-    id_student int,
-    idActivitateStudent int,
-    foreign key(id_student) references Student(idStudent),
-    foreign key(idActivitateStudent) references ActivitateStudent(idActivitateStudent)
+-- Tabel pentru mesaje legate de studiul în grup
+CREATE TABLE IF NOT EXISTS MesajGrupStudiu (
+    idMesaj INT UNIQUE AUTO_INCREMENT PRIMARY KEY,
+    idSubactivitate INT,
+    textMesaj CHAR(255),
+    numeUtilizator CHAR(255),
+    FOREIGN KEY (idSubactivitate) REFERENCES Subactivitate(idSubactivitate)
 );
 
-/*
-# aici tin marele grup de whatsapp cu un profesor
-CREATE TABLE IF NOT EXISTS GrupStudiu(
-	idGrupStudiu int unique auto_increment primary key,
-    descriereGrupStudiu char(50),
-    id_participant_activitate int,
-    foreign key(id_participant_activitate) references ParticipantActivitate(idParticipantActivitate)
-);
-*/
 
 CREATE TABLE IF NOT EXISTS Rol(
 	idRol int unique auto_increment primary key,
@@ -129,7 +127,7 @@ ALTER TABLE Administrator ADD COLUMN idRol int, ADD FOREIGN KEY(idRol) REFERENCE
 ALTER TABLE Profesor ADD COLUMN idRol int, ADD FOREIGN KEY(idRol) REFERENCES Rol(idRol);
 ALTER TABLE Student ADD COLUMN idRol int, ADD FOREIGN KEY(idRol) REFERENCES Rol(idRol);
 
-
+/*
 -- Grand privileges
 GRANT SELECT ON db_platforma.Student TO 'Student'@'%';
 GRANT SELECT ON db_platforma.Profesor TO 'Student'@'%';
@@ -156,7 +154,7 @@ GRANT ALL PRIVILEGES ON db_platforma.ActivitateStudent TO 'Admin'@'%';
 GRANT ALL PRIVILEGES ON db_platforma.NoteStudent TO 'Admin'@'%';
 
 GRANT ALL PRIVILEGES ON db_platforma.* TO 'SuperAdmin'@'%';
-
+*/
 # procedura pentru adaugarea unui super admin
 DELIMITER //
 CREATE PROCEDURE AddNewSuperAdministrator(
@@ -230,62 +228,6 @@ BEGIN
 END //
 DELIMITER ;
 
-# procedura pentru adaugarea unui student
-DELIMITER //
-CREATE PROCEDURE AddNoteStudent(
-    IN idNota int,
-    IN nota int,
-    IN id_student int,
-    IN id_participant_activitate int
-)
-BEGIN
-    INSERT INTO NoteStudent(idNota, nota, id_student, id_participant_activitate)
-    VALUES(idNota, nota, id_student, id_participant_activitate);
-END //
-DELIMITER ;
-
--- Insert into Activitate table
-DELIMITER //
-
-CREATE PROCEDURE InsertActivitate(
-    IN p_tip ENUM('curs', 'seminar', 'laborator', 'examen', 'colocviu', 'grup de studiu'),
-    IN p_nume CHAR(255),
-    IN p_descriere CHAR(255),
-    IN p_nrMaximStudenti INT,
-    IN p_dataDesfasurare DATE,
-    IN p_ziua ENUM('LUNI', 'MARTI', 'MIERCURI', 'JOI', 'VINERI', 'SAMBATA', 'DUMINICA'),
-    IN p_frecventa ENUM('saptamanal', 'bisaptamanal', 'lunar', 'odata'),
-    IN p_oraIncepere INT,
-    IN p_minuteIncepere INT,
-    IN p_durata INT,
-    IN p_procentNotaFinala INT
-)
-BEGIN
-    INSERT INTO Activitate (tip, nume, descriere, nrMaximStudenti, dataDesfasurare, ziua, frecventa, oraIncepere, minuteIncepere, durata, procentNotaFinala)
-    VALUES (p_tip, p_nume, p_descriere, p_nrMaximStudenti, p_dataDesfasurare, p_ziua, p_frecventa, p_oraIncepere, p_minuteIncepere, p_durata, p_procentNotaFinala);
-END //
-
--- Insert into ActivitateProfesor table
-CREATE PROCEDURE InsertActivitateProfesor(
-    IN p_idActivitate INT,
-    IN p_idProfesor INT
-)
-BEGIN
-    INSERT INTO ActivitateProfesor (idActivitate, idProfesor)
-    VALUES (p_idActivitate, p_idProfesor);
-END //
-
--- Insert into ActivitateStudent table
-CREATE PROCEDURE InsertActivitateStudent(
-    IN p_idActivitate INT,
-    IN p_idStudent INT
-)
-BEGIN
-    INSERT INTO ActivitateStudent (idActivitate, idStudent)
-    VALUES (p_idActivitate, p_idStudent);
-END //
-
-DELIMITER ;
 
 
 DELIMITER //
@@ -368,41 +310,7 @@ END;
 //
 DELIMITER ;
 
--- Update Activitate table
-DELIMITER //
 
-CREATE PROCEDURE UpdateActivitate(
-    IN p_idActivitate INT,
-    IN p_tip ENUM('curs', 'seminar', 'laborator', 'examen', 'colocviu', 'grup de studiu'),
-    IN p_nume CHAR(255),
-    IN p_descriere CHAR(255),
-    IN p_nrMaximStudenti INT,
-    IN p_dataDesfasurare DATE,
-    IN p_ziua ENUM('LUNI', 'MARTI', 'MIERCURI', 'JOI', 'VINERI', 'SAMBATA', 'DUMINICA'),
-    IN p_frecventa ENUM('saptamanal', 'bisaptamanal', 'lunar', 'odata'),
-    IN p_oraIncepere INT,
-    IN p_minuteIncepere INT,
-    IN p_durata INT,
-    IN p_procentNotaFinala INT
-)
-BEGIN
-    UPDATE Activitate
-    SET 
-        tip = p_tip,
-        nume = p_nume,
-        descriere = p_descriere,
-        nrMaximStudenti = p_nrMaximStudenti,
-        dataDesfasurare = p_dataDesfasurare,
-        ziua = p_ziua,
-        frecventa = p_frecventa,
-        oraIncepere = p_oraIncepere,
-        minuteIncepere = p_minuteIncepere,
-        durata = p_durata,
-        procentNotaFinala = p_procentNotaFinala
-    WHERE idActivitate = p_idActivitate;
-END //
-
-DELIMITER ;
 
 
 DELIMITER //
@@ -439,50 +347,7 @@ END;
 //
 DELIMITER ;
 
-DELIMITER //
-CREATE TRIGGER DeleteActivitiesOnProfesor
-AFTER DELETE ON Profesor
-FOR EACH ROW
-BEGIN
-    DELETE FROM ActivitateProfesor WHERE id_profesor = OLD.idProfesor;
-END;
-//
-DELIMITER ;
 
-DELIMITER //
--- Delete from Activitate table
-CREATE PROCEDURE DeleteActivitate(
-    IN p_idActivitate INT
-)
-BEGIN
-    DELETE FROM Activitate
-    WHERE idActivitate = p_idActivitate;
-END //
-DELIMITER ;
-
-DELIMITER //
-
--- Delete from ActivitateProfesor table
-CREATE PROCEDURE DeleteActivitateProfesor(
-    IN p_idActivitateProfesor INT
-)
-BEGIN
-    DELETE FROM ActivitateProfesor
-    WHERE idActivitateProfesor = p_idActivitateProfesor;
-END //
-DELIMITER ;
-
-DELIMITER //
-
--- Delete from ActivitateStudent table
-CREATE PROCEDURE DeleteActivitateStudent(
-    IN p_idActivitateStudent INT
-)
-BEGIN
-    DELETE FROM ActivitateStudent
-    WHERE idActivitateStudent = p_idActivitateStudent;
-END //
-DELIMITER ;
 
 
 
@@ -512,7 +377,6 @@ call addNewActivitateProfesor("profesormate", "Seminar", "Seminar 1: Relatii", 1
 SELECT * FROM SuperAdministrator;
 SELECT * FROM Utilizator;
 SELECT * FROM Profesor;
-SELECT * FROM ActivitateProfesor;
 
 
 /*
