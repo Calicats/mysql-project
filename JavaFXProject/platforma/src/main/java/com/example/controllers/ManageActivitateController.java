@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.*;
 
+// TODO: Remake this class because of the internal database changes
+// SEARCH FOR         throw new UnsupportedOperationException("You have to remake this method because of the internal database changes!");
 public class ManageActivitateController {
     @FXML
     private Button operationButton;
@@ -475,6 +477,8 @@ public class ManageActivitateController {
 
     private ActivitateProfesor rowToActivitateProfesor(String[] row)
     {
+        throw new UnsupportedOperationException("You have to remake this method because of the internal database changes!");
+        /*
         int maxStudent=0;
         try{
             maxStudent=Integer.parseInt(row[4]);
@@ -484,6 +488,8 @@ public class ManageActivitateController {
             row[4] = "0";
         }
         return new ActivitateProfesor(row[0], row[1], row[2], row[3], maxStudent);
+
+         */
     }
 
     /***
@@ -576,6 +582,8 @@ public class ManageActivitateController {
 
     private String getPropertyValue(ActivitateProfesor activitateProfesor, String propertyName)
     {
+        throw new UnsupportedOperationException("You have to remake this method because of the internal database changes!");
+        /*
         return switch (propertyName)
         {
             case "nume" -> activitateProfesor.getNume();
@@ -585,6 +593,8 @@ public class ManageActivitateController {
             case "nrMaximStudenti" -> String.valueOf(activitateProfesor.getNrMaximStudenti());
             default -> null;
         };
+
+         */
     }
 
     public void populateAllActivitiesTable(String[][] info)

@@ -1,5 +1,6 @@
 package com.example.controllers;
 
+import com.example.Activitate;
 import com.example.ActivitateProfesor;
 import com.example.ParticipantActivitate;
 import com.example.platforma.Main;
@@ -17,6 +18,8 @@ import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.sql.Connection;
 
+// TODO: Remake this class because of the internal database changes
+// SEARCH FOR         throw new UnsupportedOperationException("You have to remake this method because of the internal database changes!");
 public class InscriereActivitateController {
 
     @FXML
@@ -301,6 +304,8 @@ public class InscriereActivitateController {
 
     private String getPropertyValue(ActivitateProfesor activitateProfesor, String propertyName)
     {
+        throw new UnsupportedOperationException("You have to remake this method because of the internal database changes!");
+        /*
         return switch (propertyName)
         {
             case "nume" -> activitateProfesor.getNume();
@@ -308,8 +313,12 @@ public class InscriereActivitateController {
             case "tipActivitate" -> activitateProfesor.getTipActivitate();
             case "descriere" -> activitateProfesor.getDescriere();
             case "nrMaximStudenti" -> String.valueOf(activitateProfesor.getNrMaximStudenti());
+
+
             default -> null;
         };
+
+         */
     }
 
     private void clearAllFields()
@@ -383,7 +392,8 @@ public class InscriereActivitateController {
         {
             e.printStackTrace();
         }
-        return new ActivitateProfesor(row[0], row[1], row[2], row[3], maxStudent);
+        throw new UnsupportedOperationException("You have to remake this method because of the internal database changes!");
+        //return new Activitate(row[0], row[1], row[2], row[3], maxStudent);
     }
 
     private ParticipantActivitate rowToParticipantActivitate(String[] row)

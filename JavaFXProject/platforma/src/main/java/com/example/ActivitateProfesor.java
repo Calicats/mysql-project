@@ -15,6 +15,12 @@ public class ActivitateProfesor {
     private int idActivitate;
     private int idProfesor;
 
+    public ActivitateProfesor(int idActivitateProfesor, int idActivitate, int idProfesor) {
+        this.idActivitateProfesor = idActivitateProfesor;
+        this.idActivitate = idActivitate;
+        this.idProfesor = idProfesor;
+    }
+
     public ActivitateProfesor(int idActivitateProfesor) {
         Connection connection = Connect.getConnection();
         try {
@@ -83,3 +89,5 @@ public class ActivitateProfesor {
                 '}';
     }
 }
+
+

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Deprecated
 public class CalendarActivitate {
     private int id;
     private Date dataDesfasurareActivitate;

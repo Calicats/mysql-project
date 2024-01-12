@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
+
 public class ParticipantActivitate {
     public ParticipantActivitate(int id) {
         Connection connection = Connect.getConnection();
@@ -122,3 +124,4 @@ public class ParticipantActivitate {
     private int nrStudenti;
 
 }
+

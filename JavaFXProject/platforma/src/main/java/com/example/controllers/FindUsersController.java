@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.Arrays;
 
+// TODO: Remake this class because of the internal database changes
+// SEARCH FOR throw new UnsupportedOperationException("You have to remake this method because of the internal database changes!");
 public class FindUsersController {
     @FXML
     private Button backButton;
@@ -491,6 +493,6 @@ public class FindUsersController {
 
     private ActivitateProfesor rowToActivitateProfesor(String[] row)
     {
-        return new ActivitateProfesor(row[0], row[1], row[2], row[3], Integer.parseInt(row[4]));
+        throw new UnsupportedOperationException("You have to remake this method because of the internal database changes!");
     }
 }
