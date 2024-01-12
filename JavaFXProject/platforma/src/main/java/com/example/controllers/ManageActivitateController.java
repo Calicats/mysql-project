@@ -475,7 +475,14 @@ public class ManageActivitateController {
 
     private ActivitateProfesor rowToActivitateProfesor(String[] row)
     {
-        int maxStudent = Integer.parseInt(row[4]);
+        int maxStudent=0;
+        try{
+            maxStudent=Integer.parseInt(row[4]);
+        }
+        catch(Exception e)
+        {
+            row[4] = "0";
+        }
         return new ActivitateProfesor(row[0], row[1], row[2], row[3], maxStudent);
     }
 
