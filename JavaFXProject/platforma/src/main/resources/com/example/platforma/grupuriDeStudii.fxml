@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="562.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.platforma.controllers.GrupuriDeStudiiController">
+   <children>
+      <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+              <items>
+                <Button mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="70.0" text="Back" />
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="21.0" />
+                  <Button layoutX="10.0" layoutY="12.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="Creaza Grup" />
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="14.0" />
+              </items>
+            </ToolBar>
+         </top>
+         <left>
+            <TableView prefHeight="482.0" prefWidth="249.0" BorderPane.alignment="CENTER">
+              <columns>
+                <TableColumn prefWidth="82.39999234676361" text="Grup" />
+                <TableColumn prefWidth="79.9999771118164" text="Data" />
+                  <TableColumn prefWidth="83.99996948242188" text="Prezenta" />
+              </columns>
+            </TableView>
+         </left>
+         <bottom>
+            <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+              <items>
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="239.0" />
+                  <TextField prefHeight="26.0" prefWidth="775.0" />
+                  <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="2.0" />
+                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="Send" />
+              </items>
+            </ToolBar>
+         </bottom>
+         <center>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ToolBar prefHeight="40.0" prefWidth="200.0">
+                     <items>
+                        <MenuButton mnemonicParsing="false" prefHeight="26.0" prefWidth="201.0" text="Selecteaza Grup">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                            <MenuItem mnemonicParsing="false" text="Action 2" />
+                          </items>
+                        </MenuButton>
+                        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="103.0" text="Modifica Grup" />
+                        <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="2.0" />
+                        <Label text="Data intalnire: XXXX" />
+                        <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="2.0" />
+                        <CheckBox mnemonicParsing="false" text="Confirma prezenta" />
+                     </items>
+                  </ToolBar>
+                  <TableView prefHeight="443.0" prefWidth="546.0">
+                    <columns>
+                      <TableColumn prefWidth="113.79997408390045" text="Utilizator" />
+                      <TableColumn prefWidth="139.99996185302734" text="Data mesaj" />
+                        <TableColumn prefWidth="692.0000915527344" text="Mesaj" />
+                    </columns>
+                  </TableView>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
