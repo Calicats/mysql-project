@@ -435,6 +435,8 @@ call addNewActivitateProfesor("profesor", "Seminar", "Seminar 1: Introducere", 1
 call addNewActivitateProfesor("profesormate", "Curs", "Curs 1: Relatii", 10);
 call addNewActivitateProfesor("profesormate", "Seminar", "Seminar 1: Relatii", 10);
 */
+
+/*
 SELECT * FROM SuperAdministrator;
 SELECT * FROM Utilizator;
 SELECT * FROM Profesor;
@@ -457,7 +459,7 @@ FROM
     JOIN Profesor P ON A.idProfesor = P.idProfesor;
     
 SELECT * FROM Curs;
-
+*/
 /*
 
 SELECT 
