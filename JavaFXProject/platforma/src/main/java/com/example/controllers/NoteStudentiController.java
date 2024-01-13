@@ -31,6 +31,8 @@ public class NoteStudentiController {
     @FXML
     private TableColumn<NoteStudent, Integer> idParticipantActivitateColumn;
 
+    private String username;
+
     public void initialize(String username){
         ObservableList<NoteStudent> list = FXCollections.observableArrayList();
         List<NoteStudent> noteStudenti = NoteStudent.getTable();
@@ -41,6 +43,7 @@ public class NoteStudentiController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.username = username;
         for (NoteStudent noteStudent : noteStudenti) {
             if (noteStudent.getIdStudent() == id) {
                 list.add(noteStudent);
@@ -51,6 +54,6 @@ public class NoteStudentiController {
     }
 
     public void closeScreen(ActionEvent actionEvent) throws IOException {
-        Main.main.changeScene("panouStudent.fxml", "student", "student", 1024, 768);
+        Main.main.changeScene("panouStudent.fxml", username, "student", 1024, 768);
     }
 }

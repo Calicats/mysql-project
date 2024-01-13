@@ -52,6 +52,8 @@ public class CatalogProfesoriController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.username = username;
+        this.tableName = tableName;
     }
     public void goBackToMainMenu(ActionEvent actionEvent) throws IOException {
         Main.main.changeScene("panouProfesor.fxml", username, tableName, 1024, 768);

@@ -29,9 +29,18 @@ public class ProgramareCursuriProfesorController {
     public TextField durataTextInput;
     public Button butonSalveazaDatele;
 
+    private String username;
+    private String tableName;
+
+    public void initUser(String username, String tableName)
+    {
+        this.username = username;
+        this.tableName = tableName;
+    }
+
     public void closeScreen(ActionEvent actionEvent)  {
         try{
-            Main.main.changeScene("panouProfesor.fxml");
+            Main.main.changeScene("panouProfesor.fxml", username, tableName, 1024, 768);
         } catch (IOException e) {
             e.printStackTrace();
         }
