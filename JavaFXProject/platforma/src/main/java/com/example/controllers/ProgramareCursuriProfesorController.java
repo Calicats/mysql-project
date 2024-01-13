@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
 
+// TODO Rewrite this class
+
 public class ProgramareCursuriProfesorController {
     public Button backButton;
     public ChoiceBox dropBoxSelecteazaActivitate;
@@ -38,19 +40,19 @@ public class ProgramareCursuriProfesorController {
     public void loadActivitatiSelectorActivitate(ContextMenuEvent contextMenuEvent) {
         // read all the activities from the database
 
-        List<ActivitateProfesor> activitati = ActivitateProfesor.getTable();
-
-        try {
-            int profId = Query.getIdByUsername(Connect.getConnection(), Main.main.username);
-            // and load them into the dropBoxSelecteazaActivitate
-            // but only the ones that the teacher is teaching
-            for(ActivitateProfesor activitate : activitati) {
-                if(activitate.getId_profesor() == profId)
-                    dropBoxSelecteazaActivitate.getItems().add(activitate);
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+//        List<ActivitateProfesor> activitati = ActivitateProfesor.getTable();
+//
+//        try {
+//            int profId = Query.getIdByUsername(Connect.getConnection(), Main.main.username);
+//            // and load them into the dropBoxSelecteazaActivitate
+//            // but only the ones that the teacher is teaching
+//            for(ActivitateProfesor activitate : activitati) {
+//                if(activitate.getId_profesor() == profId)
+//                    dropBoxSelecteazaActivitate.getItems().add(activitate);
+//            }
+//        }catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 

@@ -19,19 +19,56 @@ public class Activitate {
     private String nume;
     private String descriere;
     private int nrMaximStudenti;
-    private String ziua;
-    private String frecventa;
-    private int oraIncepere;
-    private int minuteIncepere;
-    private int durata;
-    private int procentNotaFinala;
+    private int idCurs;
+    private int idProfesor;
 
-    public Activitate(int idActivitate, String tip, String nume, String descriere, int nrMaximStudenti) {
+    // these fiels are used in showing the activity table. DO NOT MODIFY THEM!!!!!!!!!!!!!!!
+    private String numeCurs;
+    private int procentNota;
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getNumeCurs() {
+        return numeCurs;
+    }
+
+    public void setNumeCurs(String numeCurs) {
+        this.numeCurs = numeCurs;
+    }
+
+    public int getProcentNota() {
+        return procentNota;
+    }
+
+    public void setProcentNota(int procentNota) {
+        this.procentNota = procentNota;
+    }
+
+    public Activitate(int idActivitate, String tip, int procentNota, int idCurs, int idProfesor) {
         this.idActivitate = idActivitate;
         this.tip = tip;
-        this.nume = nume;
+        this.procentNota = procentNota;
+        this.idCurs = idCurs;
+        this.idProfesor = idProfesor;
+    }
+
+    // this is for a JOIN in Query class, DO NOT MODIFY!!!!!!!
+    public Activitate(int idActivitate, String username, String numeCurs, String tip, String descriere, int nrMaximStudenti, int procentNota)
+    {
+        this.idActivitate = idActivitate;
+        this.username = username;
+        this.numeCurs = numeCurs;
+        this.tip = tip;
         this.descriere = descriere;
         this.nrMaximStudenti = nrMaximStudenti;
+        this.procentNota = procentNota;
     }
 
     public Activitate(int idActivitate) {
@@ -44,15 +81,9 @@ public class Activitate {
             if (rs.next()) {
                 this.idActivitate = rs.getInt("idActivitate");
                 this.tip = rs.getString("tip");
-                this.nume = rs.getString("nume");
-                this.descriere = rs.getString("descriere");
-                this.nrMaximStudenti = rs.getInt("nrMaximStudenti");
-                this.ziua = rs.getString("ziua");
-                this.frecventa = rs.getString("frecventa");
-                this.oraIncepere = rs.getInt("oraIncepere");
-                this.minuteIncepere = rs.getInt("minuteIncepere");
-                this.durata = rs.getInt("durata");
-                this.procentNotaFinala = rs.getInt("procentNotaFinala");
+                this.procentNota = rs.getInt("procentNota");
+                this.idCurs = rs.getInt("idCurs");
+                this.idProfesor = rs.getInt("idProfesor");
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
@@ -119,68 +150,14 @@ public class Activitate {
         this.nrMaximStudenti = nrMaximStudenti;
     }
 
-    public String getZiua() {
-        return ziua;
-    }
-
-    public void setZiua(String ziua) {
-        this.ziua = ziua;
-    }
-
-    public String getFrecventa() {
-        return frecventa;
-    }
-
-    public void setFrecventa(String frecventa) {
-        this.frecventa = frecventa;
-    }
-
-    public int getOraIncepere() {
-        return oraIncepere;
-    }
-
-    public void setOraIncepere(int oraIncepere) {
-        this.oraIncepere = oraIncepere;
-    }
-
-    public int getMinuteIncepere() {
-        return minuteIncepere;
-    }
-
-    public void setMinuteIncepere(int minuteIncepere) {
-        this.minuteIncepere = minuteIncepere;
-    }
-
-    public int getDurata() {
-        return durata;
-    }
-
-    public void setDurata(int durata) {
-        this.durata = durata;
-    }
-
-    public int getProcentNotaFinala() {
-        return procentNotaFinala;
-    }
-
-    public void setProcentNotaFinala(int procentNotaFinala) {
-        this.procentNotaFinala = procentNotaFinala;
-    }
-
     @Override
     public String toString() {
         return "Activitate{" +
                 "idActivitate=" + idActivitate +
                 ", tip='" + tip + '\'' +
-                ", nume='" + nume + '\'' +
-                ", descriere='" + descriere + '\'' +
-                ", nrMaximStudenti=" + nrMaximStudenti +
-                ", ziua='" + ziua + '\'' +
-                ", frecventa='" + frecventa + '\'' +
-                ", oraIncepere=" + oraIncepere +
-                ", minuteIncepere=" + minuteIncepere +
-                ", durata=" + durata +
-                ", procentNotaFinala=" + procentNotaFinala +
+                ", procentNota='" + procentNota + '\'' +
+                ", idCurs='" + idCurs + '\'' +
+                ", idProfesor=" + idProfesor +
                 '}';
     }
 }

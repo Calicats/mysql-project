@@ -46,6 +46,43 @@ public class Update {
         return preparedStatement.executeUpdate();
     }
 
+    public static int updateEntryInCurs(Connection connection, int id, String tableName, String columnName, String entry) throws Exception
+    {
+        String update = "UPDATE " + tableName + " SET " + columnName + " = ? WHERE idCurs = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(update);
+        preparedStatement.setString(1, entry);
+        preparedStatement.setInt(2, id);
+        return preparedStatement.executeUpdate();
+    }
+
+    public static int updateEntryInCurs(Connection connection, int id, String tableName, String columnName, int entry) throws Exception
+    {
+        String update = "UPDATE " + tableName + " SET " + columnName + " = ? WHERE idCurs = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(update);
+        preparedStatement.setInt(1, entry);
+        preparedStatement.setInt(2, id);
+        return preparedStatement.executeUpdate();
+    }
+
+    public static int updateEntryInActivitate(Connection connection, int id, String tableName, String columnName, String entry) throws Exception
+    {
+        String update = "UPDATE " + tableName + " SET " + columnName + " = ? WHERE idCurs = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(update);
+        preparedStatement.setString(1, entry);
+        preparedStatement.setInt(2, id);
+        return preparedStatement.executeUpdate();
+    }
+
+    public static int updateEntryInActivitate(Connection connection, int id, String tableName, String columnName, int entry) throws Exception
+    {
+        String update = "UPDATE " + tableName + " SET " + columnName + " = ? WHERE idActivitate = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(update);
+        preparedStatement.setInt(1, entry);
+        preparedStatement.setInt(2, id);
+        return preparedStatement.executeUpdate();
+    }
+
+    @Deprecated
     public static int updateEntryInActivitateProfesor(Connection connection, String username, String columnName, String oldActivity, String oldDescription, String entry) throws Exception
     {
         String update = "UPDATE activitateprofesor SET " + columnName + " = ? WHERE tipActivitate = ? AND descriere = ? AND id_profesor = (SELECT idProfesor FROM Profesor WHERE username = ?)";
@@ -67,14 +104,14 @@ public class Update {
          */
         // will update the grade of the student if there is a grade for that student
         // check if there is a grade for that student
-        NoteStudent.getTable(noteStudent.getId_student()).forEach(noteStudent1 -> {
-            if (noteStudent1.getId_participant_activitate() == noteStudent.getId_participant_activitate()) {
+        NoteStudent.getTable(noteStudent.getIdStudent()).forEach(noteStudent1 -> {
+            if (noteStudent1.getIdActivitate() == noteStudent.getIdActivitate()) {
                 try {
                     String update = "UPDATE notestudent SET nota = ? WHERE id_student = ? AND id_participant_activitate = ?";
                     PreparedStatement preparedStatement = connection.prepareStatement(update);
                     preparedStatement.setInt(1, noteStudent.getNota());
-                    preparedStatement.setInt(2, noteStudent.getId_student());
-                    preparedStatement.setInt(3, noteStudent.getId_participant_activitate());
+                    preparedStatement.setInt(2, noteStudent.getIdStudent());
+                    preparedStatement.setInt(3, noteStudent.getIdActivitate());
                     preparedStatement.executeUpdate();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -88,8 +125,8 @@ public class Update {
             PreparedStatement preparedStatement = connection.prepareStatement(insert);
             preparedStatement.setInt(1, noteStudent.getId());
             preparedStatement.setInt(2, noteStudent.getNota());
-            preparedStatement.setInt(3, noteStudent.getId_student());
-            preparedStatement.setInt(4, noteStudent.getId_participant_activitate());
+            preparedStatement.setInt(3, noteStudent.getIdStudent());
+            preparedStatement.setInt(4, noteStudent.getIdActivitate());
             return preparedStatement.executeUpdate();
         }
         catch (Exception e)

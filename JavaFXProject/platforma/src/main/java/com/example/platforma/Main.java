@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import javax.swing.text.View;
 import java.io.IOException;
 
 public class Main extends Application {
@@ -134,6 +135,12 @@ public class Main extends Application {
                             currentStage.setTitle("Catalog profesori");
                             CatalogProfesoriController controller = fxmlLoader.getController();
                             controller.initialize(username, tableName);
+                        }
+                        case "panouActivitatiProfesorTotal.fxml" ->
+                        {
+                            currentStage.setTitle("Panou activitati");
+                            ViewActivitateTotalProfesor controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
                         }
                     }
                 }

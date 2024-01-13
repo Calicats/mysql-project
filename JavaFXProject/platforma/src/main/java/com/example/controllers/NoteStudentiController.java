@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+// TODO Rewrite this class?
+
 public class NoteStudentiController {
 
     @FXML
@@ -40,7 +42,7 @@ public class NoteStudentiController {
             e.printStackTrace();
         }
         for (NoteStudent noteStudent : noteStudenti) {
-            if (noteStudent.getId_student() == id) {
+            if (noteStudent.getIdStudent() == id) {
                 list.add(noteStudent);
             }
         }

@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Deprecated
 
 public class ParticipantActivitate {
     public ParticipantActivitate(int id) {
@@ -34,12 +33,13 @@ public class ParticipantActivitate {
         this.id_student = id_student;
     }
 
-    public ParticipantActivitate(String usernameProfesor, String tipActivitate, String descriere, int nrStudenti)
+    public ParticipantActivitate(String usernameProfesor, String numeCurs, String tip, int nrMaximStudenti, int nrParticipanti)
     {
         this.usernameProfesor = usernameProfesor;
-        this.tipActivitate = tipActivitate;
-        this.descriere = descriere;
-        this.nrStudenti = nrStudenti;
+        this.numeCurs = numeCurs;
+        this.tip = tip;
+        this.nrMaximStudenti = nrMaximStudenti;
+        this.nrParticipanti = nrParticipanti;
     }
 
     public static List<ParticipantActivitate> getTable() {
@@ -81,12 +81,12 @@ public class ParticipantActivitate {
         this.usernameProfesor = usernameProfesor;
     }
 
-    public String getTipActivitate() {
-        return tipActivitate;
+    public String getTip() {
+        return tip;
     }
 
-    public void setTipActivitate(String tipActivitate) {
-        this.tipActivitate = tipActivitate;
+    public void setTip(String tip) {
+        this.tip = tip;
     }
 
     public String getDescriere() {
@@ -97,12 +97,28 @@ public class ParticipantActivitate {
         this.descriere = descriere;
     }
 
-    public int getNrStudenti() {
-        return nrStudenti;
+    public int getNrMaximStudenti() {
+        return nrMaximStudenti;
     }
 
-    public void setNrStudenti(int nrStudenti) {
-        this.nrStudenti = nrStudenti;
+    public void setNrMaximStudenti(int nrMaximStudenti) {
+        this.nrMaximStudenti = nrMaximStudenti;
+    }
+
+    public String getNumeCurs() {
+        return numeCurs;
+    }
+
+    public void setNumeCurs(String numeCurs) {
+        this.numeCurs = numeCurs;
+    }
+
+    public int getNrParticipanti() {
+        return nrParticipanti;
+    }
+
+    public void setNrParticipanti(int nrParticipanti) {
+        this.nrParticipanti = nrParticipanti;
     }
 
     @Override
@@ -119,9 +135,11 @@ public class ParticipantActivitate {
     private int id_student;
 
     private String usernameProfesor;
-    private String tipActivitate;
+    private String numeCurs;
+    private String tip;
     private String descriere;
-    private int nrStudenti;
+    private int nrMaximStudenti;
+    private int nrParticipanti;
 
 }
 

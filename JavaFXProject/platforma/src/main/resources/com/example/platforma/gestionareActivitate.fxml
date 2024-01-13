@@ -15,32 +15,19 @@
    <left>
       <AnchorPane prefHeight="668.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="23.0" layoutY="73.0" text="Selecteaza operatia">
+            <Label layoutX="22.0" layoutY="73.0" text="Selecteaza operatia">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="23.0" layoutY="107.0" text="Introdu utilizator profesor">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <Label fx:id="selectActivitateLabel" layoutX="24.0" layoutY="220.0" text="Alege un tip de activitate">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <Label fx:id="descriptionLabel" layoutX="23.0" layoutY="288.0" text="Introdu descrierea activitatii">
+            <Label layoutX="22.0" layoutY="107.0" text="Introdu utilizator profesor">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
             <ComboBox fx:id="selectOperationComboBox" layoutX="270.0" layoutY="73.0" onAction="#onSelectOperation" prefWidth="150.0" />
             <TextField fx:id="usernameProfesorField" layoutX="270.0" layoutY="107.0" promptText="Nume utilizator" />
-            <ComboBox fx:id="selectActivitateComboBox" layoutX="270.0" layoutY="220.0" onAction="#onSelectActivitate" prefWidth="150.0" />
-            <TextField fx:id="descriptionActivitateField" layoutX="270.0" layoutY="288.0" promptText="Descriere activitate" />
-            <Button fx:id="operationButton" layoutX="434.0" layoutY="73.0" mnemonicParsing="false" onAction="#onOperationButton" text="Selecteaza o operatie" />
-            <Label fx:id="errorHandling" layoutX="599.0" layoutY="76.0" textFill="RED">
+            <Label fx:id="errorHandling" layoutX="270.0" layoutY="55.0" textFill="RED">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -50,71 +37,75 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="selectNewActivitateLabel" layoutX="24.0" layoutY="434.0" text="Alege un tip de activitate noua">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <Label fx:id="newDescriptionLabel" layoutX="24.0" layoutY="502.0" text="Introdu descrierea noua a activitatii">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <ComboBox fx:id="selectNewActivitateComboBox" layoutX="270.0" layoutY="434.0" prefWidth="150.0" />
-            <TextField fx:id="newDescriptionActivitateField" layoutX="270.0" layoutY="502.0" promptText="Descriere activitate" />
             <Button fx:id="findUsernameButton" layoutX="434.0" layoutY="107.0" mnemonicParsing="false" onAction="#onSearchUsername" text="Cauta" />
-            <TableView fx:id="tableActivitati" layoutX="505.0" layoutY="220.0" prefHeight="200.0" prefWidth="506.0">
-              <columns>
-                <TableColumn fx:id="numeColumn" prefWidth="75.0" text="nume" />
-                <TableColumn fx:id="usernameColumn" prefWidth="96.0" text="username" />
-                  <TableColumn fx:id="tipActivitateColumn" prefWidth="84.0" text="tipActivitate" />
-                  <TableColumn fx:id="descriereColumn" prefWidth="88.0" text="descriere" />
-                  <TableColumn fx:id="nrMaximStudentiColumn" prefWidth="120.0" text="nrMaximStudenti" />
-              </columns>
-            </TableView>
-            <Label fx:id="maxStudentLabel" layoutX="23.0" layoutY="320.0" text="Introdu numarul maxim de studenti">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <TextField fx:id="maxStudentField" layoutX="270.0" layoutY="320.0" promptText="Numar maxim studenti" />
-            <Label fx:id="newMaxStudentLabel" layoutX="23.0" layoutY="536.0" text="Introdu numarul maxim de studenti">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <TextField fx:id="newMaxStudentField" layoutX="270.0" layoutY="536.0" promptText="Numar maxim studenti" />
-            <TableView fx:id="tableAllActivities" layoutX="505.0" layoutY="434.0" prefHeight="200.0" prefWidth="506.0">
-              <columns>
-                  <TableColumn fx:id="usernameAllColumn" prefWidth="102.4000244140625" text="username" />
-                <TableColumn fx:id="tipActivitateAllColumn" prefWidth="104.0" text="tipActivitate" />
-                <TableColumn fx:id="descriereAllColumn" prefWidth="148.0" text="descriere" />
-              </columns>
-            </TableView>
-            <Label layoutX="24.0" layoutY="141.0" text="Cauta o activitate">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <TextField fx:id="findActivityField" layoutX="270.0" layoutY="141.0" promptText="Nume activitate" />
-            <Button fx:id="findActivityButton" layoutX="434.0" layoutY="141.0" mnemonicParsing="false" onAction="#onSearchActivity" text="Cauta" />
-            <Label fx:id="foundActivity" layoutX="270.0" layoutY="167.0" textFill="RED">
+            <Label fx:id="foundActivity" layoutX="270.0" layoutY="251.0" textFill="RED">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="activityNameLabel" layoutX="23.0" layoutY="254.0" text="Introdu numele activitatii">
+            <Label layoutX="22.0" layoutY="175.0" text="Introdu numele cursului">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="activityNameField" layoutX="270.0" layoutY="254.0" promptText="Nume activitate" />
-            <Label fx:id="newActivityNameLabel" layoutX="23.0" layoutY="468.0" text="Introdu numele nou al activitatii">
+            <TextField fx:id="courseNameField" layoutX="270.0" layoutY="175.0" promptText="Nume curs" />
+            <Label layoutX="22.0" layoutY="243.0" text="Introdu numarul maxim de studenti">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="newActivityNameField" layoutX="270.0" layoutY="468.0" promptText="Nume activitate" />
+            <TextField fx:id="maxStudentField" layoutX="270.0" layoutY="243.0" promptText="Numar maxim studenti" />
+            <Label layoutX="22.0" layoutY="373.0" text="Alege tipul de activitate">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="selectActivityComboBox" layoutX="270.0" layoutY="371.0" prefWidth="150.0" />
+            <Button fx:id="courseButton" layoutX="434.0" layoutY="175.0" mnemonicParsing="false" onAction="#onCourseButton" text="Selecteaza o operatie" />
+            <TextField fx:id="procentField" layoutX="270.0" layoutY="405.0" promptText="Procent" />
+            <Label layoutX="22.0" layoutY="407.0" text="Introdu procentul">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Button fx:id="activityButton" layoutX="434.0" layoutY="371.0" mnemonicParsing="false" onAction="#onActivityButton" text="Selecteaza o operatie" />
+            <TableView fx:id="tableActivitati" layoutX="585.0" layoutY="373.0" prefHeight="200.0" prefWidth="394.0">
+              <columns>
+                  <TableColumn fx:id="idColumn" prefWidth="23.20001220703125" text="id" />
+                <TableColumn fx:id="usernameColumn" prefWidth="61.5999755859375" text="username" />
+                <TableColumn fx:id="numeColumn" prefWidth="63.20001220703125" text="numeCurs" />
+                  <TableColumn fx:id="tipColumn" prefWidth="28.79998779296875" text="tip" />
+                  <TableColumn fx:id="descriereColumn" prefWidth="56.7999267578125" text="descriere" />
+                  <TableColumn fx:id="nrMaximStudentiColumn" prefWidth="108.7999267578125" text="nrMaximStudenti" />
+                  <TableColumn fx:id="procentColumn" prefWidth="140.0" text="procentNota" />
+              </columns>
+            </TableView>
+            <Label layoutX="22.0" layoutY="209.0" text="Introdu descrierea cursului">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="descriereField" layoutX="270.0" layoutY="209.0" promptText="Descriere curs" />
+            <TableView fx:id="tableCurs" layoutX="585.0" layoutY="160.0" prefHeight="200.0" prefWidth="330.0">
+              <columns>
+                <TableColumn fx:id="idCursColumn" prefWidth="46.39996337890625" text="id" />
+                <TableColumn fx:id="numeCursColumn" prefWidth="70.4000244140625" text="numeCurs" />
+                  <TableColumn fx:id="descriereCursColumn" prefWidth="67.20001220703125" text="descriere" />
+                  <TableColumn fx:id="nrMaximStudentiCursColumn" prefWidth="116.800048828125" text="nrMaximStudenti" />
+              </columns>
+            </TableView>
+            <TextField fx:id="idCursField" layoutX="270.0" layoutY="277.0" promptText="ID Curs" />
+            <Label fx:id="idCursLabel" layoutX="22.0" layoutY="279.0" text="Introdu ID-ul cursului">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="idActivitateLabel" layoutX="22.0" layoutY="441.0" text="Introdu ID-ul activitatii">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="idActivitateField" layoutX="270.0" layoutY="439.0" promptText="ID Activitate" />
          </children>
       </AnchorPane>
    </left>

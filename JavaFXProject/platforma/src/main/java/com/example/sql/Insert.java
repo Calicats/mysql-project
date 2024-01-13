@@ -122,6 +122,7 @@ public class Insert {
         statement.execute();
     }
 
+    @Deprecated
     public static void addActivitateProfesor(Connection connection, String username, String tipActivitate, String descriere, int nrMaximStudenti) throws Exception
     {
         String procedureCall = "{CALL AddNewActivitateProfesor(?, ?, ?, ?)}";
@@ -133,11 +134,11 @@ public class Insert {
         statement.execute();
     }
 
-    public static void addParticipantActivitate(Connection connection, String usernameProfesor, String usernameStudent) throws Exception
+    public static void addParticipantActivitate(Connection connection, String usernameProfesor, String usernameStudent, String tip) throws Exception
     {
-        int idProfesor = Query.getIdByUsername(connection, "Profesor", usernameProfesor);
-        int idActivitateProfesor = Query.getIdActivitateProfesor(connection, idProfesor);
+        int idActivitate = Query.getIdActivitate(connection, tip);
         int idStudent = Query.getIdByUsername(connection, "Student", usernameStudent);
+        int idProfesor = Query.getIdByUsername(connection, "Profesor", usernameProfesor);
 
         if(idProfesor == -1)
         {
@@ -147,15 +148,47 @@ public class Insert {
         {
             throw new RuntimeException("Could not fetch " + usernameStudent +"'s id from Student table");
         }
-        if(idActivitateProfesor == -1)
+        if(idActivitate == -1)
         {
             throw new RuntimeException("Could not fetch " + usernameProfesor + "'s id from ActivitateProfesor table");
         }
 
-        String query = "INSERT INTO ParticipantActivitate (id_activitate_profesor, id_student) VALUES (?, ?)";
+        int maxStudents = Query.getNrMaximStudenti(connection, idActivitate);
+        int currentStudents = Query.getCurrentParticipants(connection, idActivitate);
+
+        if(currentStudents == maxStudents)
+        {
+            throw new RuntimeException("Nu mai sunt locuri la activitate!");
+        }
+
+        String query = "INSERT INTO ParticipantActivitate (idActivitate, idStudent, idProfesor) VALUES (?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setInt(1, idActivitateProfesor);
+        preparedStatement.setInt(1, idActivitate);
         preparedStatement.setInt(2, idStudent);
+        preparedStatement.setInt(3, idProfesor);
+        preparedStatement.executeUpdate();
+    }
+
+    public static void addNewCurs(Connection connection, String numeCurs, String descriere, int nrMaxStudenti) throws Exception
+    {
+        String query = "INSERT INTO Curs(numeCurs, descriere, nrMaximStudenti) VALUES (?, ?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, numeCurs);
+        preparedStatement.setString(2, descriere);
+        preparedStatement.setInt(3, nrMaxStudenti);
+        preparedStatement.executeUpdate();
+    }
+
+    public static void addNewActivitate(Connection connection, String tip, int procentNota, String curs, String username) throws Exception
+    {
+        int idCurs = Query.getIdByCurs(connection, curs);
+        int idProfesor = Query.getIdByUsername(connection, "profesor", username);
+        String query = "INSERT INTO Activitate(tip, procentNota, idCurs, idProfesor) VALUES (?, ?, ?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, tip);
+        preparedStatement.setInt(2, procentNota);
+        preparedStatement.setInt(3, idCurs);
+        preparedStatement.setInt(4, idProfesor);
         preparedStatement.executeUpdate();
     }
 }

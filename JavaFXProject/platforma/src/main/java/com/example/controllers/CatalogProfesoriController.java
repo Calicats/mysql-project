@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+// TODO Rewrite this class
+
 public class CatalogProfesoriController {
 
     public ChoiceBox selectCurs;
@@ -71,18 +73,18 @@ public class CatalogProfesoriController {
         ObservableList<String> cursuriProfesorChoiceBox = FXCollections.observableArrayList();
         cursuriHash.clear();
         int i = 0;
-        for (ActivitateProfesor curs : cursuri) {
-
-            if (curs.getId_profesor() == id) {
-                cursuriProfesor.add(curs);
-                cursuriProfesorChoiceBox.add(curs.getId()+" "+curs.getNume());
-                cursuriProfesorId.add(String.valueOf(curs.getId()));
-                cursuriProfesorNume.add(curs.getNume());
-                cursuriProfesorTip.add(curs.getTipActivitate());
-                cursuriHash.put(i, curs.getId());
-                i++;
-            }
-        }
+//        for (ActivitateProfesor curs : cursuri) {
+//
+//            if (curs.getId_profesor() == id) {
+//                cursuriProfesor.add(curs);
+//                cursuriProfesorChoiceBox.add(curs.getId()+" "+curs.getNume());
+//                cursuriProfesorId.add(String.valueOf(curs.getId()));
+//                cursuriProfesorNume.add(curs.getNume());
+//                cursuriProfesorTip.add(curs.getTipActivitate());
+//                cursuriHash.put(i, curs.getId());
+//                i++;
+//            }
+//        }
         // put the cursuri in the table
         cursuriTable.getColumns().clear();
         // Create the columns

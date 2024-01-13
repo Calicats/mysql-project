@@ -25,24 +25,36 @@ public class FindUsersController {
     @FXML
     private TextField findUsernameField;
     @FXML
+    private Button refreshButton;
+    @FXML
+    private Button searchActivityButton;
+    @FXML
     private ComboBox<String> selectTableComboBox;
     @FXML
-    private Label foundUser;
+    private Label errorHandling;
+    @FXML
+    private Label activityNameLabel;
+    @FXML
+    private TextField activityNameField;
     @FXML
     private TableView<User> tableUsers;
     // tabela tableActivitati cu coloane hardcodate, ca tabela ii construita cu un JOIN
     @FXML
-    private TableView<ActivitateProfesor> tableActivitati;
+    private TableView<Activitate> tableActivitati;
     @FXML
-    private TableColumn<ActivitateProfesor, String> numeColumn;
+    private TableColumn<Activitate, String> idColumn;
     @FXML
-    private TableColumn<ActivitateProfesor, String> usernameColumn;
+    private TableColumn<Activitate, String> numeColumn;
     @FXML
-    private TableColumn<ActivitateProfesor, String> tipActivitateColumn;
+    private TableColumn<Activitate, String> usernameColumn;
     @FXML
-    private TableColumn<ActivitateProfesor, String> descriereColumn;
+    private TableColumn<Activitate, String> tipColumn;
     @FXML
-    private TableColumn<ActivitateProfesor, String> maxStudentColumn;
+    private TableColumn<Activitate, String> descriereColumn;
+    @FXML
+    private TableColumn<Activitate, String> nrMaximStudentiColumn;
+    @FXML
+    private TableColumn<Activitate, String> procentColumn;
     private String username;
     private String tableName;
 
@@ -61,8 +73,9 @@ public class FindUsersController {
         String[] tables = {"Superadministrator", "Administrator", "Profesor", "Student"};
         tablesList.addAll(Arrays.asList(tables).subList(0, 4));
 
+        setActivitateTableVisible(false);
+
         tableUsers.setVisible(false);
-        tableActivitati.setVisible(false);
         selectTableComboBox.setItems(tablesList);
     }
 
@@ -87,7 +100,7 @@ public class FindUsersController {
         tableUsers.getItems().clear();
         tableUsers.getColumns().clear();
         findUsernameField.clear();
-        foundUser.setText("");
+        errorHandling.setText("");
 
         setActivitateTableVisible(false);
 
@@ -122,10 +135,12 @@ public class FindUsersController {
                 }
                 generateTableUsers(columnsUsers);
                 populateTableUsers(connection, tableName);
+                errorHandling.setText("");
             }
         }
         catch(Exception e)
         {
+            errorHandling.setText(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -143,18 +158,29 @@ public class FindUsersController {
 
         if(tableName == null)
         {
-            foundUser.setText("Selecteaza o tabela!");
+            errorHandling.setText("Selecteaza o tabela!");
             return;
         }
 
         try
         {
             Connection connection = Connect.getConnection();
+            if(connection == null)
+            {
+                return;
+            }
+
             String findUsernameString = findUsernameField.getText();
 
             if(findUsernameString.isEmpty())
             {
-                foundUser.setText("Introdu un utilizator!");
+                errorHandling.setText("Introdu un utilizator!");
+                return;
+            }
+
+            if(!Query.userExistsInTable(connection, findUsernameString, tableName))
+            {
+                errorHandling.setText("Utilizatorul cautat nu exista!");
                 return;
             }
 
@@ -163,13 +189,12 @@ public class FindUsersController {
 
             if(usersInfo == null || columns == null)
             {
-                foundUser.setText("Utilizatorul nu exista!");
-                System.out.println("null");
+                errorHandling.setText("Utilizatorul nu exista!");
                 return;
             }
 
             ObservableList<User> listUsers = FXCollections.observableArrayList();
-            foundUser.setText("");
+            errorHandling.setText("");
 
             generateTableUsers(columns);
             for(String[] row: usersInfo)
@@ -180,27 +205,62 @@ public class FindUsersController {
 
             if(tableName.equals("Profesor"))
             {
-                String[][] activitateInfo = Query.getUsersFromActivityPanel(connection, findUsernameString);
-
-                if(activitateInfo == null)
+                String[][] activitateProfesor = Query.getActivitateTableInfoOnUser(connection, findUsernameString);
+                if(activitateProfesor == null)
                 {
-                    foundUser.setText("Utilizatorul cautat nu are nicio activitate!");
+                    errorHandling.setText("Utilizatorul cautat nu are nicio activitate!");
                     return;
                 }
 
-                setActivitateTableVisible(true);
-                ObservableList<ActivitateProfesor> listActivitate = FXCollections.observableArrayList();
-                for(String[] row: activitateInfo)
-                {
-                    listActivitate.add(rowToActivitateProfesor(row));
-                }
-                foundUser.setText("");
-                tableActivitati.setItems(listActivitate);
+                generateTableActivitati();
+                populateTableActivitati(connection, findUsernameString);
+                errorHandling.setText("");
             }
         }
         catch(Exception e)
         {
-            foundUser.setText(e.getMessage());
+            errorHandling.setText(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void onSearchActivity()
+    {
+        String activityNameString = activityNameField.getText();
+
+        if(activityNameString.isEmpty())
+        {
+            errorHandling.setText("Introdu o activitate!");
+            return;
+        }
+
+        try
+        {
+            Connection connection = Connect.getConnection();
+            if(connection == null)
+            {
+                return;
+            }
+
+            if(!Query.existsCurs(connection, activityNameString))
+            {
+                errorHandling.setText("Activitatea cautata nu exista!");
+                return;
+            }
+
+            String[][] activitateProfesor = Query.getActivitateTableInfoOnActivity(connection, activityNameString);
+            if(activitateProfesor == null)
+            {
+                return;
+            }
+
+            generateTableActivitati();
+            populateTableActivitatiOnActivity(connection, activityNameString);
+            errorHandling.setText("");
+        }
+        catch(Exception e)
+        {
+            errorHandling.setText(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -217,7 +277,7 @@ public class FindUsersController {
         tableUsers.getItems().clear();
         tableUsers.getColumns().clear();
         findUsernameField.clear();
-        foundUser.setText("");
+        errorHandling.setText("");
     }
 
     private void setActivitateTableVisible(boolean expr)
@@ -226,9 +286,13 @@ public class FindUsersController {
         tableActivitati.setVisible(expr);
         numeColumn.setVisible(expr);
         usernameColumn.setVisible(expr);
-        tipActivitateColumn.setVisible(expr);
+        tipColumn.setVisible(expr);
         descriereColumn.setVisible(expr);
-        maxStudentColumn.setVisible(expr);
+        nrMaximStudentiColumn.setVisible(expr);
+
+        activityNameLabel.setVisible(expr);
+        activityNameField.setVisible(expr);
+        searchActivityButton.setVisible(expr);
     }
 
     /***
@@ -255,16 +319,21 @@ public class FindUsersController {
 
     private void generateTableActivitati()
     {
-        numeColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("nume"));
-        usernameColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("username"));
-        tipActivitateColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("tipActivitate"));
-        descriereColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("descriere"));
-        maxStudentColumn.setCellValueFactory(new PropertyValueFactory<ActivitateProfesor, String>("nrMaximStudenti"));
-        removeEllipses(numeColumn);
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("idActivitate"));
+        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        numeColumn.setCellValueFactory(new PropertyValueFactory<>("numeCurs"));
+        tipColumn.setCellValueFactory(new PropertyValueFactory<>("tip"));
+        descriereColumn.setCellValueFactory(new PropertyValueFactory<>("descriere"));
+        nrMaximStudentiColumn.setCellValueFactory(new PropertyValueFactory<>("nrMaximStudenti"));
+        procentColumn.setCellValueFactory(new PropertyValueFactory<>("procentNota"));
+
+        removeEllipses(idColumn);
         removeEllipses(usernameColumn);
-        removeEllipses(tipActivitateColumn);
+        removeEllipses(numeColumn);
+        removeEllipses(tipColumn);
         removeEllipses(descriereColumn);
-        removeEllipses(maxStudentColumn);
+        removeEllipses(nrMaximStudentiColumn);
+        removeEllipses(procentColumn);
     }
 
     /***
@@ -272,7 +341,7 @@ public class FindUsersController {
      * @param column coloana
      */
 
-    private void removeEllipses(TableColumn<ActivitateProfesor, String> column)
+    private void removeEllipses(TableColumn<?, String> column)
     {
         column.setMinWidth(200);
     }
@@ -436,7 +505,7 @@ public class FindUsersController {
 
     private void populateTableActivitati(Connection connection)
     {
-        ObservableList<ActivitateProfesor> list = FXCollections.observableArrayList();
+        ObservableList<Activitate> list = FXCollections.observableArrayList();
         // tot continutul tabelului activitateprofesor
         String[][] allInfo = Query.getActivitateTableInfo(connection);
 
@@ -448,8 +517,50 @@ public class FindUsersController {
 
         for(String[] row: allInfo)
         {
-            ActivitateProfesor activitateProfesor = rowToActivitateProfesor(row);
-            list.add(activitateProfesor);
+            Activitate activitate = rowToActivitate(row);
+            list.add(activitate);
+        }
+
+        tableActivitati.setItems(list);
+    }
+
+    private void populateTableActivitati(Connection connection, String username)
+    {
+        ObservableList<Activitate> list = FXCollections.observableArrayList();
+        // tot continutul tabelului activitateprofesor
+        String[][] allInfo = Query.getActivitateTableInfoOnUser(connection, username);
+
+        if(allInfo == null)
+        {
+            System.out.println("Tabela vida!");
+            return;
+        }
+
+        for(String[] row: allInfo)
+        {
+            Activitate activitate = rowToActivitate(row);
+            list.add(activitate);
+        }
+
+        tableActivitati.setItems(list);
+    }
+
+    private void populateTableActivitatiOnActivity(Connection connection, String activity)
+    {
+        ObservableList<Activitate> list = FXCollections.observableArrayList();
+        // tot continutul tabelului activitateprofesor
+        String[][] allInfo = Query.getActivitateTableInfoOnActivity(connection, activity);
+
+        if(allInfo == null)
+        {
+            System.out.println("Tabela vida!");
+            return;
+        }
+
+        for(String[] row: allInfo)
+        {
+            Activitate activitate = rowToActivitate(row);
+            list.add(activitate);
         }
 
         tableActivitati.setItems(list);
@@ -491,8 +602,23 @@ public class FindUsersController {
      * @return o noua activitate
      */
 
-    private ActivitateProfesor rowToActivitateProfesor(String[] row)
+    private Activitate rowToActivitate(String[] row)
     {
-        throw new UnsupportedOperationException("You have to remake this method because of the internal database changes!");
+        int idActivitate = -1;
+        int nrMaximStudenti = -1;
+        int procentNota = -1;
+
+        try
+        {
+            idActivitate = Integer.parseInt(row[0]);
+            nrMaximStudenti = Integer.parseInt(row[5]);
+            procentNota = Integer.parseInt(row[6]);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return new Activitate(idActivitate, row[1], row[2], row[3], row[4],nrMaximStudenti, procentNota);
     }
 }
