@@ -17,9 +17,10 @@ public class Rol {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            // TODO: Silently Fail instead of throwing exception?
-            this.id = rs.getInt("idRol");
-            numeRol = rs.getString("numeRol");
+            if (rs.next()) {
+                this.id = rs.getInt("idRol");
+                numeRol = rs.getString("numeRol");
+            }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
@@ -34,19 +35,21 @@ public class Rol {
         List<Rol> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Rol");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idRol FROM Rol");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idRol");
-                String numeRol = rs.getString("numeRol");
-                list.add(new Rol(id, numeRol));
+                int idRol = rs.getInt("idRol");
+                list.add(new Rol(idRol));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
         return list;
     }
+
+    // TODO: Are update methods needed for this class?
+    // Seems redundant since it's only used internally
 
     public int getId() {
         return id;

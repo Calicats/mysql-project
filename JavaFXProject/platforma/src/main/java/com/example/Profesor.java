@@ -17,18 +17,19 @@ public class Profesor extends User {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            // TODO: Silently Fail instead of throwing exception?
-            this.id = rs.getInt("idProfesor");
-            cnp = rs.getString("cnp");
-            nume = rs.getString("nume");
-            departament = rs.getString("departament");
-            nrMinOre = rs.getInt("nrMinOre");
-            nrMaxOre = rs.getInt("nrMaxOre");
-            adresa = rs.getString("adresa");
-            nrTelefon = rs.getString("nrTelefon");
-            email = rs.getString("email");
-            username = rs.getString("username");
-            parola = rs.getString("parola");
+            if (rs.next()) {
+                this.id = rs.getInt("idProfesor");
+                cnp = rs.getString("cnp");
+                nume = rs.getString("nume");
+                departament = rs.getString("departament");
+                nrMinOre = rs.getInt("nrMinOre");
+                nrMaxOre = rs.getInt("nrMaxOre");
+                adresa = rs.getString("adresa");
+                nrTelefon = rs.getString("nrTelefon");
+                email = rs.getString("email");
+                username = rs.getString("username");
+                parola = rs.getString("parola");
+            }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
@@ -45,28 +46,70 @@ public class Profesor extends User {
         List<Profesor> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Profesor");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idProfesor FROM Profesor");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idProfesor");
-                String cnp = rs.getString("cnp");
-                String nume = rs.getString("nume");
-                String departament = rs.getString("departament");
-                int nrMinOre = rs.getInt("nrMinOre");
-                int nrMaxOre = rs.getInt("nrMaxOre");
-                String adresa = rs.getString("adresa");
-                String nrTelefon = rs.getString("nrTelefon");
-                String email = rs.getString("email");
-                String username = rs.getString("username");
-                String parola = rs.getString("parola");
-                int idRol = rs.getInt("idRol");
-                list.add(new Profesor(id, cnp, nume, departament, nrMinOre, nrMaxOre, adresa, nrTelefon, email, username, parola, idRol));
+                int idProfesor = rs.getInt("idProfesor");
+                list.add(new Profesor(idProfesor));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
         return list;
+    }
+
+    public static int updateEntry(int idProfesor, Profesor other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Profesor SET cnp = ?, nume = ?, departament = ?, nrMinOre = ?, nrMaxOre = ?, adresa = ?, nrTelefon = ?, email = ?, username = ?, parola = ? WHERE idProfesor = ?");
+            stmt.setString(1, other.cnp);
+            stmt.setString(2, other.nume);
+            stmt.setString(3, other.departament);
+            stmt.setInt(4, other.nrMinOre);
+            stmt.setInt(5, other.nrMaxOre);
+            stmt.setString(6, other.adresa);
+            stmt.setString(7, other.nrTelefon);
+            stmt.setString(8, other.email);
+            stmt.setString(9, other.username);
+            stmt.setString(10, other.parola);
+            stmt.setInt(11, idProfesor);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idProfesor, String column, String value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Profesor SET ? = ? WHERE idProfesor = ?");
+            stmt.setString(1, column);
+            stmt.setString(2, value);
+            stmt.setInt(3, idProfesor);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idProfesor, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Profesor SET ? = ? WHERE idProfesor = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idProfesor);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
     }
 
     public String getDepartament() {

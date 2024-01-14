@@ -10,7 +10,8 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Connect {
-
+    private static boolean didConnect = false;
+    private static Connection connection;
     private static String usernameDB;
     private static String passwordDB;
 
@@ -53,6 +54,11 @@ public class Connect {
      */
     public static Connection getConnection()
     {
+        if (didConnect)
+        {
+            return connection;
+        }
+
         try
         {
             // The file "login.txt" should sit at the root of the PROJECT directory
@@ -60,7 +66,9 @@ public class Connect {
             parseLoginDetails("login.txt");
 
             String jdbcUrl = "jdbc:mysql://localhost:3306/db_platforma";
-            return DriverManager.getConnection(jdbcUrl, usernameDB, passwordDB);
+            connection = DriverManager.getConnection(jdbcUrl, usernameDB, passwordDB);
+            didConnect = true;
+            return connection;
         }
         catch(Exception e)
         {

@@ -18,23 +18,27 @@ public class ParticipantActivitate {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            // TODO: Silently Fail instead of throwing exception?
-            this.id = rs.getInt("idParticipantActivitate");
-            id_activitate_profesor = rs.getInt("id_activitate_profesor");
-            id_student = rs.getInt("id_student");
+            if (rs.next()) {
+                this.id = rs.getInt("idParticipantActivitate");
+                numarParticipanti = rs.getInt("numarParticipanti");
+                idActivitate = rs.getInt("idActivitate");
+                idStudent = rs.getInt("idStudent");
+                idProfesor = rs.getInt("idProfesor");
+            }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
     }
 
-    public ParticipantActivitate(int id, int id_activitate_profesor, int id_student) {
+    public ParticipantActivitate(int id, int numarParticipanti, int idActivitate, int idStudent, int idProfesor) {
         this.id = id;
-        this.id_activitate_profesor = id_activitate_profesor;
-        this.id_student = id_student;
+        this.numarParticipanti = numarParticipanti;
+        this.idActivitate = idActivitate;
+        this.idStudent = idStudent;
+        this.idProfesor = idProfesor;
     }
 
-    public ParticipantActivitate(String usernameProfesor, String numeCurs, String tip, int nrMaximStudenti, int nrParticipanti)
-    {
+    public ParticipantActivitate(String usernameProfesor, String numeCurs, String tip, int nrMaximStudenti, int nrParticipanti) {
         this.usernameProfesor = usernameProfesor;
         this.numeCurs = numeCurs;
         this.tip = tip;
@@ -46,14 +50,12 @@ public class ParticipantActivitate {
         List<ParticipantActivitate> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM ParticipantActivitate");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idParticipantActivitate FROM ParticipantActivitate");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idParticipantActivitate");
-                int id_activitate_profesor = rs.getInt("id_activitate_profesor");
-                int id_student = rs.getInt("id_student");
-                list.add(new ParticipantActivitate(id, id_activitate_profesor, id_student));
+                int idParticipantActivitate = rs.getInt("idParticipantActivitate");
+                list.add(new ParticipantActivitate(idParticipantActivitate));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
@@ -61,16 +63,48 @@ public class ParticipantActivitate {
         return list;
     }
 
+    public static int updateEntry(int idParticipantActivitate, ParticipantActivitate other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE NoteStudent SET numarParticipanti = ?, idActivitate = ?, idStudent = ?, idProfesor = ? WHERE idParticipantActivitate = ?");
+            stmt.setInt(1, other.numarParticipanti);
+            stmt.setInt(2, other.idActivitate);
+            stmt.setInt(3, other.idStudent);
+            stmt.setInt(4, other.idProfesor);
+            stmt.setInt(5, idParticipantActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idParticipantActivitate, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE ParticipantActivitate SET ? = ? WHERE idParticipantActivitate = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idParticipantActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }
 
-    public int getId_activitate_profesor() {
-        return id_activitate_profesor;
+    public int getIdActivitate() {
+        return idActivitate;
     }
 
-    public int getId_student() {
-        return id_student;
+    public int getIdStudent() {
+        return idStudent;
     }
 
     public String getUsernameProfesor() {
@@ -117,6 +151,14 @@ public class ParticipantActivitate {
         return nrParticipanti;
     }
 
+    public int getNumarParticipanti() {
+        return numarParticipanti;
+    }
+
+    public int getIdProfesor() {
+        return idProfesor;
+    }
+
     public void setNrParticipanti(int nrParticipanti) {
         this.nrParticipanti = nrParticipanti;
     }
@@ -125,14 +167,16 @@ public class ParticipantActivitate {
     public String toString() {
         return "ParticipantActivitate{" +
                 "id=" + id +
-                ", id_activitate_profesor=" + id_activitate_profesor +
-                ", id_student=" + id_student +
+                ", id_activitate_profesor=" + idActivitate +
+                ", id_student=" + idStudent +
                 '}';
     }
 
     private int id;
-    private int id_activitate_profesor;
-    private int id_student;
+    private int numarParticipanti;
+    private int idActivitate;
+    private int idStudent;
+    private int idProfesor;
 
     private String usernameProfesor;
     private String numeCurs;

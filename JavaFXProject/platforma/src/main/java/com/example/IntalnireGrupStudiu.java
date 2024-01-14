@@ -43,22 +43,65 @@ public class IntalnireGrupStudiu {
         List<IntalnireGrupStudiu> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM IntalnireGrupStudiu");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idIntalnireGrupStudiu FROM IntalnireGrupStudiu");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idIntalnireGrupStudiu");
-                java.sql.Date dataIntalnire = rs.getDate("dataIntalnire");
-                int numarMinParticipanti = rs.getInt("numarMinParticipanti");
-                int ora = rs.getInt("ora");
-                int minut = rs.getInt("minut");
-                int idGrupStudiu = rs.getInt("idGrupStudiu");
-                list.add(new IntalnireGrupStudiu(id, dataIntalnire, numarMinParticipanti, ora, minut, idGrupStudiu));
+                int idIntalnireGrupStudiu = rs.getInt("idIntalnireGrupStudiu");
+                list.add(new IntalnireGrupStudiu(idIntalnireGrupStudiu));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
         return list;
+    }
+
+    public static int updateEntry(int idIntalnireGrupStudiu, IntalnireGrupStudiu other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE IntalnireGrupStudiu SET dataIntalnire = ?, numarMinParticipanti = ?, ora = ?, minut = ?, idGrupStudiu = ? WHERE idIntalnireGrupStudiu = ?");
+            stmt.setDate(1, other.dataIntalnire);
+            stmt.setInt(2, other.numarMinParticipanti);
+            stmt.setInt(3, other.ora);
+            stmt.setInt(4, other.minut);
+            stmt.setInt(5, other.idGrupStudiu);
+            stmt.setInt(6, idIntalnireGrupStudiu);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idIntalnireGrupStudiu, String column, java.sql.Date value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE IntalnireGrupStudiu SET ? = ? WHERE idIntalnireGrupStudiu = ?");
+            stmt.setString(1, column);
+            stmt.setDate(2, value);
+            stmt.setInt(3, idIntalnireGrupStudiu);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idIntalnireGrupStudiu, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE IntalnireGrupStudiu SET ? = ? WHERE idIntalnireGrupStudiu = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idIntalnireGrupStudiu);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
     }
 
     public int getId() {

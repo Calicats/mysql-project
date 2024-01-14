@@ -39,20 +39,63 @@ public class MesajGrupStudiu {
         List<MesajGrupStudiu> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM MesajGrupStudiu");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idMesaj FROM MesajGrupStudiu");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idMesaj");
-                String textMesaj = rs.getString("textMesaj");
-                String numeUtilizator = rs.getString("numeUtilizator");
-                int idGrupStudiu = rs.getInt("idGrupStudiu");
-                list.add(new MesajGrupStudiu(id, textMesaj, numeUtilizator, idGrupStudiu));
+                int idMesaj = rs.getInt("idMesaj");
+                list.add(new MesajGrupStudiu(idMesaj));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
         return list;
+    }
+
+    public static int updateEntry(int idMesaj, MesajGrupStudiu other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE MesajGrupStudiu SET textMesaj = ?, numeUtilizator = ?, idGrupStudiu = ? WHERE idMesaj = ?");
+            stmt.setString(1, other.textMesaj);
+            stmt.setString(2, other.numeUtilizator);
+            stmt.setInt(3, other.idGrupStudiu);
+            stmt.setInt(4, idMesaj);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idMesaj, String column, String value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE MesajGrupStudiu SET ? = ? WHERE idMesaj = ?");
+            stmt.setString(1, column);
+            stmt.setString(2, value);
+            stmt.setInt(3, idMesaj);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idMesaj, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE MesajGrupStudiu SET ? = ? WHERE idMesaj = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idMesaj);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
     }
 
     public int getId() {

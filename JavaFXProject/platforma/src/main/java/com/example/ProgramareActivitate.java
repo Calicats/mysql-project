@@ -50,25 +50,83 @@ public class ProgramareActivitate {
         List<ProgramareActivitate> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM ProgramareActivitate");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idProgramareActivitate FROM ProgramareActivitate");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idProgramareActivitate");
-                java.sql.Date dataIncepere = rs.getDate("dataIncepere");
-                java.sql.Date dataFinalizare = rs.getDate("dataFinalizare");
-                String frecventa = rs.getString("frecventa");
-                String zi = rs.getString("zi");
-                int ora = rs.getInt("ora");
-                int minut = rs.getInt("minut");
-                int durata = rs.getInt("durata");
-                int idParticipantActivitate = rs.getInt("idParticipantActivitate");
-                list.add(new ProgramareActivitate(id, dataIncepere, dataFinalizare, frecventa, zi, ora, minut, durata, idParticipantActivitate));
+                int idProgramareActivitate = rs.getInt("idProgramareActivitate");
+                list.add(new ProgramareActivitate(idProgramareActivitate));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
         return list;
+    }
+
+    public static int updateEntry(int idProgramareActivitate, ProgramareActivitate other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE ProgramareActivitate SET dataIncepere = ?, dataFinalizare = ?, frecventa = ?, zi = ?, ora = ?, minut = ?, durata = ?, idParticipantActivitate = ? WHERE idProgramareActivitate = ?");
+            stmt.setDate(1, other.dataIncepere);
+            stmt.setDate(2, other.dataFinalizare);
+            stmt.setString(3, other.frecventa);
+            stmt.setString(4, other.zi);
+            stmt.setInt(5, other.ora);
+            stmt.setInt(6, other.minut);
+            stmt.setInt(7, other.durata);
+            stmt.setInt(8, other.idParticipantActivitate);
+            stmt.setInt(9, idProgramareActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idProgramareActivitate, String column, String value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE ProgramareActivitate SET ? = ? WHERE idProgramareActivitate = ?");
+            stmt.setString(1, column);
+            stmt.setString(2, value);
+            stmt.setInt(3, idProgramareActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idProgramareActivitate, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE ProgramareActivitate SET ? = ? WHERE idProgramareActivitate = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idProgramareActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idProgramareActivitate, String column, java.sql.Date value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE ProgramareActivitate SET ? = ? WHERE idProgramareActivitate = ?");
+            stmt.setString(1, column);
+            stmt.setDate(2, value);
+            stmt.setInt(3, idProgramareActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
     }
 
     public int getId() {

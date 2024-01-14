@@ -17,11 +17,12 @@ public class NoteStudent {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            // TODO: Silently Fail instead of throwing exception?
-            this.id = rs.getInt("idNota");
-            nota = rs.getInt("nota");
-            idStudent = rs.getInt("id_student");
-            idActivitate = rs.getInt("idActivitate");
+            if (rs.next()) {
+                this.id = rs.getInt("idNoteStudent");
+                nota = rs.getInt("nota");
+                idStudent = rs.getInt("idStudent");
+                idActivitate = rs.getInt("idActivitate");
+            }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
@@ -38,15 +39,12 @@ public class NoteStudent {
         List<NoteStudent> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NoteStudent");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idNoteStudent FROM NoteStudent");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idNoteStudent");
-                int nota = rs.getInt("nota");
-                int idStudent = rs.getInt("idStudent");
-                int idActivitate = rs.getInt("idActivitate");
-                list.add(new NoteStudent(id, nota, idStudent, idActivitate));
+                int idNoteStudent = rs.getInt("idNoteStudent");
+                list.add(new NoteStudent(idNoteStudent));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
@@ -54,19 +52,19 @@ public class NoteStudent {
         return list;
     }
 
-    public static List<NoteStudent> getTable(int id_student) {
+    public static List<NoteStudent> getTable(int idStudent) {
         List<NoteStudent> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NoteStudent WHERE idStudent = ?");
-            stmt.setInt(1, id_student);
+            stmt.setInt(1, idStudent);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("idNoteStudent");
                 int nota = rs.getInt("nota");
                 int idActivitate = rs.getInt("idActivitate");
-                list.add(new NoteStudent(id, nota, id_student, idActivitate));
+                list.add(new NoteStudent(id, nota, idStudent, idActivitate));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
@@ -85,6 +83,37 @@ public class NoteStudent {
             e.printStackTrace(System.err);
         }
         return -1;
+    }
+
+    public static int updateEntry(int idNoteStudent, NoteStudent other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE NoteStudent SET nota = ?, idStudent = ?, idActivitate = ? WHERE idNoteStudent = ?");
+            stmt.setInt(1, other.nota);
+            stmt.setInt(2, other.idStudent);
+            stmt.setInt(3, other.idActivitate);
+            stmt.setInt(4, idNoteStudent);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idNoteStudent, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE NoteStudent SET ? = ? WHERE idNoteStudent = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idNoteStudent);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
     }
 
     public int getId() {
