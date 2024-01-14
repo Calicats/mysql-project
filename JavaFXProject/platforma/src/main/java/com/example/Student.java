@@ -17,17 +17,18 @@ public class Student extends User {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            // TODO: Silently Fail instead of throwing exception?
-            this.id = rs.getInt("idProfesor");
-            cnp = rs.getString("cnp");
-            nume = rs.getString("nume");
-            anStudiu = rs.getInt("anStudiu");
-            numarOre = rs.getInt("numarOre");
-            adresa = rs.getString("adresa");
-            nrTelefon = rs.getString("nrTelefon");
-            email = rs.getString("email");
-            username = rs.getString("username");
-            parola = rs.getString("parola");
+            if (rs.next()) {
+                this.id = rs.getInt("idProfesor");
+                cnp = rs.getString("cnp");
+                nume = rs.getString("nume");
+                anStudiu = rs.getInt("anStudiu");
+                numarOre = rs.getInt("numarOre");
+                adresa = rs.getString("adresa");
+                nrTelefon = rs.getString("nrTelefon");
+                email = rs.getString("email");
+                username = rs.getString("username");
+                parola = rs.getString("parola");
+            }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
@@ -43,22 +44,12 @@ public class Student extends User {
         List<Student> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Student");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idStudent FROM Student");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idStudent");
-                String cnp = rs.getString("cnp");
-                String nume = rs.getString("nume");
-                int anStudiu = rs.getInt("anStudiu");
-                int numarOre = rs.getInt("numarOre");
-                String adresa = rs.getString("adresa");
-                String nrTelefon = rs.getString("nrTelefon");
-                String email = rs.getString("email");
-                String username = rs.getString("username");
-                String parola = rs.getString("parola");
-                int idRol = rs.getInt("idRol");
-                list.add(new Student(id, cnp, nume, anStudiu, numarOre, adresa, nrTelefon, email, username, parola, idRol));
+                int idStudent = rs.getInt("idStudent");
+                list.add(new Student(idStudent));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);

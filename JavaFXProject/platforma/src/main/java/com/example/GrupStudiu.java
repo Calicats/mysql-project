@@ -17,11 +17,12 @@ public class GrupStudiu {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            // TODO: Silently Fail instead of throwing exception?
-            this.id = rs.getInt("idGrupStudiu");
-            numeGrup = rs.getString("numeGrup");
-            descriere = rs.getString("descriere");
-            idParticipantActivitate = rs.getInt("idParticipantActivitate");
+            if (rs.next()) {
+                this.id = rs.getInt("idGrupStudiu");
+                numeGrup = rs.getString("numeGrup");
+                descriere = rs.getString("descriere");
+                idParticipantActivitate = rs.getInt("idParticipantActivitate");
+            }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
@@ -42,11 +43,8 @@ public class GrupStudiu {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idGrupStudiu");
-                String numeGrup = rs.getString("numeGrup");
-                String descriereGrupStudiu = rs.getString("descriere");
-                int idParticipantActivitate = rs.getInt("idParticipantActivitate");
-                list.add(new GrupStudiu(id, numeGrup, descriereGrupStudiu, idParticipantActivitate));
+                int idGrupStudiu = rs.getInt("idGrupStudiu");
+                list.add(new GrupStudiu(idGrupStudiu));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);

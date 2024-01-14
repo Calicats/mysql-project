@@ -50,20 +50,12 @@ public class ProgramareActivitate {
         List<ProgramareActivitate> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM ProgramareActivitate");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idProgramareActivitate FROM ProgramareActivitate");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idProgramareActivitate");
-                java.sql.Date dataIncepere = rs.getDate("dataIncepere");
-                java.sql.Date dataFinalizare = rs.getDate("dataFinalizare");
-                String frecventa = rs.getString("frecventa");
-                String zi = rs.getString("zi");
-                int ora = rs.getInt("ora");
-                int minut = rs.getInt("minut");
-                int durata = rs.getInt("durata");
-                int idParticipantActivitate = rs.getInt("idParticipantActivitate");
-                list.add(new ProgramareActivitate(id, dataIncepere, dataFinalizare, frecventa, zi, ora, minut, durata, idParticipantActivitate));
+                int idProgramareActivitate = rs.getInt("idProgramareActivitate");
+                list.add(new ProgramareActivitate(idProgramareActivitate));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);

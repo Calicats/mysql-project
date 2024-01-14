@@ -5,19 +5,14 @@ import com.example.platforma.Main;
 import com.example.sql.Connect;
 import com.example.sql.Query;
 import com.example.sql.Update;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -166,7 +161,7 @@ public class CatalogProfesoriController {
         for (ParticipantActivitate participantActivitate : studentList) {
             if(participantActivitate.getId() == currentCursId)
             {
-                studentListForThisCourse.add(new Student(participantActivitate.getId_student()));
+                studentListForThisCourse.add(new Student(participantActivitate.getIdStudent()));
             }
         }
 
@@ -192,7 +187,7 @@ public class CatalogProfesoriController {
         List<ParticipantActivitate> studentList = ParticipantActivitate.getTable();
         boolean found = false;
         for (ParticipantActivitate participantActivitate : studentList) {
-            if(participantActivitate.getId_activitate_profesor()== currentCursId && participantActivitate.getId_student() == currentStudentId)
+            if(participantActivitate.getIdActivitate()== currentCursId && participantActivitate.getIdStudent() == currentStudentId)
             {
                 found = true;
                 break;

@@ -17,14 +17,16 @@ public class Administrator extends User {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            this.id = rs.getInt("idAdmin");
-            cnp = rs.getString("cnp");
-            nume = rs.getString("nume");
-            adresa = rs.getString("adresa");
-            nrTelefon = rs.getString("nrTelefon");
-            email = rs.getString("email");
-            username = rs.getString("username");
-            parola = rs.getString("parola");
+            if (rs.next()) {
+                this.id = rs.getInt("idAdmin");
+                cnp = rs.getString("cnp");
+                nume = rs.getString("nume");
+                adresa = rs.getString("adresa");
+                nrTelefon = rs.getString("nrTelefon");
+                email = rs.getString("email");
+                username = rs.getString("username");
+                parola = rs.getString("parola");
+            }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
@@ -38,20 +40,12 @@ public class Administrator extends User {
         List<Administrator> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Administrator");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idAdmin FROM Administrator");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idAdmin");
-                String cnp = rs.getString("cnp");
-                String nume = rs.getString("nume");
-                String adresa = rs.getString("adresa");
-                String nrTelefon = rs.getString("nrTelefon");
-                String email = rs.getString("email");
-                String username = rs.getString("username");
-                String parola = rs.getString("parola");
-                int idRol = rs.getInt("idRol");
-                list.add(new Administrator(id, cnp, nume, adresa, nrTelefon, email, username, parola, idRol));
+                int idAdmin = rs.getInt("idAdmin");
+                list.add(new Administrator(idAdmin));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);

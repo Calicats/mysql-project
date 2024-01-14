@@ -43,17 +43,12 @@ public class IntalnireGrupStudiu {
         List<IntalnireGrupStudiu> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM IntalnireGrupStudiu");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idIntalnireGrupStudiu FROM IntalnireGrupStudiu");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idIntalnireGrupStudiu");
-                java.sql.Date dataIntalnire = rs.getDate("dataIntalnire");
-                int numarMinParticipanti = rs.getInt("numarMinParticipanti");
-                int ora = rs.getInt("ora");
-                int minut = rs.getInt("minut");
-                int idGrupStudiu = rs.getInt("idGrupStudiu");
-                list.add(new IntalnireGrupStudiu(id, dataIntalnire, numarMinParticipanti, ora, minut, idGrupStudiu));
+                int idIntalnireGrupStudiu = rs.getInt("idIntalnireGrupStudiu");
+                list.add(new IntalnireGrupStudiu(idIntalnireGrupStudiu));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);

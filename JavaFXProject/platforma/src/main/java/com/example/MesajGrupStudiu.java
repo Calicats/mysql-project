@@ -39,15 +39,12 @@ public class MesajGrupStudiu {
         List<MesajGrupStudiu> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM MesajGrupStudiu");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idMesaj FROM MesajGrupStudiu");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idMesaj");
-                String textMesaj = rs.getString("textMesaj");
-                String numeUtilizator = rs.getString("numeUtilizator");
-                int idGrupStudiu = rs.getInt("idGrupStudiu");
-                list.add(new MesajGrupStudiu(id, textMesaj, numeUtilizator, idGrupStudiu));
+                int idMesaj = rs.getInt("idMesaj");
+                list.add(new MesajGrupStudiu(idMesaj));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);

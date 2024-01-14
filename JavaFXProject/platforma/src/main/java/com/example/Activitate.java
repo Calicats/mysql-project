@@ -13,60 +13,6 @@ import java.util.List;
 
 
 public class Activitate {
-
-    private int idActivitate;
-    private String tip;
-    private String nume;
-    private String descriere;
-    private int nrMaximStudenti;
-    private int idCurs;
-    private int idProfesor;
-
-    // these fiels are used in showing the activity table. DO NOT MODIFY THEM!!!!!!!!!!!!!!!
-    private String numeCurs;
-    private int procentNota;
-    private String username;
-
-    public int getIdCurs() {
-        return idCurs;
-    }
-
-    public void setIdCurs(int idCurs) {
-        this.idCurs = idCurs;
-    }
-
-    public int getIdProfesor() {
-        return idProfesor;
-    }
-
-    public void setIdProfesor(int idProfesor) {
-        this.idProfesor = idProfesor;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getNumeCurs() {
-        return numeCurs;
-    }
-
-    public void setNumeCurs(String numeCurs) {
-        this.numeCurs = numeCurs;
-    }
-
-    public int getProcentNota() {
-        return procentNota;
-    }
-
-    public void setProcentNota(int procentNota) {
-        this.procentNota = procentNota;
-    }
-
     public Activitate(int idActivitate, String tip, int procentNota, int idCurs, int idProfesor) {
         this.idActivitate = idActivitate;
         this.tip = tip;
@@ -114,7 +60,7 @@ public class Activitate {
         List<Activitate> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Activitate");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idActivitate FROM Activitate");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -126,6 +72,47 @@ public class Activitate {
         }
         return list;
     }
+
+    public int getIdCurs() {
+        return idCurs;
+    }
+
+    public void setIdCurs(int idCurs) {
+        this.idCurs = idCurs;
+    }
+
+    public int getIdProfesor() {
+        return idProfesor;
+    }
+
+    public void setIdProfesor(int idProfesor) {
+        this.idProfesor = idProfesor;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getNumeCurs() {
+        return numeCurs;
+    }
+
+    public void setNumeCurs(String numeCurs) {
+        this.numeCurs = numeCurs;
+    }
+
+    public int getProcentNota() {
+        return procentNota;
+    }
+
+    public void setProcentNota(int procentNota) {
+        this.procentNota = procentNota;
+    }
+
 
     public int getIdActivitate() {
         return idActivitate;
@@ -177,6 +164,19 @@ public class Activitate {
                 ", idProfesor=" + idProfesor +
                 '}';
     }
+
+    private int idActivitate;
+    private String tip;
+    private String nume;
+    private String descriere;
+    private int nrMaximStudenti;
+    private int idCurs;
+    private int idProfesor;
+
+    // these fiels are used in showing the activity table. DO NOT MODIFY THEM!!!!!!!!!!!!!!!
+    private String numeCurs;
+    private int procentNota;
+    private String username;
 }
 
 

@@ -18,12 +18,13 @@ public class ParticipantActivitate {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            // TODO: Silently Fail instead of throwing exception?
-            this.id = rs.getInt("idParticipantActivitate");
-            numarParticipanti = rs.getInt("numarParticipanti");
-            idActivitate = rs.getInt("idActivitate");
-            idStudent = rs.getInt("idStudent");
-            idProfesor = rs.getInt("idProfesor");
+            if (rs.next()) {
+                this.id = rs.getInt("idParticipantActivitate");
+                numarParticipanti = rs.getInt("numarParticipanti");
+                idActivitate = rs.getInt("idActivitate");
+                idStudent = rs.getInt("idStudent");
+                idProfesor = rs.getInt("idProfesor");
+            }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
