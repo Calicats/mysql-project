@@ -29,33 +29,30 @@
             <TextField fx:id="findUsernameField" layoutX="173.0" layoutY="115.0" promptText="Nume utilizator" />
             <Button fx:id="findUsernameButton" layoutX="336.0" layoutY="115.0" mnemonicParsing="false" onAction="#onSearchUsername" text="Cauta" />
             <Button fx:id="refreshButton" layoutX="336.0" layoutY="61.0" mnemonicParsing="false" onAction="#onRefreshButton" text="Refresh" />
-            <Label fx:id="foundUser" layoutX="173.0" layoutY="151.0" textFill="RED">
+            <Label fx:id="errorHandling" layoutX="173.0" layoutY="41.0" textFill="RED">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
             <TableView fx:id="tableUsers" layoutX="420.0" layoutY="59.0" prefHeight="200.0" prefWidth="506.0" />
-            <TableView fx:id="tableActivitati" layoutX="420.0" layoutY="271.0" prefHeight="200.0" prefWidth="506.0">
+            <TableView fx:id="tableActivitati" layoutX="420.0" layoutY="289.0" prefHeight="200.0" prefWidth="506.0">
                <columns>
-                  <TableColumn fx:id="numeColumn" prefWidth="75.0" text="nume" />
-                  <TableColumn fx:id="usernameColumn" prefWidth="75.0" text="username" />
-                  <TableColumn fx:id="tipActivitateColumn" prefWidth="75.0" text="tipActivitate" />
-                  <TableColumn fx:id="descriereColumn" prefWidth="75.0" text="descriere" />
-                  <TableColumn fx:id="maxStudentColumn" prefWidth="105.0" text="nrMaximStudenti" />
+                  <TableColumn fx:id="idColumn" prefWidth="39.20001220703125" text="id" />
+                  <TableColumn fx:id="usernameColumn" prefWidth="62.399993896484375" text="username" />
+                  <TableColumn fx:id="numeColumn" prefWidth="60.79998779296875" text="nume" />
+                  <TableColumn fx:id="descriereColumn" prefWidth="60.0" text="descriere" />
+                  <TableColumn fx:id="tipColumn" prefWidth="41.5999755859375" text="tip" />
+                  <TableColumn fx:id="nrMaximStudentiColumn" prefWidth="107.99993896484375" text="nrMaximStudenti" />
+                  <TableColumn fx:id="procentColumn" prefWidth="87.20001220703125" text="procentNota" />
                </columns>
             </TableView>
-            <Label fx:id="searchActivityLabel" layoutX="24.0" layoutY="169.0" text="Nume activitate">
+            <Label fx:id="activityNameLabel" layoutX="24.0" layoutY="149.0" text="Nume activitate">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="searchActivityField" layoutX="173.0" layoutY="169.0" promptText="Nume activitate" />
-            <Button fx:id="searchActivityButton" layoutX="336.0" layoutY="169.0" mnemonicParsing="false" onAction="#onSearchActivity" text="Cauta" />
-            <Label fx:id="foundActivity" layoutX="174.0" layoutY="205.0" textFill="RED">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
+            <TextField fx:id="activityNameField" layoutX="173.0" layoutY="149.0" promptText="Nume activitate" />
+            <Button fx:id="searchActivityButton" layoutX="336.0" layoutY="149.0" mnemonicParsing="false" onAction="#onSearchActivity" text="Cauta" />
          </children>
       </AnchorPane>
    </left>

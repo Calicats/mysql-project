@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controllers.ProgramareCursuriProfesorController">
+   <children>
+      <SplitPane dividerPositions="0.1034136546184739" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <ToolBar prefHeight="196.0" prefWidth="599.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <Button fx:id="backButton" mnemonicParsing="false" onAction="#closeScreen" text="Back" />
+                    </items>
+                  </ToolBar>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <SplitPane dividerPositions="0.5073627844712181" prefHeight="354.4" prefWidth="599.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <TableView prefHeight="352.8" prefWidth="175.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <VBox prefHeight="352.8" prefWidth="354.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <ToolBar prefHeight="40.0" prefWidth="200.0">
+                                      <items>
+                                          <Label text="Selecteaza activitate " />
+                                          <ChoiceBox fx:id="dropBoxSelecteazaActivitate" onContextMenuRequested="#loadActivitatiSelectorActivitate" onMouseClicked="#dropBoxSelecteazaActivitateSelectItem" prefWidth="150.0" />
+                                      </items>
+                                    </ToolBar>
+                                    <ToolBar prefHeight="40.0" prefWidth="200.0">
+                                      <items>
+                                          <Label text="Data de incepere" />
+                                          <DatePicker fx:id="dataIncepereInput" onAction="#selecteazaDataIncepere" />
+                                      </items>
+                                    </ToolBar>
+                                    <ToolBar prefHeight="40.0" prefWidth="200.0">
+                                       <items>
+                                          <Label text="Data de finalizare" />
+                                          <DatePicker fx:id="dataFinalizareInput" onAction="#selecteazaDataFinalizare" />
+                                       </items>
+                                    </ToolBar>
+                                    <ToolBar prefHeight="40.0" prefWidth="200.0">
+                                       <items>
+                                          <Label text="Selecteaza ziua" />
+                                          <ChoiceBox fx:id="dropBoxSelecteazaZiua" onMouseClicked="#dropBoxSelecteazaZiuaSelectItem" prefWidth="150.0" />
+                                       </items>
+                                    </ToolBar>
+                                    <ToolBar prefHeight="40.0" prefWidth="200.0">
+                                       <items>
+                                          <Label text="Selecteaza frecventa" />
+                                          <ChoiceBox fx:id="dropBoxSelecteazaFrecventa" onMouseClicked="#dropBoxSelecteazaFrecventaSelectItem" prefWidth="150.0" />
+                                       </items>
+                                    </ToolBar>
+                                    <ToolBar prefHeight="40.0" prefWidth="200.0">
+                                       <items>
+                                          <Label text="Ora incepere" />
+                                          <TextField fx:id="oraIncepereTextInput" prefHeight="26.0" prefWidth="43.0" promptText="ora" />
+                                          <Label text=":" />
+                                          <TextField fx:id="minuteIncepereTextInput" prefHeight="26.0" prefWidth="58.0" promptText="minute" />
+                                       </items>
+                                    </ToolBar>
+                                    <ToolBar prefHeight="40.0" prefWidth="200.0">
+                                       <items>
+                                          <Label text="Durata (minute)" />
+                                          <TextField fx:id="durataTextInput" />
+                                       </items>
+                                    </ToolBar>
+                                    <ToolBar prefHeight="40.0" prefWidth="200.0">
+                                       <items>
+                                          <Button fx:id="butonSalveazaDatele" mnemonicParsing="false" text="Salveaza" />
+                                          <Label textFill="RED" />
+                                       </items>
+                                    </ToolBar>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

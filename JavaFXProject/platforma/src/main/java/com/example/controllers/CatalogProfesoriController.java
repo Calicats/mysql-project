@@ -1,8 +1,6 @@
 package com.example.controllers;
 
-import com.example.ActivitateProfesor;
-import com.example.NoteStudent;
-import com.example.Student;
+import com.example.*;
 import com.example.platforma.Main;
 import com.example.sql.Connect;
 import com.example.sql.Query;
@@ -23,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+// TODO Rewrite this class
+
 public class CatalogProfesoriController {
 
     public ChoiceBox selectCurs;
@@ -30,18 +30,21 @@ public class CatalogProfesoriController {
     public Button saveGradeButton;
     public Button backButton;
     @FXML
-    public TableView<ActivitateProfesor> cursuriTable;
+    public TableView<Activitate> cursuriTable;
     public TextField inputGrade;
     public Label errorLabel;
     public TableView<NoteStudent> studentList;
+    public TextField textFieldIdActivitate;
+    public Button buttonCautaIdStudent;
+    public TextField textFieldUsernameStudent;
 
-    HashMap<Integer, Integer> cursuriHash = new HashMap<Integer, Integer>(0);
-    HashMap<Integer, Integer> studentiHash = new HashMap<Integer, Integer>(0);
+    int idUser = -1;
     int currentCursId=0;
     int currentStudentId=0;
-    int id;
-    String username;
-    String tableName;
+    int idActivitateSelectat=-1;
+    int idStudentSelectat=-1;
+    List<Activitate> activitateProfesorListForThisProfesor = new ArrayList<>();
+
     public void initialize(String username, String tableName){
         // get the current user's id
         int id=-1;
@@ -50,142 +53,51 @@ public class CatalogProfesoriController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        idUser = id;
+        showActivitateTable();
+
     }
     public void goBackToMainMenu(ActionEvent actionEvent) throws IOException {
-        Main.main.changeScene("panouProfesor.fxml", username, tableName, 1024, 768);
+        Main.main.changeScene("panouProfesor.fxml");
     }
 
 
-
-
-    public void loadCursuri(ContextMenuEvent contextMenuEvent) {
-        // create a list of cursuri for the current user
-        List<ActivitateProfesor> cursuri = ActivitateProfesor.getTable();
-        // using the id, get the cursuri for the current user
-        ObservableList<ActivitateProfesor> cursuriProfesor = FXCollections.observableArrayList();
-        // create the tables for the cursuri with strings
-        ObservableList<String> cursuriProfesorId = FXCollections.observableArrayList();
-        ObservableList<String> cursuriProfesorNume = FXCollections.observableArrayList();
-        ObservableList<String> cursuriProfesorTip = FXCollections.observableArrayList();
-
-        ObservableList<String> cursuriProfesorChoiceBox = FXCollections.observableArrayList();
-        cursuriHash.clear();
-        int i = 0;
-        for (ActivitateProfesor curs : cursuri) {
-
-            if (curs.getId_profesor() == id) {
-                cursuriProfesor.add(curs);
-                cursuriProfesorChoiceBox.add(curs.getId()+" "+curs.getNume());
-                cursuriProfesorId.add(String.valueOf(curs.getId()));
-                cursuriProfesorNume.add(curs.getNume());
-                cursuriProfesorTip.add(curs.getTipActivitate());
-                cursuriHash.put(i, curs.getId());
-                i++;
+    public void showActivitateTable(){
+        // get the list of activities
+        List<Activitate> activitateProfesorList = Activitate.getTable();
+        List<Activitate> activitateProfesorListForThisProfesor = new ArrayList<>();
+        for (Activitate activitate : activitateProfesorList) {
+            if(activitate.getIdProfesor() == idUser)
+            {
+                activitateProfesorListForThisProfesor.add(activitate);
             }
         }
-        // put the cursuri in the table
-        cursuriTable.getColumns().clear();
-        // Create the columns
-        TableColumn<ActivitateProfesor, String> idColumn = new TableColumn<>("ID");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id")); // Assuming you have a getId() method in ActivitateProfesor
+        // create the table columns
+        TableColumn<Activitate, Integer> idActivitateColumn = new TableColumn<>("Id");
+        TableColumn<Activitate, String> numeCursColumn = new TableColumn<>("Nume curs");
+        TableColumn<Activitate, String> tipColumn = new TableColumn<>("Tip");
+        TableColumn<Activitate, String> descriereColumn = new TableColumn<>("Descriere");
+        TableColumn<Activitate, Integer> nrMaximStudentiColumn = new TableColumn<>("Nr. maxim studenti");
+        TableColumn<Activitate, Integer> procentNotaColumn = new TableColumn<>("Procent nota");
+        // add the columns to the table
+        idActivitateColumn.setCellValueFactory(new PropertyValueFactory<>("idActivitate"));
+        numeCursColumn.setCellValueFactory(new PropertyValueFactory<>("numeCurs"));
+        tipColumn.setCellValueFactory(new PropertyValueFactory<>("tip"));
+        descriereColumn.setCellValueFactory(new PropertyValueFactory<>("descriere"));
+        nrMaximStudentiColumn.setCellValueFactory(new PropertyValueFactory<>("nrMaximStudenti"));
+        procentNotaColumn.setCellValueFactory(new PropertyValueFactory<>("procentNota"));
 
-        TableColumn<ActivitateProfesor, String> numeColumn = new TableColumn<>("Nume");
-        numeColumn.setCellValueFactory(new PropertyValueFactory<>("nume")); // Assuming you have a getNume() method
-
-        TableColumn<ActivitateProfesor, String> tipActivitateColumn = new TableColumn<>("Tip Activitate");
-        tipActivitateColumn.setCellValueFactory(new PropertyValueFactory<>("tipActivitate")); // Assuming you have a getTipActivitate() method
-
-    // Add the columns to the TableView
-        cursuriTable.getColumns().clear();
-        cursuriTable.getColumns().addAll(idColumn, numeColumn, tipActivitateColumn);
-
-    // Add data to the TableView
-        cursuriTable.setItems(cursuriProfesor); // Assuming cursuriProfesor is an ObservableList<ActivitateProfesor> containing your data
-        // put the cursuri in the choice box
-        selectCurs.setItems(cursuriProfesorChoiceBox);
-
-    }
-
-    public void selectCurs(MouseEvent mouseEvent) {
-        // get the curs id
-        if(selectCurs.getItems().isEmpty())
-            loadCursuri(null);
-        if(selectCurs.getItems().isEmpty()){
-            // there are no students for this curs
-            errorLabel.setText("Nu exista cursuri pentru acest profesor!");
-            return;
-        }
-        try {
-            currentCursId = cursuriHash.getOrDefault(selectCurs.getSelectionModel().getSelectedIndex(), 0);
-        } catch (Exception e) {
-            selectCurs.getItems().clear();
-            errorLabel.setText("Nu s-au putut incarca cursurile!");
-            e.printStackTrace();
-        }
+        // add the columns to the table
+        cursuriTable.getColumns().add(idActivitateColumn);
+        cursuriTable.getColumns().add(numeCursColumn);
+        cursuriTable.getColumns().add(tipColumn);
+        cursuriTable.getColumns().add(descriereColumn);
+        cursuriTable.getColumns().add(nrMaximStudentiColumn);
+        cursuriTable.getColumns().add(procentNotaColumn);
+        // add the list to the table as an observable list
+        cursuriTable.setItems(FXCollections.observableList(activitateProfesorListForThisProfesor));
 
 
-    }
-
-    public void selectStudent(MouseEvent mouseEvent) {
-        // get the student id
-        if(selectStudent.getItems().isEmpty())
-            loadStudents(null);
-        if(selectStudent.getItems().isEmpty()) {
-            // there are no students for this curs
-            errorLabel.setText("Nu exista studenti pentru acest curs!");
-            return;
-        }
-        currentStudentId = studentiHash.get(selectStudent.getSelectionModel().getSelectedIndex());
-    }
-
-    public void loadStudents(ContextMenuEvent contextMenuEvent) {
-        // get the students for the curs
-        List<Student> studenti = Student.getTable();
-        ObservableList<String> noteStudentiCurs = FXCollections.observableArrayList();
-        studentiHash.clear();
-        int i = 0;
-        for (Student s : studenti) {
-            if (s.getId() == currentCursId) {
-                noteStudentiCurs.add(s.getNume());
-                studentiHash.put(i, s.getId());
-                i++;
-            }
-        }
-
-        // put the students in the table
-        if (noteStudentiCurs != null)
-            selectStudent.setItems(noteStudentiCurs);
-        currentStudentId = 0;
-
-        // Create columns for TableView
-        TableColumn<NoteStudent, String> idColumn = new TableColumn<>("ID");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id")); // Assuming you have a getId() method in NoteStudent class
-
-        TableColumn<NoteStudent, String> numeColumn = new TableColumn<>("Nume");
-        numeColumn.setCellValueFactory(new PropertyValueFactory<>("nume")); // You might need to adapt this part based on your Student class
-
-        TableColumn<NoteStudent, String> gradeColumn = new TableColumn<>("Grade");
-        gradeColumn.setCellValueFactory(new PropertyValueFactory<>("nota")); // Assuming you have a getNota() method in NoteStudent class
-
-        // Clear the columns before adding new ones
-        studentList.getColumns().clear();
-        studentList.getColumns().addAll(idColumn, numeColumn, gradeColumn);
-
-        // Load data into the table based on the selected student
-        selectStudent.setOnAction(e -> {
-            // Assuming you have a method to get the selected student's ID from the selectStudent ComboBox
-            int selectedStudentId = studentiHash.getOrDefault(currentStudentId, 0); // Implement this according to your logic
-
-
-            // Get NoteStudent data based on selected student's ID
-            List<NoteStudent> studentGrades = NoteStudent.getTable(selectedStudentId); // Implement this method to fetch NoteStudent data for the selected student
-
-            // Populate TableView with the fetched NoteStudent data
-            if (studentGrades != null) {
-                ObservableList<NoteStudent> studentGradesList = FXCollections.observableArrayList(studentGrades);
-                studentList.setItems(studentGradesList);
-            }
-        });
     }
 
 
@@ -223,4 +135,77 @@ public class CatalogProfesoriController {
 
     }
 
+    public void cautaActivitate(ActionEvent actionEvent) {
+        if(textFieldIdActivitate.getText().isEmpty())
+        {
+            errorLabel.setText("Nu ati introdus un id!");
+            return;
+        }
+        try{
+            currentCursId = Integer.parseInt(textFieldIdActivitate.getText());
+        } catch (NumberFormatException e) {
+            errorLabel.setText("Id-ul trebuie sa fie un numar!");
+            return;
+        }
+        Activitate activitate = new Activitate(currentCursId);
+        if(activitate.getIdActivitate() == -1)
+        {
+            errorLabel.setText("Nu exista o activitate cu acest id!");
+            return;
+        }
+        if(activitate.getIdProfesor() != idUser)
+        {
+            errorLabel.setText("Nu aveti acces la aceasta activitate!");
+            return;
+        }
+        errorLabel.setText("Activitatea a fost gasita!");
+        idActivitateSelectat = currentCursId;
+        // get the list of students
+        List<ParticipantActivitate> studentList = ParticipantActivitate.getTable();
+        List<Student> studentListForThisCourse = new ArrayList<>();
+        for (ParticipantActivitate participantActivitate : studentList) {
+            if(participantActivitate.getId() == currentCursId)
+            {
+                studentListForThisCourse.add(new Student(participantActivitate.getId_student()));
+            }
+        }
+
+    }
+
+    public void cautaStudent(ActionEvent actionEvent) {
+        if(idActivitateSelectat == -1)
+        {
+            errorLabel.setText("Nu ati cautat o activitate!");
+            return;
+        }
+        if(textFieldUsernameStudent.getText().isEmpty())
+        {
+            errorLabel.setText("Nu ati introdus un username!");
+            return;
+        }
+        try{
+            currentStudentId = Query.getIdByUsername(Objects.requireNonNull(Connect.getConnection()), textFieldUsernameStudent.getText());
+        } catch (Exception e) {
+            errorLabel.setText("Nu exista un student cu acest username!");
+            return;
+        }
+        List<ParticipantActivitate> studentList = ParticipantActivitate.getTable();
+        boolean found = false;
+        for (ParticipantActivitate participantActivitate : studentList) {
+            if(participantActivitate.getId_activitate_profesor()== currentCursId && participantActivitate.getId_student() == currentStudentId)
+            {
+                found = true;
+                break;
+            }
+        }
+        if(!found)
+        {
+            errorLabel.setText("Acest student nu e inrolat in activitatea selectata!");
+            return;
+        }
+        errorLabel.setText("Studentul a fost gasit!");
+        idStudentSelectat = currentStudentId;
+
+
+    }
 }

@@ -19,31 +19,34 @@ public class GrupStudiu {
 
             // TODO: Silently Fail instead of throwing exception?
             this.id = rs.getInt("idGrupStudiu");
-            descriereGrupStudiu = rs.getString("descriereGrupStudiu");
-            id_participant_activitate = rs.getInt("id_participant_activitate");
+            numeGrup = rs.getString("numeGrup");
+            descriere = rs.getString("descriere");
+            idParticipantActivitate = rs.getInt("idParticipantActivitate");
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
     }
 
-    private GrupStudiu(int id, String descriereGrupStudiu, int id_participant_activitate) {
+    private GrupStudiu(int id, String numeGrup, String descriere, int idParticipantActivitate) {
         this.id = id;
-        this.descriereGrupStudiu = descriereGrupStudiu;
-        this.id_participant_activitate = id_participant_activitate;
+        this.numeGrup = numeGrup;
+        this.descriere = descriere;
+        this.idParticipantActivitate = idParticipantActivitate;
     }
 
     public static List<GrupStudiu> getTable() {
         List<GrupStudiu> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NoteStudent");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM GrupStudiu");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("idGrupStudiu");
-                String descriereGrupStudiu = rs.getString("descriereGrupStudiu");
-                int id_participant_activitate = rs.getInt("id_participant_activitate");
-                list.add(new GrupStudiu(id, descriereGrupStudiu, id_participant_activitate));
+                String numeGrup = rs.getString("numeGrup");
+                String descriereGrupStudiu = rs.getString("descriere");
+                int idParticipantActivitate = rs.getInt("idParticipantActivitate");
+                list.add(new GrupStudiu(id, numeGrup, descriereGrupStudiu, idParticipantActivitate));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
@@ -55,24 +58,26 @@ public class GrupStudiu {
         return id;
     }
 
-    public String getDescriereGrupStudiu() {
-        return descriereGrupStudiu;
+    public String getDescriere() {
+        return descriere;
     }
 
-    public int getId_participant_activitate() {
-        return id_participant_activitate;
+    public int getIdParticipantActivitate() {
+        return idParticipantActivitate;
     }
 
     @Override
     public String toString() {
         return "GrupStudiu{" +
                 "id=" + id +
-                ", descriereGrupStudiu='" + descriereGrupStudiu + '\'' +
-                ", id_participant_activitate=" + id_participant_activitate +
+                "numeGrup=" + numeGrup +
+                ", descriere='" + descriere + '\'' +
+                ", idParticipantActivitate=" + idParticipantActivitate +
                 '}';
     }
 
     private int id;
-    private String descriereGrupStudiu;
-    private int id_participant_activitate;
+    private String descriere;
+    private String numeGrup;
+    private int idParticipantActivitate;
 }

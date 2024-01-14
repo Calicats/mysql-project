@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import javax.swing.text.View;
 import java.io.IOException;
 
 public class Main extends Application {
@@ -13,6 +14,8 @@ public class Main extends Application {
     private static Stage currentStage;
 
     public static Main main;
+    public String username;
+    public String tablename;
 
 
     /***
@@ -23,8 +26,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException, ClassNotFoundException {
-        //Class.forName("com.mysql.cj.jdbc.Driver");
-
         currentStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("logare.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
@@ -33,6 +34,29 @@ public class Main extends Application {
         stage.setTitle("Logare platforma");
         stage.setScene(scene);
         stage.show();
+    }
+
+    /***
+     * Metoda asta e apelata de fiecare data cand se schimba scena
+     * Preia datele utilizatorului din Main.main si le trimite catre controllerul care trebuie sa le preia
+     * Si deschide by default un ecran 1024x768
+     * @param fxml
+     * @throws IOException
+     */
+    public void changeScene(String fxml) throws IOException
+    {
+        changeScene(fxml, username, tablename, 1024, 768);
+    }
+
+    /***
+     * Metoda asta e apelata de fiecare data cand se schimba scena
+     * Preia datele utilizatorului din Main.main si le trimite catre controllerul care trebuie sa le preia
+     * @param fxml
+     * @throws IOException
+     */
+    public void changeScene(String fxml, int row, int col) throws IOException
+    {
+        changeScene(fxml, Main.main.username, Main.main.tablename, row, col);
     }
 
     /***
@@ -54,6 +78,10 @@ public class Main extends Application {
 
         if(username != null && tableName != null)
         {
+            if(Main.main == null)
+                Main.main = new Main();
+            Main.main.username = username;
+            Main.main.tablename = tableName;
             switch(tableName)
             {
                 case "superadministrator", "administrator" ->
@@ -108,6 +136,12 @@ public class Main extends Application {
                             CatalogProfesoriController controller = fxmlLoader.getController();
                             controller.initialize(username, tableName);
                         }
+                        case "panouActivitatiProfesorTotal.fxml" ->
+                        {
+                            currentStage.setTitle("Panou activitati");
+                            ViewActivitateTotalProfesor controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
                     }
                 }
                 case "student" ->
@@ -138,6 +172,8 @@ public class Main extends Application {
             }
         }
     }
+
+
 
     public static void main(String[] args)
     {

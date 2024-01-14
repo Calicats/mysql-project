@@ -11,6 +11,22 @@ public class Delete {
         return preparedStatement.executeUpdate();
     }
 
+    public static int deleteCurs(Connection connection, int id) throws Exception
+    {
+        String update = "DELETE FROM Curs WHERE idCurs = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(update);
+        preparedStatement.setInt(1, id);
+        return preparedStatement.executeUpdate();
+    }
+
+    public static int deleteActivitate(Connection connection, int id) throws Exception
+    {
+        String update = "DELETE FROM Activitate WHERE idActivitate = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(update);
+        preparedStatement.setInt(1, id);
+        return preparedStatement.executeUpdate();
+    }
+    @Deprecated
     public static int deleteActivitateProfesor(Connection connection, String username, String tipActivitate, String descriereActivitate) throws Exception
     {
         String update = "DELETE FROM activitateprofesor WHERE tipActivitate = ? AND descriere = ? AND id_profesor = (SELECT idProfesor FROM Profesor WHERE username = ?)";

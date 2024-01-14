@@ -35,6 +35,8 @@ public class ProfesorPanelController {
     private Label nume;
     @FXML
     private Button personalDataButton;
+    @FXML
+    private Button viewActivityButton;
 
     private String username;
     private String tableName;
@@ -52,6 +54,12 @@ public class ProfesorPanelController {
         this.tableName = tableName;
 
         greetUser.setText("Bine ai venit, " + this.username + "!");
+    }
+
+    public void onViewActivity() throws IOException
+    {
+        Main main = new Main();
+        main.changeScene("panouActivitatiProfesorTotal.fxml", username, tableName, 1024, 768);
     }
 
     /***

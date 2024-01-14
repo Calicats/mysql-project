@@ -13,25 +13,25 @@ public class NoteStudent {
     public NoteStudent(int id) {
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NoteStudent WHERE idNota = ?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NoteStudent WHERE idNoteStudent = ?");
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
             // TODO: Silently Fail instead of throwing exception?
             this.id = rs.getInt("idNota");
             nota = rs.getInt("nota");
-            id_student = rs.getInt("id_student");
-            id_participant_activitate = rs.getInt("id_participant_activitate");
+            idStudent = rs.getInt("id_student");
+            idActivitate = rs.getInt("idActivitate");
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
     }
 
-    public NoteStudent(int id, int nota, int id_student, int id_participant_activitate) {
+    public NoteStudent(int id, int nota, int idStudent, int idActivitate) {
         this.id = id;
         this.nota = nota;
-        this.id_student = id_student;
-        this.id_participant_activitate = id_participant_activitate;
+        this.idStudent = idStudent;
+        this.idActivitate = idActivitate;
     }
 
     public static List<NoteStudent> getTable() {
@@ -42,11 +42,11 @@ public class NoteStudent {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idNota");
+                int id = rs.getInt("idNoteStudent");
                 int nota = rs.getInt("nota");
-                int id_student = rs.getInt("id_student");
-                int id_participant_activitate = rs.getInt("id_participant_activitate");
-                list.add(new NoteStudent(id, nota, id_student, id_participant_activitate));
+                int idStudent = rs.getInt("idStudent");
+                int idActivitate = rs.getInt("idActivitate");
+                list.add(new NoteStudent(id, nota, idStudent, idActivitate));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
@@ -58,15 +58,15 @@ public class NoteStudent {
         List<NoteStudent> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NoteStudent WHERE id_student = ?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NoteStudent WHERE idStudent = ?");
             stmt.setInt(1, id_student);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("idNota");
+                int id = rs.getInt("idNoteStudent");
                 int nota = rs.getInt("nota");
-                int id_participant_activitate = rs.getInt("id_participant_activitate");
-                list.add(new NoteStudent(id, nota, id_student, id_participant_activitate));
+                int idActivitate = rs.getInt("idActivitate");
+                list.add(new NoteStudent(id, nota, id_student, idActivitate));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
@@ -77,7 +77,7 @@ public class NoteStudent {
     public static int getNextId() {
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT MAX(idNota) FROM NoteStudent");
+            PreparedStatement stmt = connection.prepareStatement("SELECT MAX(idNoteStudent) FROM NoteStudent");
             ResultSet rs = stmt.executeQuery();
             rs.next();
             return rs.getInt(1) + 1;
@@ -95,12 +95,12 @@ public class NoteStudent {
         return nota;
     }
 
-    public int getId_student() {
-        return id_student;
+    public int getIdStudent() {
+        return idStudent;
     }
 
-    public int getId_participant_activitate() {
-        return id_participant_activitate;
+    public int getIdActivitate() {
+        return idActivitate;
     }
 
     @Override
@@ -108,13 +108,13 @@ public class NoteStudent {
         return "NoteStudent{" +
                 "id=" + id +
                 ", nota=" + nota +
-                ", id_student=" + id_student +
-                ", id_participant_activitate=" + id_participant_activitate +
+                ", idStudent=" + idStudent +
+                ", idActivitate=" + idActivitate +
                 '}';
     }
 
     private int id;
     private int nota;
-    private int id_student;
-    private int id_participant_activitate;
+    private int idStudent;
+    private int idActivitate;
 }

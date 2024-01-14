@@ -13,16 +13,11 @@
                   <Button fx:id="backButton" mnemonicParsing="false" onAction="#goBackToMainMenu" prefHeight="31.0" prefWidth="82.0" text="Back" />
               </items>
             </ToolBar>
-            <SplitPane dividerPositions="0.3904538341158059" prefHeight="562.0" prefWidth="1024.0">
+            <SplitPane dividerPositions="0.3258998435054773" prefHeight="728.0" prefWidth="1024.0">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <TableView id="cursuriTable" fx:id="cursuriTable" layoutX="-37.0" layoutY="81.0" prefHeight="349.6" prefWidth="148.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columns>
-                            <TableColumn prefWidth="26.200014173984528" text="id" />
-                            <TableColumn prefWidth="124.20001029968262" text="Cursuri" />
-                          </columns>
-                        </TableView>
+                        <TableView id="cursuriTable" fx:id="cursuriTable" layoutX="-37.0" layoutY="81.0" prefHeight="544.0" prefWidth="330.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="431.0">
@@ -35,24 +30,29 @@
                                        <children>
                                           <ToolBar>
                                              <items>
-                                                <Label prefHeight="42.0" prefWidth="111.0" text="   Selecteaza cursul" textAlignment="CENTER" />
-                                                <ChoiceBox fx:id="selectCurs" onContextMenuRequested="#loadCursuri" onMouseClicked="#selectCurs" prefHeight="26.0" prefWidth="307.0" />
+                                                <Label prefHeight="42.0" prefWidth="111.0" text="Selecteaza activitate" textAlignment="CENTER" />
+                                                <TextField fx:id="textFieldIdActivitate" prefHeight="26.0" prefWidth="247.0" promptText="id activitate" />
+                                                <Button fx:id="buttonCautaIdStudent" mnemonicParsing="false" onAction="#cautaActivitate" text="Cauta" />
                                              </items>
                                           </ToolBar>
                                           <ToolBar>
                                              <items>
                                                 <Label prefHeight="42.0" prefWidth="111.0" text="Selecteaza studentul" textAlignment="CENTER" />
-                                                <ChoiceBox fx:id="selectStudent" onContextMenuRequested="#loadStudents" onMouseClicked="#selectStudent" prefHeight="26.0" prefWidth="307.0" />
+                                                <TextField fx:id="textFieldUsernameStudent" prefHeight="26.0" prefWidth="247.0" promptText="username student" />
+                                                <Button mnemonicParsing="false" onAction="#cautaStudent" text="Cauta" />
                                              </items>
                                           </ToolBar>
                                           <ToolBar>
                                              <items>
-                                                <Label prefHeight="42.0" prefWidth="100.0" text="Nota:">
+                                                <Label prefHeight="42.0" prefWidth="61.0" text="Nota:">
                                                    <font>
                                                       <Font size="23.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="inputGrade" prefHeight="42.0" prefWidth="224.0" />
+                                                <TextField fx:id="inputGrade" prefHeight="42.0" prefWidth="145.0" promptText="1-10">
+                                                   <font>
+                                                      <Font size="20.0" />
+                                                   </font></TextField>
                                                 <Button fx:id="saveGradeButton" mnemonicParsing="false" onAction="#saveGrade" prefHeight="31.0" prefWidth="100.0" text="Save">
                                                    <font>
                                                       <Font size="19.0" />
@@ -62,7 +62,7 @@
                                           </ToolBar>
                                           <ToolBar>
                                              <items>
-                                                <Label fx:id="errorLabel" prefHeight="26.0" prefWidth="424.0" textFill="RED">
+                                                <Label fx:id="errorLabel" prefHeight="26.0" prefWidth="412.0" textFill="RED">
                                                    <font>
                                                       <Font name="System Bold" size="16.0" />
                                                    </font>

@@ -1,12 +1,12 @@
 package com.example.controllers;
 
+import com.example.Activitate;
 import com.example.ActivitateProfesor;
 import com.example.ParticipantActivitate;
 import com.example.platforma.Main;
 import com.example.sql.Connect;
 import com.example.sql.Insert;
 import com.example.sql.Query;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,31 +20,16 @@ import java.sql.Connection;
 public class InscriereActivitateController {
 
     @FXML
-    private TextField activityField;
+    private TextField courseNameField;
 
     @FXML
     private Button backButton;
 
     @FXML
-    private TableColumn<ActivitateProfesor, String> descriereColumn;
+    private TableColumn<Activitate, String> descriereColumn;
 
     @FXML
-    private TableColumn<ActivitateProfesor, String> descriereActivitateParticipant;
-
-    @FXML
-    private TableColumn<ActivitateProfesor, String> nrMaximStudentiColumn;
-
-    @FXML
-    private TableColumn<ParticipantActivitate, String> nrStudenti;
-
-    @FXML
-    private TableColumn<ActivitateProfesor, String> numeColumn;
-
-    @FXML
-    private Button searchActivityButton;
-
-    @FXML
-    private Label foundUser;
+    private Button enrollActivityButton;
 
     @FXML
     private Label errorHandling;
@@ -53,31 +38,58 @@ public class InscriereActivitateController {
     private Label foundActivity;
 
     @FXML
+    private Label foundUser;
+
+    @FXML
+    private TableColumn<Activitate, String> idColumn;
+
+    @FXML
+    private TableColumn<Activitate, String> nrMaximStudentiColumn;
+
+    @FXML
+    private TableColumn<Activitate, String> numeColumn;
+
+    @FXML
+    private TableColumn<Activitate, String> procentColumn;
+
+    @FXML
+    private Button searchActivityButton;
+
+    @FXML
     private Button searchProfesorButton;
 
     @FXML
-    private Button enrollActivityButton;
+    private TableView<Activitate> tableActivitati;
 
     @FXML
-    private TableView<ActivitateProfesor> tableActivitati;
+    private TableColumn<Activitate, String> tipColumn;
 
     @FXML
-    private TableView<ParticipantActivitate> tableParticipanti;
+    private TableColumn<Activitate, String> usernameColumn;
 
     @FXML
-    private TableColumn<ActivitateProfesor, String> tipActivitateColumn;
+    private TableView<ParticipantActivitate> tableParticipant;
 
     @FXML
-    private TableColumn<ParticipantActivitate, String> tipActivitateParticipant;
+    private TableColumn<ParticipantActivitate, String> usernameProfesorColumn;
 
     @FXML
-    private TableColumn<ActivitateProfesor, String> usernameColumn;
+    private TableColumn<ParticipantActivitate, String> numeCursParticipantColumn;
+
+    @FXML
+    private TableColumn<ParticipantActivitate, String> tipParticipantColumn;
+
+    @FXML
+    private TableColumn<ParticipantActivitate, String> nrMaximStudentiParticipantColumn;
+
+    @FXML
+    private TableColumn<ParticipantActivitate, String> nrParticipantiColumn;
 
     @FXML
     private TextField usernameField;
 
     @FXML
-    private TableColumn<ParticipantActivitate, String> usernameProfesor;
+    private ComboBox<String> selectActivityType;
 
     private String studentLogat;
     private String tableName;
@@ -95,6 +107,10 @@ public class InscriereActivitateController {
 
         populateTableActivitati();
         populateTableParticipanti();
+
+        String[] activities = {"Curs", "Seminar", "Laborator", "Examen", "Restanta"};
+        ObservableList<String> activitiesList = FXCollections.observableArrayList(activities);
+        selectActivityType.setItems(activitiesList);
     }
 
     @FXML
@@ -108,11 +124,19 @@ public class InscriereActivitateController {
     {
         clearErrors();
 
-        String activityString = activityField.getText();
+        String cursString = courseNameField.getText();
+        String activityType = selectActivityType.getValue();
 
-        if(activityString.isEmpty())
+        if(cursString.isEmpty())
         {
-            foundActivity.setText("Introdu o activitate!");
+            foundActivity.setText("Introdu un curs!");
+            clearAllFields();
+            return;
+        }
+
+        if(activityType == null)
+        {
+            foundActivity.setText("Alege o activitate!");
             clearAllFields();
             return;
         }
@@ -125,19 +149,19 @@ public class InscriereActivitateController {
                 return;
             }
 
-            if(!Query.existsActivity(connection, activityString))
+            if(!Query.existsActivity(connection, cursString, activityType))
             {
                 foundActivity.setText("Introdu o activitate valida!");
                 clearAllFields();
                 return;
             }
 
-            String[][] tableInfo = Query.getAllActivitiesTableFromSearch(connection, activityString);
-            ObservableList<ActivitateProfesor> list = FXCollections.observableArrayList();
+            String[][] tableInfo = Query.getActivitateTableInfoOnActivity(connection, cursString);
+            ObservableList<Activitate> list = FXCollections.observableArrayList();
 
             for(String[] row: tableInfo)
             {
-                list.add(rowToActivitateProfesor(row));
+                list.add(rowToActivitate(row));
             }
 
             tableActivitati.setItems(list);
@@ -157,8 +181,17 @@ public class InscriereActivitateController {
         clearErrors();
 
         String usernameProfesorString = usernameField.getText();
-        String activityString = activityField.getText();
-        if(usernameProfesorString.isEmpty() || activityString.isEmpty())
+        String cursString = courseNameField.getText();
+        String activityType = selectActivityType.getValue();
+
+        if(activityType == null)
+        {
+            foundActivity.setText("Alege o activitate!");
+            clearAllFields();
+            return;
+        }
+
+        if(usernameProfesorString.isEmpty() || cursString.isEmpty())
         {
             errorHandling.setText("Introdu date in toate campurile!");
             clearAllFields();
@@ -180,21 +213,28 @@ public class InscriereActivitateController {
                 return;
             }
 
-            if(!Query.existsActivitySensitive(connection, activityString))
+            if(!Query.existsActivitySensitive(connection, cursString, activityType))
             {
                 errorHandling.setText("Introdu o activitate valida!");
                 clearAllFields();
                 return;
             }
 
-            if(Query.existsStudentInActivity(connection, usernameProfesorString, studentLogat))
+            if(!Query.existsProfesorInActivity(connection, usernameProfesorString, cursString, activityType))
+            {
+                errorHandling.setText("Profesorul nu este in activitatea respectiva!");
+                clearAllFields();
+                return;
+            }
+
+            if(Query.existsStudentInParticipant(connection, usernameProfesorString, studentLogat, activityType))
             {
                 errorHandling.setText("Esti deja inscris la activitatea introdusa!");
                 clearAllFields();
                 return;
             }
 
-            Insert.addParticipantActivitate(connection, usernameProfesorString, studentLogat);
+            Insert.addParticipantActivitate(connection, usernameProfesorString, studentLogat, activityType);
             errorHandling.setTextFill(Color.rgb(0, 255, 0));
             errorHandling.setText("Inscriere efectuata cu succes!");
             clearAllFields();
@@ -235,7 +275,7 @@ public class InscriereActivitateController {
                 return;
             }
 
-            String[][] activitateInfo = Query.getActivityTableFromUsername(connection, profesorString);
+            String[][] activitateInfo = Query.getActivitateTableInfoOnUser(connection, profesorString);
             if(activitateInfo == null)
             {
                 foundUser.setText("Utilizatorul cautat nu are nicio activitate!");
@@ -243,10 +283,10 @@ public class InscriereActivitateController {
                 return;
             }
 
-            ObservableList<ActivitateProfesor> listActivitate = FXCollections.observableArrayList();
+            ObservableList<Activitate> listActivitate = FXCollections.observableArrayList();
             for(String[] row: activitateInfo)
             {
-                listActivitate.add(rowToActivitateProfesor(row));
+                listActivitate.add(rowToActivitate(row));
             }
             tableActivitati.setItems(listActivitate);
             clearAllFields();
@@ -262,35 +302,80 @@ public class InscriereActivitateController {
 
     private void generateTableActivitati()
     {
-        numeColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(getPropertyValue(cellData.getValue(), "nume")));
-        usernameColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(getPropertyValue(cellData.getValue(), "username")));
-        tipActivitateColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(getPropertyValue(cellData.getValue(), "tipActivitate")));
-        descriereColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(getPropertyValue(cellData.getValue(), "descriere")));
-        nrMaximStudentiColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(getPropertyValue(cellData.getValue(), "nrMaximStudenti")));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("idActivitate"));
+        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        numeColumn.setCellValueFactory(new PropertyValueFactory<>("numeCurs"));
+        tipColumn.setCellValueFactory(new PropertyValueFactory<>("tip"));
+        descriereColumn.setCellValueFactory(new PropertyValueFactory<>("descriere"));
+        nrMaximStudentiColumn.setCellValueFactory(new PropertyValueFactory<>("nrMaximStudenti"));
+        procentColumn.setCellValueFactory(new PropertyValueFactory<>("procentNota"));
 
-        removeEllipses(numeColumn);
+        removeEllipses(idColumn);
         removeEllipses(usernameColumn);
-        removeEllipses(tipActivitateColumn);
+        removeEllipses(numeColumn);
+        removeEllipses(tipColumn);
         removeEllipses(descriereColumn);
         removeEllipses(nrMaximStudentiColumn);
+        removeEllipses(procentColumn);
     }
 
-    private void generateTableParticipanti()
+    private void populateTableActivitati()
     {
-        usernameProfesor.setCellValueFactory(new PropertyValueFactory<>("usernameProfesor"));
-        tipActivitateParticipant.setCellValueFactory(new PropertyValueFactory<>("tipActivitate"));
-        descriereActivitateParticipant.setCellValueFactory(new PropertyValueFactory<>("descriere"));
-        nrStudenti.setCellValueFactory(new PropertyValueFactory<>("nrStudenti"));
+        Connection connection = Connect.getConnection();
+        if(connection == null)
+        {
+            return;
+        }
+        ObservableList<Activitate> list = FXCollections.observableArrayList();
+        String[][] allInfo = Query.getActivitateTableInfo(connection);
 
-        removeEllipses(usernameProfesor);
-        removeEllipses(tipActivitateParticipant);
-        removeEllipses(descriereActivitateParticipant);
-        removeEllipses(nrStudenti);
+        if(allInfo == null)
+        {
+            System.out.println("Tabela vida!");
+            return;
+        }
+
+        for(String[] row: allInfo)
+        {
+            Activitate activitate = rowToActivitate(row);
+            list.add(activitate);
+        }
+
+        tableActivitati.setItems(list);
+    }
+
+    public void generateTableParticipanti()
+    {
+        usernameProfesorColumn.setCellValueFactory(new PropertyValueFactory<>("usernameProfesor"));
+        numeCursParticipantColumn.setCellValueFactory(new PropertyValueFactory<>("numeCurs"));
+        tipParticipantColumn.setCellValueFactory(new PropertyValueFactory<>("tip"));
+        nrMaximStudentiParticipantColumn.setCellValueFactory(new PropertyValueFactory<>("nrMaximStudenti"));
+        nrParticipantiColumn.setCellValueFactory(new PropertyValueFactory<>("nrParticipanti"));
+
+        removeEllipses(usernameProfesorColumn);
+        removeEllipses(numeCursParticipantColumn);
+        removeEllipses(tipParticipantColumn);
+        removeEllipses(nrMaximStudentiParticipantColumn);
+        removeEllipses(nrParticipantiColumn);
+    }
+
+    public void populateTableParticipanti()
+    {
+        Connection connection = Connect.getConnection();
+        if(connection == null)
+        {
+            return;
+        }
+        ObservableList<ParticipantActivitate> list = FXCollections.observableArrayList();
+        String[][] allInfo = Query.getParticipantiTableInfo(connection);
+
+        for(String[] row: allInfo)
+        {
+            ParticipantActivitate participantActivitate = rowToParticipantActivitate(row);
+            list.add(participantActivitate);
+        }
+
+        tableParticipant.setItems(list);
     }
 
     private void removeEllipses(TableColumn<?, String> column)
@@ -298,24 +383,10 @@ public class InscriereActivitateController {
         column.setMinWidth(200);
     }
 
-
-    private String getPropertyValue(ActivitateProfesor activitateProfesor, String propertyName)
-    {
-        return switch (propertyName)
-        {
-            case "nume" -> activitateProfesor.getNume();
-            case "username" -> activitateProfesor.getUsername();
-            case "tipActivitate" -> activitateProfesor.getTipActivitate();
-            case "descriere" -> activitateProfesor.getDescriere();
-            case "nrMaximStudenti" -> String.valueOf(activitateProfesor.getNrMaximStudenti());
-            default -> null;
-        };
-    }
-
     private void clearAllFields()
     {
         usernameField.clear();
-        activityField.clear();
+        courseNameField.clear();
     }
 
     private void clearErrors()
@@ -326,62 +397,41 @@ public class InscriereActivitateController {
         errorHandling.setText("");
     }
 
-    private void populateTableActivitati()
+    private Activitate rowToActivitate(String[] row)
     {
-        Connection connection = Connect.getConnection();
-        if(connection == null)
+        int idActivitate = -1;
+        int nrMaximStudenti = -1;
+        int procentNota = -1;
+
+        try
         {
-            return;
+            idActivitate = Integer.parseInt(row[0]);
+            nrMaximStudenti = Integer.parseInt(row[5]);
+            procentNota = Integer.parseInt(row[6]);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
 
-        String[][] activitateInfo = Query.getActivitateTableInfo(connection);
-
-        if(activitateInfo == null)
-        {
-            errorHandling.setText("activitateprofesor is null!");
-            return;
-        }
-
-        ObservableList<ActivitateProfesor> listActivitate = FXCollections.observableArrayList();
-        for(String[] row: activitateInfo)
-        {
-            listActivitate.add(rowToActivitateProfesor(row));
-        }
-        tableActivitati.setItems(listActivitate);
-    }
-
-    private void populateTableParticipanti()
-    {
-        Connection connection = Connect.getConnection();
-        if(connection == null)
-        {
-            return;
-        }
-
-        String[][] participantActivitateInfo = Query.getParticipantiTableInfo(connection);
-        if(participantActivitateInfo == null)
-        {
-            errorHandling.setText("participantactivitate is null!");
-            return;
-        }
-
-        ObservableList<ParticipantActivitate> listParticipantActivitate = FXCollections.observableArrayList();
-        for(String[] row: participantActivitateInfo)
-        {
-            listParticipantActivitate.add(rowToParticipantActivitate(row));
-        }
-        tableParticipanti.setItems(listParticipantActivitate);
-    }
-
-    private ActivitateProfesor rowToActivitateProfesor(String[] row)
-    {
-        int maxStudent = Integer.parseInt(row[4]);
-        return new ActivitateProfesor(row[0], row[1], row[2], row[3], maxStudent);
+        return new Activitate(idActivitate, row[1], row[2], row[3], row[4],nrMaximStudenti, procentNota);
     }
 
     private ParticipantActivitate rowToParticipantActivitate(String[] row)
     {
-        int nrStudenti = Integer.parseInt(row[3]);
-        return new ParticipantActivitate(row[0], row[1], row[2], nrStudenti);
+        int nrMaximStudenti = -1;
+        int nrParticipanti = -1;
+
+        try
+        {
+            nrMaximStudenti = Integer.parseInt(row[3]);
+            nrParticipanti = Integer.parseInt(row[4]);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return new ParticipantActivitate(row[0], row[1], row[2], nrMaximStudenti, nrParticipanti);
     }
 }
