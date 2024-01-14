@@ -11,7 +11,6 @@ import java.util.List;
 
 // Similarly, you can create classes for ActivitateProfesorEntry, ActivitateStudentEntry, and NoteStudentEntry
 
-
 public class Activitate {
     public Activitate(int idActivitate, String tip, int procentNota, int idCurs, int idProfesor) {
         this.idActivitate = idActivitate;
@@ -51,9 +50,6 @@ public class Activitate {
             e.printStackTrace(System.err);
         }
     }
-
-    // Getter methods for ActivitateEntry fields
-    // ...
 
     public static List<Activitate> getTable() {
         List<Activitate> list = new ArrayList<>();
@@ -112,6 +108,19 @@ public class Activitate {
             stmt.setString(1, column);
             stmt.setInt(2, value);
             stmt.setInt(3, idActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int deleteEntry(int idActivitate) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM Activitate WHERE idActivitate = ?");
+            stmt.setInt(1, idActivitate);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace(System.err);

@@ -98,6 +98,19 @@ public class MesajGrupStudiu {
         }
     }
 
+    public static int deleteEntry(int idMesajGrupStudiu) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM MesajGrupStudiu WHERE idMesaj = ?");
+            stmt.setInt(1, idMesajGrupStudiu);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }

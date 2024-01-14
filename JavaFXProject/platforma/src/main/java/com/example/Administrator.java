@@ -103,6 +103,19 @@ public class Administrator extends User {
         }
     }
 
+    public static int deleteEntry(int idAdmin) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM Administrator WHERE idAdmin = ?");
+            stmt.setInt(1, idAdmin);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     @Override
     public String toString() {
         return "Administrator{" +

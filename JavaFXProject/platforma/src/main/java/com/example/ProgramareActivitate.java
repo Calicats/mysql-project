@@ -129,6 +129,19 @@ public class ProgramareActivitate {
         }
     }
 
+    public static int deleteEntry(int idProgramareActivitate) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM ProgramareActivitate WHERE idProgramareActivitate = ?");
+            stmt.setInt(1, idProgramareActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }

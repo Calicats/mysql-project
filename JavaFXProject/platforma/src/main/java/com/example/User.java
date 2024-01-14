@@ -1,19 +1,6 @@
 package com.example;
 
 public class User {
-    protected int id;
-    protected String nume;
-    protected String cnp;
-    protected String adresa;
-    protected String nrTelefon;
-    protected String email;
-    protected String username;
-    protected String parola;
-    protected int idRol;
-
-    protected User() {
-    }
-
     public User(int id, String cnp, String nume, String adresa, String nrTelefon, String email, String username, String parola, int idRol) {
         this.id = id;
         this.cnp = cnp;
@@ -93,5 +80,18 @@ public class User {
 
     public void setIdRol(int idRol) {
         this.idRol = idRol;
+    }
+
+    protected int id;
+    protected String nume;
+    protected String cnp;
+    protected String adresa;
+    protected String nrTelefon;
+    protected String email;
+    protected String username;
+    protected String parola;
+    protected int idRol;
+
+    protected User() {
     }
 }
