@@ -98,7 +98,7 @@
                                     <Label prefHeight="18.0" prefWidth="88.0" text="Elimina student:" />
                                     <TextField prefHeight="26.0" prefWidth="186.0" />
                                     <Label disable="true" prefHeight="18.0" prefWidth="146.0" text="Utilizatorul nu a fost gasit!" textFill="RED" />
-                                    <Button mnemonicParsing="false" text="Adauga" />
+                                    <Button mnemonicParsing="false" text="Elimina" />
                                  </items>
                               </ToolBar>
                               <ToolBar prefHeight="40.0" prefWidth="482.0">
@@ -106,7 +106,7 @@
                                     <Label prefHeight="18.0" prefWidth="93.0" text="Elimina profesor:" />
                                     <TextField prefHeight="26.0" prefWidth="186.0" />
                                     <Label disable="true" text="Utilizatorul nu a fost gasit!" textFill="RED" />
-                                    <Button mnemonicParsing="false" text="Adauga" />
+                                    <Button mnemonicParsing="false" text="Elimina" />
                                  </items>
                               </ToolBar>
                            </children>

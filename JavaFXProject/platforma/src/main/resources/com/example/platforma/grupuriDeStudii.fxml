@@ -67,7 +67,6 @@
                   <TableView prefHeight="443.0" prefWidth="546.0">
                     <columns>
                       <TableColumn prefWidth="113.79997408390045" text="Utilizator" />
-                      <TableColumn prefWidth="139.99996185302734" text="Data mesaj" />
                         <TableColumn prefWidth="692.0000915527344" text="Mesaj" />
                     </columns>
                   </TableView>
