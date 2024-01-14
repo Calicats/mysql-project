@@ -22,8 +22,7 @@ public class Activitate {
     }
 
     // this is for a JOIN in Query class, DO NOT MODIFY!!!!!!!
-    public Activitate(int idActivitate, String username, String numeCurs, String tip, String descriere, int nrMaximStudenti, int procentNota)
-    {
+    public Activitate(int idActivitate, String username, String numeCurs, String tip, String descriere, int nrMaximStudenti, int procentNota) {
         this.idActivitate = idActivitate;
         this.username = username;
         this.numeCurs = numeCurs;
@@ -71,6 +70,53 @@ public class Activitate {
             e.printStackTrace(System.err);
         }
         return list;
+    }
+
+    public static int updateEntry(int idActivitate, Activitate other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Activitate SET tip = ?, procentNota = ?, idCurs = ?, idProfesor = ? WHERE idActivitate = ?");
+            stmt.setString(1, other.tip);
+            stmt.setInt(2, other.procentNota);
+            stmt.setInt(3, other.idCurs);
+            stmt.setInt(4, other.idProfesor);
+            stmt.setInt(5, idActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idActivitate, String column, String value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Activitate SET ? = ? WHERE idActivitate = ?");
+            stmt.setString(1, column);
+            stmt.setString(2, value);
+            stmt.setInt(3, idActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idActivitate, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Activitate SET ? = ? WHERE idActivitate = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
     }
 
     public int getIdCurs() {

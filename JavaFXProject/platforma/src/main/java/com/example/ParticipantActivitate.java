@@ -63,6 +63,38 @@ public class ParticipantActivitate {
         return list;
     }
 
+    public static int updateEntry(int idParticipantActivitate, ParticipantActivitate other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE NoteStudent SET numarParticipanti = ?, idActivitate = ?, idStudent = ?, idProfesor = ? WHERE idParticipantActivitate = ?");
+            stmt.setInt(1, other.numarParticipanti);
+            stmt.setInt(2, other.idActivitate);
+            stmt.setInt(3, other.idStudent);
+            stmt.setInt(4, other.idProfesor);
+            stmt.setInt(5, idParticipantActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idParticipantActivitate, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE ParticipantActivitate SET ? = ? WHERE idParticipantActivitate = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idParticipantActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }

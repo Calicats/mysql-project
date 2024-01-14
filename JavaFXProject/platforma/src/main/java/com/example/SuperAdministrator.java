@@ -53,6 +53,56 @@ public class SuperAdministrator extends User {
         return list;
     }
 
+    public static int updateEntry(int idSuperAdmin, SuperAdministrator other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE SuperAdministrator SET cnp = ?, nume = ?, adresa = ?, nrTelefon = ?, email = ?, username = ?, parola = ? WHERE idSuperAdmin = ?");
+            stmt.setString(1, other.cnp);
+            stmt.setString(2, other.nume);
+            stmt.setString(3, other.adresa);
+            stmt.setString(4, other.nrTelefon);
+            stmt.setString(5, other.email);
+            stmt.setString(6, other.username);
+            stmt.setString(7, other.parola);
+            stmt.setInt(8, idSuperAdmin);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idSuperAdmin, String column, String value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE SuperAdministrator SET ? = ? WHERE idSuperAdmin = ?");
+            stmt.setString(1, column);
+            stmt.setString(2, value);
+            stmt.setInt(3, idSuperAdmin);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idSuperAdmin, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE SuperAdministrator SET ? = ? WHERE idSuperAdmin = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idSuperAdmin);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     @Override
     public String toString() {
         return "SuperAdministrator{" +

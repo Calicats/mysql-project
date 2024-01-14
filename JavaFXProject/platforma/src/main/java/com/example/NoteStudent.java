@@ -18,9 +18,9 @@ public class NoteStudent {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                this.id = rs.getInt("idNota");
+                this.id = rs.getInt("idNoteStudent");
                 nota = rs.getInt("nota");
-                idStudent = rs.getInt("id_student");
+                idStudent = rs.getInt("idStudent");
                 idActivitate = rs.getInt("idActivitate");
             }
         } catch (SQLException e) {
@@ -83,6 +83,37 @@ public class NoteStudent {
             e.printStackTrace(System.err);
         }
         return -1;
+    }
+
+    public static int updateEntry(int idNoteStudent, NoteStudent other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE NoteStudent SET nota = ?, idStudent = ?, idActivitate = ? WHERE idNoteStudent = ?");
+            stmt.setInt(1, other.nota);
+            stmt.setInt(2, other.idStudent);
+            stmt.setInt(3, other.idActivitate);
+            stmt.setInt(4, idNoteStudent);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idNoteStudent, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE NoteStudent SET ? = ? WHERE idNoteStudent = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idNoteStudent);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
     }
 
     public int getId() {

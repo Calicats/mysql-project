@@ -52,6 +52,52 @@ public class Curs {
         return list;
     }
 
+    public static int updateEntry(int idCurs, Curs other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Curs SET numeCurs = ?, descriere = ?, nrMaximStudenti = ? WHERE idCurs = ?");
+            stmt.setString(1, other.numeCurs);
+            stmt.setString(2, other.descriere);
+            stmt.setInt(3, other.nrMaximStudenti);
+            stmt.setInt(4, idCurs);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idCurs, String column, String value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Curs SET ? = ? WHERE idCurs = ?");
+            stmt.setString(1, column);
+            stmt.setString(2, value);
+            stmt.setInt(3, idCurs);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idCurs, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Curs SET ? = ? WHERE idCurs = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idCurs);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getIdCurs() {
         return idCurs;
     }

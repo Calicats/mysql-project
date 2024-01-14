@@ -59,6 +59,59 @@ public class Profesor extends User {
         return list;
     }
 
+    public static int updateEntry(int idProfesor, Profesor other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Profesor SET cnp = ?, nume = ?, departament = ?, nrMinOre = ?, nrMaxOre = ?, adresa = ?, nrTelefon = ?, email = ?, username = ?, parola = ? WHERE idProfesor = ?");
+            stmt.setString(1, other.cnp);
+            stmt.setString(2, other.nume);
+            stmt.setString(3, other.departament);
+            stmt.setInt(4, other.nrMinOre);
+            stmt.setInt(5, other.nrMaxOre);
+            stmt.setString(6, other.adresa);
+            stmt.setString(7, other.nrTelefon);
+            stmt.setString(8, other.email);
+            stmt.setString(9, other.username);
+            stmt.setString(10, other.parola);
+            stmt.setInt(11, idProfesor);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idProfesor, String column, String value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Profesor SET ? = ? WHERE idProfesor = ?");
+            stmt.setString(1, column);
+            stmt.setString(2, value);
+            stmt.setInt(3, idProfesor);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idProfesor, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Profesor SET ? = ? WHERE idProfesor = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idProfesor);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public String getDepartament() {
         return departament;
     }

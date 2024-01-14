@@ -56,6 +56,54 @@ public class IntalnireGrupStudiu {
         return list;
     }
 
+    public static int updateEntry(int idIntalnireGrupStudiu, IntalnireGrupStudiu other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE IntalnireGrupStudiu SET dataIntalnire = ?, numarMinParticipanti = ?, ora = ?, minut = ?, idGrupStudiu = ? WHERE idIntalnireGrupStudiu = ?");
+            stmt.setDate(1, other.dataIntalnire);
+            stmt.setInt(2, other.numarMinParticipanti);
+            stmt.setInt(3, other.ora);
+            stmt.setInt(4, other.minut);
+            stmt.setInt(5, other.idGrupStudiu);
+            stmt.setInt(6, idIntalnireGrupStudiu);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idIntalnireGrupStudiu, String column, java.sql.Date value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE IntalnireGrupStudiu SET ? = ? WHERE idIntalnireGrupStudiu = ?");
+            stmt.setString(1, column);
+            stmt.setDate(2, value);
+            stmt.setInt(3, idIntalnireGrupStudiu);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idIntalnireGrupStudiu, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE IntalnireGrupStudiu SET ? = ? WHERE idIntalnireGrupStudiu = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idIntalnireGrupStudiu);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }

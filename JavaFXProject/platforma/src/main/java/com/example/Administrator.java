@@ -53,6 +53,56 @@ public class Administrator extends User {
         return list;
     }
 
+    public static int updateEntry(int idAdmin, Administrator other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Administrator SET cnp = ?, nume = ?, adresa = ?, nrTelefon = ?, email = ?, username = ?, parola = ? WHERE idAdmin = ?");
+            stmt.setString(1, other.cnp);
+            stmt.setString(2, other.nume);
+            stmt.setString(3, other.adresa);
+            stmt.setString(4, other.nrTelefon);
+            stmt.setString(5, other.email);
+            stmt.setString(6, other.username);
+            stmt.setString(7, other.parola);
+            stmt.setInt(8, idAdmin);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idAdmin, String column, String value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Administrator SET ? = ? WHERE idAdmin = ?");
+            stmt.setString(1, column);
+            stmt.setString(2, value);
+            stmt.setInt(3, idAdmin);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idAdmin, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE Administrator SET ? = ? WHERE idAdmin = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idAdmin);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     @Override
     public String toString() {
         return "Administrator{" +

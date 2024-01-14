@@ -39,7 +39,7 @@ public class GrupStudiu {
         List<GrupStudiu> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM GrupStudiu");
+            PreparedStatement stmt = connection.prepareStatement("SELECT idGrupStudiu FROM GrupStudiu");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -50,6 +50,52 @@ public class GrupStudiu {
             e.printStackTrace(System.err);
         }
         return list;
+    }
+
+    public static int updateEntry(int idGrupStudiu, GrupStudiu other) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE GrupStudiu SET numeGrup = ?, descriere = ?, idParticipantActivitate = ? WHERE idGrupStudiu = ?");
+            stmt.setString(1, other.numeGrup);
+            stmt.setString(2, other.descriere);
+            stmt.setInt(3, other.idParticipantActivitate);
+            stmt.setInt(4, idGrupStudiu);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idGrupStudiu, String column, String value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE GrupStudiu SET ? = ? WHERE idGrupStudiu = ?");
+            stmt.setString(1, column);
+            stmt.setString(2, value);
+            stmt.setInt(3, idGrupStudiu);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int updateEntry(int idGrupStudiu, String column, int value) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE GrupStudiu SET ? = ? WHERE idGrupStudiu = ?");
+            stmt.setString(1, column);
+            stmt.setInt(2, value);
+            stmt.setInt(3, idGrupStudiu);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
     }
 
     public int getId() {

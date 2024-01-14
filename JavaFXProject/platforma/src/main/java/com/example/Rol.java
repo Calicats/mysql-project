@@ -48,6 +48,9 @@ public class Rol {
         return list;
     }
 
+    // TODO: Are update methods needed for this class?
+    // Seems redundant since it's only used internally
+
     public int getId() {
         return id;
     }
