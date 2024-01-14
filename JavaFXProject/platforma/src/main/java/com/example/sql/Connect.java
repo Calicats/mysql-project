@@ -67,6 +67,7 @@ public class Connect {
 
             String jdbcUrl = "jdbc:mysql://localhost:3306/db_platforma";
             connection = DriverManager.getConnection(jdbcUrl, usernameDB, passwordDB);
+            didConnect = true;
             return connection;
         }
         catch(Exception e)
