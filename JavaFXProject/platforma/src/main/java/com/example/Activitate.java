@@ -27,6 +27,22 @@ public class Activitate {
     private int procentNota;
     private String username;
 
+    public int getIdCurs() {
+        return idCurs;
+    }
+
+    public void setIdCurs(int idCurs) {
+        this.idCurs = idCurs;
+    }
+
+    public int getIdProfesor() {
+        return idProfesor;
+    }
+
+    public void setIdProfesor(int idProfesor) {
+        this.idProfesor = idProfesor;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -73,6 +89,7 @@ public class Activitate {
 
     public Activitate(int idActivitate) {
         Connection connection = Connect.getConnection();
+        this.idActivitate = -1;
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Activitate WHERE idActivitate = ?");
             stmt.setInt(1, idActivitate);

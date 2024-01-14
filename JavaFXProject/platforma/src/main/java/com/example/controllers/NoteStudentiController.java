@@ -1,5 +1,6 @@
 package com.example.controllers;
 
+import com.example.Activitate;
 import com.example.NoteStudent;
 import com.example.platforma.Main;
 import com.example.sql.Connect;
@@ -10,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,11 +51,19 @@ public class NoteStudentiController {
                 list.add(noteStudent);
             }
         }
-        gradesTable.setItems(list);
-        // TO DO: save the grade in the database
+        gradesTable.getColumns().clear();
+        TableColumn<NoteStudent, Integer> idNotaColumn = new TableColumn<>("idNota");
+        idNotaColumn.setCellValueFactory(new PropertyValueFactory<>("idNota"));
+        TableColumn<NoteStudent, Integer> notaColumn = new TableColumn<>("nota");
+        notaColumn.setCellValueFactory(new PropertyValueFactory<>("nota"));
+        TableColumn<NoteStudent, Integer> idParticipantActivitateColumn = new TableColumn<>("idParticipantActivitate");
+        idParticipantActivitateColumn.setCellValueFactory(new PropertyValueFactory<>("idParticipantActivitate"));
+        gradesTable.getColumns().addAll(idNotaColumn, notaColumn, idParticipantActivitateColumn);
+
+       // TO DO: save the grade in the database
     }
 
     public void closeScreen(ActionEvent actionEvent) throws IOException {
-        Main.main.changeScene("panouStudent.fxml", username, "student", 1024, 768);
+        Main.main.changeScene("panouStudent.fxml");
     }
 }
