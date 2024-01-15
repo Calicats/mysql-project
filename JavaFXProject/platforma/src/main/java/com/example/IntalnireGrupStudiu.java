@@ -104,6 +104,19 @@ public class IntalnireGrupStudiu {
         }
     }
 
+    public static int deleteEntry(int idIntalnireGrupStudiu) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM IntalnireGrupStudiu WHERE idIntalnireGrupStudiu = ?");
+            stmt.setInt(1, idIntalnireGrupStudiu);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }

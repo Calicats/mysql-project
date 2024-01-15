@@ -116,6 +116,19 @@ public class NoteStudent {
         }
     }
 
+    public static int deleteEntry(int idNoteStudent) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM NoteStudent WHERE idNoteStudent = ?");
+            stmt.setInt(1, idNoteStudent);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }

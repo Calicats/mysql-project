@@ -112,6 +112,19 @@ public class Profesor extends User {
         }
     }
 
+    public static int deleteEntry(int idProfesor) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM Profesor WHERE idProfesor = ?");
+            stmt.setInt(1, idProfesor);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public String getDepartament() {
         return departament;
     }

@@ -109,6 +109,19 @@ public class Student extends User {
         }
     }
 
+    public static int deleteEntry(int idStudent) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM Student WHERE idStudent = ?");
+            stmt.setInt(1, idStudent);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getAnStudiu() {
         return anStudiu;
     }

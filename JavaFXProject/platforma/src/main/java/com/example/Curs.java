@@ -98,6 +98,19 @@ public class Curs {
         }
     }
 
+    public static int deleteEntry(int idCurs) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM Curs WHERE idCurs = ?");
+            stmt.setInt(1, idCurs);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getIdCurs() {
         return idCurs;
     }

@@ -103,6 +103,19 @@ public class SuperAdministrator extends User {
         }
     }
 
+    public static int deleteEntry(int idSuperAdmin) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM SuperAdministrator WHERE idSuperAdmin = ?");
+            stmt.setInt(1, idSuperAdmin);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     @Override
     public String toString() {
         return "SuperAdministrator{" +
