@@ -144,6 +144,24 @@ public class NoteStudent {
         }
     }
 
+    public static int updateOrInsert(NoteStudent newNoteStudent) {
+        Connection connection = Connect.getConnection();
+        try {
+            if (NoteStudent.getTable().stream().anyMatch(noteStudent -> noteStudent.idStudent == newNoteStudent.idStudent)) {
+                PreparedStatement stmt = connection.prepareStatement(
+                        "UPDATE NoteStudent SET nota = ? WHERE idStudent = ? AND idActivitate = ?");
+                stmt.setInt(1, newNoteStudent.nota);
+                stmt.setInt(2, newNoteStudent.idStudent);
+                stmt.setInt(3, newNoteStudent.idActivitate);
+                return stmt.executeUpdate();
+            }
+            return NoteStudent.insert(newNoteStudent);
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }
