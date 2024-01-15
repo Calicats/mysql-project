@@ -120,11 +120,15 @@ CREATE TABLE IF NOT EXISTS NoteStudent (
 
 CREATE TABLE IF NOT EXISTS GrupStudiu(
     idGrupStudiu INT UNIQUE AUTO_INCREMENT PRIMARY KEY,
-    numeGrup char(255),
-    descriere char(255),
+    numeGrup char(255) unique not null
+);
+
+CREATE TABLE IF NOT EXISTS MembruGrupStudiu(
+	idMembruGrupStudiu INT UNIQUE AUTO_INCREMENT PRIMARY KEY,
+    username char(255),
     
-    idParticipantActivitate int,
-    FOREIGN KEY (idParticipantActivitate) REFERENCES ParticipantActivitate(idParticipantActivitate)
+    idGrupStudiu int,
+    FOREIGN KEY (idGrupStudiu) REFERENCES GrupStudiu(idGrupStudiu)
 );
 
 -- Tabel pentru mesaje legate de studiul în grup
@@ -143,9 +147,20 @@ CREATE TABLE IF NOT EXISTS IntalnireGrupStudiu (
     numarMinParticipanti int,
     ora int,
     minut int,
+    numarParticipanti int,
     
     idGrupStudiu INT,
     FOREIGN KEY (idGrupStudiu) REFERENCES GrupStudiu(idGrupStudiu)
+);
+
+CREATE TABLE IF NOT EXISTS MembruIntalnireGrupStudiu (
+   idMembruIntalnireGrupStudiu INT UNIQUE AUTO_INCREMENT PRIMARY KEY,
+   username char(255) unique not null,
+   
+   idIntalnireGrupStudiu INT,
+   idGrupStudiu INT,
+   FOREIGN KEY (idIntalnireGrupStudiu) REFERENCES IntalnireGrupStudiu(idIntalnireGrupStudiu),
+   FOREIGN KEY (idGrupStudiu) REFERENCES GrupStudiu(idGrupStudiu)
 );
 
 CREATE TABLE IF NOT EXISTS Rol(
@@ -412,6 +427,31 @@ END;
 //
 DELIMITER ;
 
+DELIMITER //
+CREATE TRIGGER IncrementNumarParticipanti
+AFTER INSERT ON MembruIntalnireGrupStudiu
+FOR EACH ROW
+BEGIN
+    UPDATE IntalnireGrupStudiu
+    SET numarParticipanti = numarParticipanti + 1
+    WHERE idIntalnireGrupStudiu = NEW.idIntalnireGrupStudiu;
+END;
+//
+DELIMITER ;
+
+-- Trigger for decrementing numarParticipanti when an entry is removed from MembruIntalnireGrupStudiu
+DELIMITER //
+CREATE TRIGGER DecrementNumarParticipanti
+AFTER DELETE ON MembruIntalnireGrupStudiu
+FOR EACH ROW
+BEGIN
+    UPDATE IntalnireGrupStudiu
+    SET numarParticipanti = numarParticipanti - 1
+    WHERE idIntalnireGrupStudiu = OLD.idIntalnireGrupStudiu;
+END;
+//
+DELIMITER ;
+
 call addNewSuperAdministrator("0000000000000", "Vlad Durdeu", "Str Principala nr 1", "0755333444", "johnsmith0@random.org", "Vlad", "Calicats");
 call addNewSuperAdministrator( "1111111111111", "Alex Stancu", "Str Principala nr 2", "0755333445", "johnsmith1@random.org", "Stancu", "Calicats");
 call addNewSuperAdministrator("2222222222222", "Lion Moroz", "Str Principala nr 3", "0755333446", "johnsmith2@random.org", "Lion", "Calicats");
@@ -422,6 +462,12 @@ CALL AddNewProfesor("1", "Profesor2 Test", "Informatics", 10, 20, "Main Street 4
 -- Test call for adding a new student
 CALL AddNewStudent("2", "Student1 Test", 2, 15, "Main Street 5", "0755333449", "student@test.com", "student1_test", "test");
 CALL AddNewStudent("3", "Student2 Test", 2, 15, "Main Street 5", "0755333450", "student@test2.com", "student2_test", "test");
+
+SELECT * FROM ParticipantActivitate;
+SELECT * FROM GrupStudiu;
+SELECT * FROM MembruGrupStudiu;
+SELECT * FROM IntalnireGrupStudiu;
+SELECT * FROM MembruIntalnireGrupStudiu;   
 
 /*
 call AddNoteStudent("1", 10, "1", "1");

@@ -35,6 +35,12 @@ public class MesajGrupStudiu {
         this.idGrupStudiu = idGrupStudiu;
     }
 
+    public MesajGrupStudiu(String numeUtilizator, String textMesaj)
+    {
+        this.numeUtilizator = numeUtilizator;
+        this.textMesaj = textMesaj;
+    }
+
     public static List<MesajGrupStudiu> getTable() {
         List<MesajGrupStudiu> list = new ArrayList<>();
         Connection connection = Connect.getConnection();

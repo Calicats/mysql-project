@@ -138,4 +138,9 @@ public class StudentPanelController {
     public void onShowNoteStudenti(ActionEvent actionEvent) throws IOException {
         Main.main.changeScene("noteStudenti.fxml", username, tableName, 1024, 768);
     }
+
+    public void onGrupStudii() throws IOException
+    {
+        Main.main.changeScene("grupuriDeStudii.fxml", username, tableName, 1200, 562);
+    }
 }

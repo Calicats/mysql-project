@@ -1,6 +1,7 @@
 package com.example.sql;
 
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 public class Query {
@@ -125,6 +126,16 @@ public class Query {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static boolean existsGrup(Connection connection, String numeGrup) throws Exception
+    {
+        String query = "SELECT numeGrup FROM GrupStudiu WHERE LOWER(numeGrup) = LOWER(?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, numeGrup);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
     }
 
     /***
@@ -266,17 +277,313 @@ public class Query {
         return resultSet.next();
     }
 
+    public static boolean existsProfesorInActivity(Connection connection, String username, String curs) throws Exception
+    {
+        int idProfesor = getIdByUsername(connection, "profesor", username);
+        int idCurs = getIdByCurs(connection, curs);
+        String query = "SELECT * FROM Activitate WHERE idProfesor = ? AND idCurs = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, idProfesor);
+        preparedStatement.setInt(2, idCurs);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
     public static boolean existsStudentInParticipant(Connection connection, String usernameProfesor, String usernameStudent, String tip) throws Exception
     {
         int idStudent = getIdByUsername(connection, "Student", usernameStudent);
         int idProfesor = getIdByUsername(connection, "Profesor", usernameProfesor);
-        int idActivitate = getIdActivitate(connection, tip);
+        int idActivitate = getIdActivitate(connection, tip, idProfesor);
 
-        String query = "SELECT idStudent FROM ParticipantActivitate WHERE idStudent = ? AND idProfesor = ? AND idActivitate = ?";
+        String query = "SELECT PA.idStudent " +
+                "FROM ParticipantActivitate PA " +
+                "JOIN Activitate A ON PA.idActivitate = A.idActivitate " +
+                "WHERE PA.idStudent = ? AND PA.idProfesor = ? AND PA.idActivitate = ? AND A.tip = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1, idStudent);
         preparedStatement.setInt(2, idProfesor);
         preparedStatement.setInt(3, idActivitate);
+        preparedStatement.setString(4, tip);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
+    public static boolean existsStudentInParticipantForGroup(Connection connection, String username, String curs) throws Exception
+    {
+        int idStudent = getIdByUsername(connection, "student", username);
+        String query = "SELECT * FROM ParticipantActivitate pa " +
+                "JOIN Activitate a ON pa.idActivitate = a.idActivitate " +
+                "JOIN Curs c ON a.idCurs = c.idCurs " +
+                "WHERE pa.idStudent = ? AND c.numeCurs = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, idStudent);
+        preparedStatement.setString(2, curs);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
+    public static String[][] getMembersStudent(Connection connection)
+    {
+        String query = "SELECT MG.username " +
+                "FROM MembruGrupStudiu MG " +
+                "JOIN Student S ON MG.username = S.username";
+
+        return getInfoFromQuery(connection, query);
+    }
+
+    public static String[][] getMembersProfesor(Connection connection)
+    {
+        String query = "SELECT MG.username " +
+                "FROM MembruGrupStudiu MG " +
+                "JOIN Profesor P ON MG.username = P.username";
+
+        return getInfoFromQuery(connection, query);
+    }
+
+    public static String[][] getGrup(Connection connection)
+    {
+        String query = "SELECT GS.idGrupStudiu, " +
+                "GS.numeGrup, " +
+                "COALESCE(IG.idIntalnireGrupStudiu, 0), " +
+                "COALESCE(IG.dataIntalnire, '1970-01-01') " +
+                "FROM GrupStudiu GS " +
+                "JOIN IntalnireGrupStudiu IG ON GS.idGrupStudiu = IG.idGrupStudiu";
+
+        return getInfoFromQuery(connection, query);
+    }
+
+    public static int getNumberParticipants(Connection connection, String groupName) throws Exception
+    {
+        int idGrup = getIdGrup(connection, groupName);
+        String query = "SELECT numarParticipanti FROM IntalnireGrupStudiu WHERE idGrup = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, idGrup);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.getInt(1);
+    }
+
+    public static int getIdGrup(Connection connection, String numeGrup) throws Exception
+    {
+        String query = "SELECT idGrupStudiu FROM grupstudiu WHERE numeGrup = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, numeGrup);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next())
+        {
+            return resultSet.getInt("idGrupStudiu");
+        }
+        throw new RuntimeException("Invalid group name!");
+    }
+
+    public static int getIdIntalnire(Connection connection, String numeGrup) throws Exception
+    {
+        int idGrup = getIdGrup(connection, numeGrup);
+        String query = "SELECT idIntalnireGrupStudiu FROM IntalnireGrupStudiu WHERE idGrupStudiu = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, idGrup);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next())
+        {
+            return resultSet.getInt(1);
+        }
+        return -1;
+    }
+
+    public static boolean existsIntalnire(Connection connection, String numeGrup) throws Exception
+    {
+        String query = "SELECT COUNT(*) AS meetingCount " +
+                "FROM IntalnireGrupStudiu IGS " +
+                "JOIN GrupStudiu GS ON IGS.idGrupStudiu = GS.idGrupStudiu " +
+                "WHERE GS.numeGrup = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, numeGrup);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
+    public static boolean existsIntalnireForUser(Connection connection, String username) throws Exception
+    {
+        String query = "SELECT GS.numeGrup, " +
+                "COALESCE(IG.dataIntalnire, 'No Meeting') AS dataIntalnire, " +
+                "COALESCE(IG.numarParticipanti, 0) AS numarParticipanti " +
+                "FROM MembruGrupStudiu MG " +
+                "JOIN GrupStudiu GS ON MG.idGrupStudiu = GS.idGrupStudiu " +
+                "LEFT JOIN IntalnireGrupStudiu IG ON GS.idGrupStudiu = IG.idGrupStudiu " +
+                "WHERE MG.username = ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, username);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
+    public static String[][] getMessages(Connection connection, String numeGrup) throws Exception
+    {
+        int idGrup = getIdGrup(connection, numeGrup);
+        String query = "SELECT numeUtilizator, textMesaj FROM MesajGrupStudiu WHERE idGrupStudiu = ?";
+
+        return getInfoFromQueryWithInt(connection, query, idGrup);
+    }
+
+    public static String[][] getGroupMeetings(Connection connection, String username)
+    {
+        String query = "SELECT GS.numeGrup, " +
+                "COALESCE(IG.dataIntalnire, 'No Meeting') AS dataIntalnire, " +
+                "COALESCE(IG.numarParticipanti, 0) AS numarParticipanti " +
+                "FROM MembruGrupStudiu MG " +
+                "JOIN GrupStudiu GS ON MG.idGrupStudiu = GS.idGrupStudiu " +
+                "LEFT JOIN IntalnireGrupStudiu IG ON GS.idGrupStudiu = IG.idGrupStudiu " +
+                "WHERE MG.username = ?";
+
+        return getInfoFromQueryWithString(connection, query, username);
+    }
+
+    public static boolean existsInMeet(Connection connection, String numeGrup, String username) throws Exception
+    {
+        int idGrup = getIdGrup(connection, numeGrup);
+        int idIntalnire = getIdIntalnire(connection, numeGrup);
+        String query = "SELECT * FROM MembruIntalnireGrupStudiu WHERE username = ? AND idIntalnireGrupStudiu = ? AND idGrupStudiu = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, username);
+        preparedStatement.setInt(2, idIntalnire);
+        preparedStatement.setInt(3, idGrup);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
+    public static String getMeetingDate(Connection connection, String numeGrup) throws Exception
+    {
+        int idIntalnire = getIdIntalnire(connection, numeGrup);
+        int idGrup = getIdGrup(connection, numeGrup);
+        String query = "SELECT dataIntalnire FROM intalniregrupstudiu WHERE idIntalnireGrupStudiu = ? AND idGrupStudiu = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, idIntalnire);
+        preparedStatement.setInt(2, idGrup);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next())
+        {
+            Date date = resultSet.getDate(1);
+            if(date != null)
+            {
+                return date.toString();
+            }
+            return "XXXXX";
+        }
+        return "NaN";
+    }
+
+    public static String getMeetingTime(Connection connection, String numeGrup) throws Exception
+    {
+        int idIntalnire = getIdIntalnire(connection, numeGrup);
+        int idGrup = getIdGrup(connection, numeGrup);
+        String query = "SELECT ora, minut FROM intalniregrupstudiu WHERE idIntalnireGrupStudiu = ? AND idGrupStudiu = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, idIntalnire);
+        preparedStatement.setInt(2, idGrup);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next())
+        {
+            int hour = resultSet.getInt(1);
+            int minute = resultSet.getInt(2);
+            String hourString = "-1", minuteString = "-1";
+            if(hour < 10)
+            {
+                hourString = "0" + hour;
+            }
+            if(minute < 10)
+            {
+                minuteString = "0" + minute;
+            }
+            return hourString + ":" + minuteString;
+        }
+        return "NaN";
+    }
+
+    public static String getRolFromUser(Connection connection, String username) throws Exception
+    {
+        String query = "SELECT R.numeRol " +
+                "FROM Utilizator U " +
+                "JOIN Rol R ON U.id_rol = R.idRol " +
+                "WHERE U.username = ?";
+        String role = "null";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, username);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next())
+        {
+            return resultSet.getString(1);
+        }
+        return role;
+    }
+
+    public static String[][] getSuggestions(Connection connection, String numeCurs)
+    {
+        String query = "SELECT " +
+                "    S.username AS username, " +
+                "    'Student' as rol " +
+                "FROM " +
+                "    Student S " +
+                "JOIN " +
+                "    Utilizator U ON S.idStudent = U.idUtilizator " +
+                "JOIN " +
+                "    ParticipantActivitate PA ON U.idUtilizator = PA.idStudent " +
+                "JOIN " +
+                "    Activitate A ON PA.idActivitate = A.idActivitate " +
+                "JOIN " +
+                "    Curs C ON A.idCurs = C.idCurs " +
+                "LEFT JOIN " +
+                "    MembruGrupStudiu MG ON U.idUtilizator = MG.idMembruGrupStudiu " +
+                "WHERE " +
+                "    MG.idMembruGrupStudiu IS NULL AND C.numeCurs = ? " +
+                "UNION " +
+                "SELECT " +
+                "    P.username AS username, " +
+                "    'Profesor' as rol " +
+                "FROM " +
+                "    Profesor P " +
+                "JOIN " +
+                "    Utilizator U ON P.idProfesor = U.idUtilizator " +
+                "JOIN " +
+                "    Activitate A ON P.idProfesor = A.idProfesor " +
+                "JOIN " +
+                "    Curs C ON A.idCurs = C.idCurs " +
+                "LEFT JOIN " +
+                "    MembruGrupStudiu MG ON U.idUtilizator = MG.idMembruGrupStudiu " +
+                "WHERE " +
+                "    MG.idMembruGrupStudiu IS NULL AND C.numeCurs = ?";
+
+        return getInfoFromQueryWithDoubleString(connection, query, numeCurs, numeCurs);
+    }
+
+    public static boolean existsUser(Connection connection, String username) throws Exception
+    {
+        String query = "SELECT * FROM Utilizator WHERE username = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, username);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
+    public static boolean existsUserInGroup(Connection connection, String username, String numeGrup) throws Exception
+    {
+        int idGrupStudiu = getIdGrup(connection, numeGrup);
+        String query = "SELECT * FROM MembruGrupStudiu WHERE username = ? AND idGrupStudiu = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, username);
+        preparedStatement.setInt(2, idGrupStudiu);
 
         ResultSet resultSet = preparedStatement.executeQuery();
         return resultSet.next();
@@ -426,6 +733,47 @@ public class Query {
         return null;
     }
 
+    private static String[][] getInfoFromQueryWithDoubleString(Connection connection, String query, String str1, String str2)
+    {
+        try
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, str1);
+            preparedStatement.setString(2, str2);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            return generateTable(resultSet, columnCount);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static String[][] getInfoFromQueryWithInt(Connection connection, String query, int num)
+    {
+        try
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, num);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            return generateTable(resultSet, columnCount);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /***
      * Metoda ajutatoare pentru a crea tabelele de utilizatori si activitate profesor
      * @param connection conexiunea la db_platforma
@@ -552,12 +900,13 @@ public class Query {
         return -1;
     }
 
-    public static int getIdActivitate(Connection connection, String tip) throws Exception
+    public static int getIdActivitate(Connection connection, String tip, int idProfesor) throws Exception
     {
-        String query = "SELECT idActivitate FROM Activitate WHERE tip = ?";
+        String query = "SELECT idActivitate FROM Activitate WHERE tip = ? AND idProfesor = ?";
 
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, tip);
+        preparedStatement.setInt(2, idProfesor);
 
         ResultSet resultSet = preparedStatement.executeQuery();
         if(resultSet.next())

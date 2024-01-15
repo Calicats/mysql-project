@@ -3,6 +3,7 @@ package com.example.sql;
 import com.example.NoteStudent;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 public class Update {
 
@@ -134,5 +135,73 @@ public class Update {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public static int updateNumeGrup(Connection connection, String numeGrup, int idGrupStudiu) throws Exception
+    {
+        String update = "UPDATE GrupStudiu SET numeGrup = ? WHERE idGrupStudiu = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(update);
+        preparedStatement.setString(1, numeGrup);
+        preparedStatement.setInt(2, idGrupStudiu);
+        return preparedStatement.executeUpdate();
+    }
+
+    public static int updateDataIntalnire(Connection connection, int idIntalnire, LocalDate newDataIntalnire) {
+        try {
+            String query = "UPDATE IntalnireGrupStudiu SET dataIntalnire = ? WHERE idIntalnireGrupStudiu = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setDate(1, Date.valueOf(newDataIntalnire));
+                preparedStatement.setInt(2, idIntalnire);
+                return preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception according to your needs
+        }
+        return 0;
+    }
+
+    // Method to update the numarMinParticipanti field
+    public static int updateNumarMinParticipanti(Connection connection,int idIntalnire, int newNumarMinParticipanti) {
+        try {
+            String query = "UPDATE IntalnireGrupStudiu SET numarMinParticipanti = ? WHERE idIntalnireGrupStudiu = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, newNumarMinParticipanti);
+                preparedStatement.setInt(2, idIntalnire);
+                return preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception according to your needs
+        }
+        return 0;
+    }
+
+    // Method to update the ora field
+    public static int updateOra(Connection connection,int idIntalnire, int newOra) {
+        try {
+            String query = "UPDATE IntalnireGrupStudiu SET ora = ? WHERE idIntalnireGrupStudiu = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, newOra);
+                preparedStatement.setInt(2, idIntalnire);
+                return preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception according to your needs
+        }
+        return 0;
+    }
+
+    // Method to update the minut field
+    public static int updateMinut(Connection connection,int idIntalnire, int newMinut) {
+        try {
+            String query = "UPDATE IntalnireGrupStudiu SET minut = ? WHERE idIntalnireGrupStudiu = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, newMinut);
+                preparedStatement.setInt(2, idIntalnire);
+                return preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception according to your needs
+        }
+        return 0;
     }
 }

@@ -30,13 +30,21 @@ public class IntalnireGrupStudiu {
         }
     }
 
-    private IntalnireGrupStudiu(int id, java.sql.Date dataIntalnire, int numarMinParticipanti, int ora, int minut, int idGrupStudiu) {
+    public IntalnireGrupStudiu(int id, java.sql.Date dataIntalnire, int numarMinParticipanti, int ora, int minut, int numarParticipanti, int idGrupStudiu) {
         this.id = id;
         this.dataIntalnire = dataIntalnire;
         this.numarMinParticipanti = numarMinParticipanti;
         this.ora = ora;
         this.minut = minut;
+        this.numarParticipanti = numarParticipanti;
         this.idGrupStudiu = idGrupStudiu;
+    }
+
+    public IntalnireGrupStudiu(String numeGrup, java.sql.Date dataIntalnire, int numarParticipanti)
+    {
+        this.numeGrup = numeGrup;
+        this.dataIntalnire = dataIntalnire;
+        this.numarParticipanti = numarParticipanti;
     }
 
     public static List<IntalnireGrupStudiu> getTable() {
@@ -52,8 +60,9 @@ public class IntalnireGrupStudiu {
                 int numarMinParticipanti = rs.getInt("numarMinParticipanti");
                 int ora = rs.getInt("ora");
                 int minut = rs.getInt("minut");
+                int numarParticipanti = rs.getInt("numarParticipanti");
                 int idGrupStudiu = rs.getInt("idGrupStudiu");
-                list.add(new IntalnireGrupStudiu(id, dataIntalnire, numarMinParticipanti, ora, minut, idGrupStudiu));
+                list.add(new IntalnireGrupStudiu(id, dataIntalnire, numarMinParticipanti, ora, minut, numarParticipanti, idGrupStudiu));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
@@ -81,8 +90,18 @@ public class IntalnireGrupStudiu {
         return minut;
     }
 
+    public int getNumarParticipanti()
+    {
+        return numarParticipanti;
+    }
+
     public int getIdGrupStudiu() {
         return idGrupStudiu;
+    }
+
+    public String getNumeGrup()
+    {
+        return numeGrup;
     }
 
     @Override
@@ -93,6 +112,7 @@ public class IntalnireGrupStudiu {
                 ", numarMinParticipanti=" + numarMinParticipanti +
                 ", ora=" + ora +
                 ", minut=" + minut +
+                ", numarParticipanti=" + numarParticipanti +
                 ", idGrupStudiu=" + idGrupStudiu +
                 '}';
     }
@@ -102,5 +122,9 @@ public class IntalnireGrupStudiu {
     private int numarMinParticipanti;
     private int ora;
     private int minut;
+    private int numarParticipanti;
     private int idGrupStudiu;
+
+    // folowing fields are used in a JOIN DO NOT MODIFY !!!
+    private String numeGrup;
 }

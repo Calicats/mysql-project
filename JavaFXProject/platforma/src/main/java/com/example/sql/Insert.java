@@ -1,6 +1,7 @@
 package com.example.sql;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 public class Insert {
 
@@ -136,9 +137,9 @@ public class Insert {
 
     public static void addParticipantActivitate(Connection connection, String usernameProfesor, String usernameStudent, String tip) throws Exception
     {
-        int idActivitate = Query.getIdActivitate(connection, tip);
         int idStudent = Query.getIdByUsername(connection, "Student", usernameStudent);
         int idProfesor = Query.getIdByUsername(connection, "Profesor", usernameProfesor);
+        int idActivitate = Query.getIdActivitate(connection, tip, idProfesor);
 
         if(idProfesor == -1)
         {
@@ -189,6 +190,65 @@ public class Insert {
         preparedStatement.setInt(2, procentNota);
         preparedStatement.setInt(3, idCurs);
         preparedStatement.setInt(4, idProfesor);
+        preparedStatement.executeUpdate();
+    }
+
+    public static void addNewGrupStudiu(Connection connection, String numeGrup) throws Exception
+    {
+        String query = "INSERT INTO GrupStudiu(numeGrup) VALUES (?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, numeGrup);
+        preparedStatement.executeUpdate();
+    }
+
+    public static void addNewMembruGrup(Connection connection, String numeGrup, String username) throws Exception
+    {
+        int idGrupStudiu = Query.getIdGrup(connection, numeGrup);
+        String query = "INSERT INTO MembruGrupStudiu(username, idGrupStudiu) VALUES (?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, username);
+        preparedStatement.setInt(2, idGrupStudiu);
+        preparedStatement.executeUpdate();
+    }
+
+    public static void addNewMeeting(Connection connection, String numeGrup, LocalDate localDate, int numarMinParticipanti, int ora, int minute) throws Exception
+    {
+        int idGrupStudiu = Query.getIdGrup(connection, numeGrup);
+        Date date = Date.valueOf(localDate);
+        String query = "INSERT INTO IntalnireGrupStudiu(dataIntalnire, numarMinParticipanti, ora, minut, numarParticipanti, idGrupStudiu)" +
+                "VALUES(?, ?, ?, ?, ?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setDate(1, date);
+        preparedStatement.setInt(2, numarMinParticipanti);
+        preparedStatement.setInt(3, ora);
+        preparedStatement.setInt(4, minute);
+        preparedStatement.setInt(5, 0);
+        preparedStatement.setInt(6, idGrupStudiu);
+        preparedStatement.executeUpdate();
+    }
+
+    public static void addNewMemberInMeeting(Connection connection, String numeGrup, String username) throws Exception
+    {
+        int idGrupStudiu = Query.getIdGrup(connection, numeGrup);
+        int idIntalnire = Query.getIdIntalnire(connection, numeGrup);
+        String insert = "INSERT INTO MembruIntalnireGrupStudiu(username, idIntalnireGrupStudiu, idGrupStudiu)" +
+                "VALUES(?, ?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(insert);
+        preparedStatement.setString(1, username);
+        preparedStatement.setInt(2, idIntalnire);
+        preparedStatement.setInt(3, idGrupStudiu);
+        preparedStatement.executeUpdate();
+    }
+
+    public static void addMessage(Connection connection, String numeGrup, String username, String message) throws Exception
+    {
+        int idGrup = Query.getIdGrup(connection, numeGrup);
+        String insert = "INSERT INTO MesajGrupStudiu(textMesaj, numeUtilizator, idGrupStudiu)" +
+                "VALUES(?, ?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(insert);
+        preparedStatement.setString(1, message);
+        preparedStatement.setString(2, username);
+        preparedStatement.setInt(3, idGrup);
         preparedStatement.executeUpdate();
     }
 }

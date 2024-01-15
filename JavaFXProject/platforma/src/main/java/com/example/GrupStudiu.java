@@ -20,18 +20,22 @@ public class GrupStudiu {
             // TODO: Silently Fail instead of throwing exception?
             this.id = rs.getInt("idGrupStudiu");
             numeGrup = rs.getString("numeGrup");
-            descriere = rs.getString("descriere");
-            idParticipantActivitate = rs.getInt("idParticipantActivitate");
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
     }
 
-    private GrupStudiu(int id, String numeGrup, String descriere, int idParticipantActivitate) {
+    public GrupStudiu(int id, String numeGrup) {
         this.id = id;
         this.numeGrup = numeGrup;
-        this.descriere = descriere;
-        this.idParticipantActivitate = idParticipantActivitate;
+    }
+
+    public GrupStudiu(int id, String numeGrup, int idIntalnire, java.sql.Date dataIntalnire)
+    {
+        this.id = id;
+        this.numeGrup = numeGrup;
+        this.idIntalnire = idIntalnire;
+        this.dataIntalnire = dataIntalnire;
     }
 
     public static List<GrupStudiu> getTable() {
@@ -44,9 +48,7 @@ public class GrupStudiu {
             while (rs.next()) {
                 int id = rs.getInt("idGrupStudiu");
                 String numeGrup = rs.getString("numeGrup");
-                String descriereGrupStudiu = rs.getString("descriere");
-                int idParticipantActivitate = rs.getInt("idParticipantActivitate");
-                list.add(new GrupStudiu(id, numeGrup, descriereGrupStudiu, idParticipantActivitate));
+                list.add(new GrupStudiu(id, numeGrup));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
@@ -58,26 +60,33 @@ public class GrupStudiu {
         return id;
     }
 
-    public String getDescriere() {
-        return descriere;
+    public int getIdIntalnire()
+    {
+        return idIntalnire;
     }
 
-    public int getIdParticipantActivitate() {
-        return idParticipantActivitate;
+    public String getNumeGrup()
+    {
+        return numeGrup;
+    }
+
+    public java.sql.Date getDataIntalnire()
+    {
+        return dataIntalnire;
     }
 
     @Override
     public String toString() {
         return "GrupStudiu{" +
                 "id=" + id +
-                "numeGrup=" + numeGrup +
-                ", descriere='" + descriere + '\'' +
-                ", idParticipantActivitate=" + idParticipantActivitate +
+                "numeGrup=" + numeGrup + '\'' +
                 '}';
     }
 
     private int id;
-    private String descriere;
     private String numeGrup;
-    private int idParticipantActivitate;
+
+    //following fields are used for JOIN DO NOT MODIFY !!!
+    private int idIntalnire;
+    private java.sql.Date dataIntalnire;
 }
