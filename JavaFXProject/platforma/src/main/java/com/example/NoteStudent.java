@@ -144,22 +144,6 @@ public class NoteStudent {
         }
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public int getNota() {
-        return nota;
-    }
-
-    public int getIdStudent() {
-        return idStudent;
-    }
-
-    public int getIdActivitate() {
-        return idActivitate;
-    }
-
     public static int updateOrInsert(NoteStudent newNoteStudent) {
         Connection connection = Connect.getConnection();
         try {
@@ -176,6 +160,22 @@ public class NoteStudent {
             e.printStackTrace(System.err);
             return 0;
         }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getNota() {
+        return nota;
+    }
+
+    public int getIdStudent() {
+        return idStudent;
+    }
+
+    public int getIdActivitate() {
+        return idActivitate;
     }
 
     @Override
