@@ -2,10 +2,7 @@ package com.example;
 
 import com.example.sql.Connect;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,6 +106,25 @@ public class SuperAdministrator extends User {
             PreparedStatement stmt = connection.prepareStatement(
                     "DELETE FROM SuperAdministrator WHERE idSuperAdmin = ?");
             stmt.setInt(1, idSuperAdmin);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int insert(SuperAdministrator newSuperAdmin) {
+        Connection connection = Connect.getConnection();
+        try {
+            CallableStatement stmt = connection.prepareCall(
+                    "{CALL AddNewSuperAdministrator(?, ?, ?, ?, ?, ?, ?)}");
+            stmt.setString(1, newSuperAdmin.cnp);
+            stmt.setString(2, newSuperAdmin.nume);
+            stmt.setString(3, newSuperAdmin.adresa);
+            stmt.setString(4, newSuperAdmin.nrTelefon);
+            stmt.setString(5, newSuperAdmin.email);
+            stmt.setString(6, newSuperAdmin.username);
+            stmt.setString(7, newSuperAdmin.parola);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace(System.err);

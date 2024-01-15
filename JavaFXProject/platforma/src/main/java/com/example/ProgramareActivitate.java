@@ -142,6 +142,26 @@ public class ProgramareActivitate {
         }
     }
 
+    public static int insert(ProgramareActivitate newProgramareActivitate) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO ProgramareActivitate(dataIncepere, dataFinalizare, frecventa, zi, ora, minut, durata, idParticipantActivitate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            stmt.setDate(1, newProgramareActivitate.dataIncepere);
+            stmt.setDate(2, newProgramareActivitate.dataFinalizare);
+            stmt.setString(3, newProgramareActivitate.frecventa);
+            stmt.setString(4, newProgramareActivitate.zi);
+            stmt.setInt(5, newProgramareActivitate.ora);
+            stmt.setInt(6, newProgramareActivitate.minut);
+            stmt.setInt(7, newProgramareActivitate.durata);
+            stmt.setInt(8, newProgramareActivitate.idParticipantActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }

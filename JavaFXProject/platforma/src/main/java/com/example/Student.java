@@ -2,10 +2,7 @@ package com.example;
 
 import com.example.sql.Connect;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,6 +112,27 @@ public class Student extends User {
             PreparedStatement stmt = connection.prepareStatement(
                     "DELETE FROM Student WHERE idStudent = ?");
             stmt.setInt(1, idStudent);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int insert(Student newStudent) {
+        Connection connection = Connect.getConnection();
+        try {
+            CallableStatement stmt = connection.prepareCall(
+                    "{CALL AddNewStudent(?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+            stmt.setString(1, newStudent.cnp);
+            stmt.setString(2, newStudent.nume);
+            stmt.setInt(3, newStudent.anStudiu);
+            stmt.setInt(4, newStudent.numarOre);
+            stmt.setString(5, newStudent.adresa);
+            stmt.setString(6, newStudent.nrTelefon);
+            stmt.setString(7, newStudent.email);
+            stmt.setString(8, newStudent.username);
+            stmt.setString(9, newStudent.parola);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace(System.err);
