@@ -120,6 +120,11 @@ public class ProfesorPanelController {
         main.changeScene("logare.fxml", username, tableName, 600, 400);
     }
 
+    public void onGrupStudii() throws IOException
+    {
+        Main.main.changeScene("grupuriDeStudii.fxml", username, tableName, 1200, 562);
+    }
+
     private void showData(boolean expr)
     {
         nume.setVisible(expr);

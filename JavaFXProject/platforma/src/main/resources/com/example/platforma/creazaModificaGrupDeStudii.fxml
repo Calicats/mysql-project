@@ -7,6 +7,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
@@ -14,13 +15,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="502.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.platforma.CreazaModificaGrupDeStudii">
+<AnchorPane prefHeight="502.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controllers.CreazaModificaGrupDeStudii">
    <children>
       <VBox layoutX="74.0" layoutY="97.0" prefHeight="500.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ToolBar prefHeight="40.0" prefWidth="200.0">
               <items>
-                <Button cancelButton="true" mnemonicParsing="false" text="Back">
+                <Button cancelButton="true" mnemonicParsing="false" onAction="#onBackButton" text="Back">
                      <font>
                         <Font size="20.0" />
                      </font></Button>
@@ -32,83 +33,107 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="325.0" prefWidth="415.0">
                      <children>
-                        <VBox prefHeight="424.0" prefWidth="481.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox prefHeight="394.0" prefWidth="494.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <ToolBar prefHeight="40.0" prefWidth="200.0">
                                  <items>
-                                    <Label text="Nume grup: ">
+                                    <Label prefHeight="30.0" prefWidth="86.0" text="Nume grup: ">
                                        <font>
-                                          <Font size="20.0" />
+                                          <Font size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField prefHeight="26.0" prefWidth="346.0">
+                                    <TextField fx:id="numeGrupField" prefHeight="31.0" prefWidth="94.0">
                                        <font>
                                           <Font size="15.0" />
                                        </font></TextField>
+                                    <Label prefHeight="27.0" prefWidth="79.0" text="Nume curs: ">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="numeCursField" prefHeight="31.0" prefWidth="93.0">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label text="ID:">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="idField" prefHeight="30.0" prefWidth="54.0" />
                                  </items>
                               </ToolBar>
-                              <ToolBar prefHeight="40.0" prefWidth="200.0">
+                              <ToolBar prefHeight="40.0" prefWidth="526.0">
                                  <items>
-                                    <Label text="Data intalnire">
+                                    <Label prefHeight="22.0" prefWidth="94.0" text="Data intalnire">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker />
-                                    <Label text="Ora:">
+                                    <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="111.0" />
+                                    <Label text="Ora">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField prefHeight="26.0" prefWidth="48.0" />
+                                    <TextField fx:id="oraField" prefHeight="26.0" prefWidth="40.0" />
                                     <Label text="Minute">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField prefHeight="26.0" prefWidth="48.0" />
+                                    <TextField fx:id="minuteField" prefHeight="26.0" prefWidth="40.0" />
+                                    <Label text="Participati">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="participantsField" prefHeight="26.0" prefWidth="40.0" />
                                  </items>
                               </ToolBar>
                               <ToolBar prefHeight="40.0" prefWidth="200.0">
                                  <items>
-                                    <Label disable="true" text="Utilizatorul nu a fost gasit!" textAlignment="CENTER" textFill="RED">
+                                    <Label fx:id="errorHandling" disable="true" textAlignment="CENTER" textFill="RED">
                                        <font>
-                                          <Font size="20.0" />
+                                          <Font name="System Bold" size="20.0" />
                                        </font></Label>
                                  </items>
                               </ToolBar>
                               <ToolBar prefHeight="40.0" prefWidth="482.0">
                                  <items>
-                                    <Label prefHeight="18.0" prefWidth="81.0" text="Invita student:" />
-                                    <TextField prefHeight="26.0" prefWidth="176.0" />
-                                    <Label disable="true" prefHeight="18.0" prefWidth="160.0" text="Utilizatorul nu a fost gasit!" textFill="RED" />
-                                    <Button mnemonicParsing="false" text="Adauga" />
+                                    <Label prefHeight="18.0" prefWidth="90.0" text="Invita student:" />
+                                    <TextField fx:id="addStudentField" prefHeight="26.0" prefWidth="176.0" />
+                                    <Button mnemonicParsing="false" onAction="#onAddStudent" text="Adauga" />
                                  </items>
                               </ToolBar>
                               <ToolBar prefHeight="40.0" prefWidth="482.0">
                                  <items>
-                                    <Label prefHeight="18.0" prefWidth="81.0" text="Invita profesor:" />
-                                    <TextField prefHeight="26.0" prefWidth="176.0" />
-                                    <Label disable="true" prefHeight="18.0" prefWidth="161.0" text="Utilizatorul nu a fost gasit!" textFill="RED" />
-                                    <Button mnemonicParsing="false" text="Adauga" />
+                                    <Label prefHeight="18.0" prefWidth="90.0" text="Invita profesor:" />
+                                    <TextField fx:id="addProfesorField" prefHeight="26.0" prefWidth="176.0" />
+                                    <Button mnemonicParsing="false" onAction="#onAddProfesor" text="Adauga" />
                                  </items>
                               </ToolBar>
                               <ToolBar prefHeight="40.0" prefWidth="482.0">
                                  <items>
-                                    <Label prefHeight="18.0" prefWidth="88.0" text="Elimina student:" />
-                                    <TextField prefHeight="26.0" prefWidth="186.0" />
-                                    <Label disable="true" prefHeight="18.0" prefWidth="146.0" text="Utilizatorul nu a fost gasit!" textFill="RED" />
-                                    <Button mnemonicParsing="false" text="Elimina" />
+                                    <Label prefHeight="18.0" prefWidth="90.0" text="Elimina student:" />
+                                    <TextField fx:id="removeStudentField" prefHeight="26.0" prefWidth="176.0" />
+                                    <Button mnemonicParsing="false" onAction="#onRemoveStudent" text="Elimina" />
                                  </items>
                               </ToolBar>
-                              <ToolBar prefHeight="40.0" prefWidth="482.0">
+                              <ToolBar prefHeight="40.0" prefWidth="490.0">
                                  <items>
-                                    <Label prefHeight="18.0" prefWidth="93.0" text="Elimina profesor:" />
-                                    <TextField prefHeight="26.0" prefWidth="186.0" />
-                                    <Label disable="true" text="Utilizatorul nu a fost gasit!" textFill="RED" />
-                                    <Button mnemonicParsing="false" text="Elimina" />
+                                    <Label prefHeight="18.0" prefWidth="90.0" text="Elimina profesor:" />
+                                    <TextField fx:id="removeProfesorField" prefHeight="26.0" prefWidth="176.0" />
+                                    <Button mnemonicParsing="false" onAction="#onRemoveProfesor" text="Elimina" />
                                  </items>
                               </ToolBar>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Button layoutY="1.0" mnemonicParsing="false" onAction="#onShowParticipants" text="Afiseaza participanti" />
+                                    <Button layoutY="27.0" mnemonicParsing="false" onAction="#onShowSuggestions" text="Afiseaza sugestii de participanti" />
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </VBox>
                      </children>
@@ -121,7 +146,10 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <TableView layoutX="158.0" layoutY="48.0" prefHeight="296.0" prefWidth="420.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <TableView fx:id="tableStudent" layoutX="158.0" layoutY="48.0" prefHeight="296.0" prefWidth="420.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <columns>
+                                                <TableColumn fx:id="usernameStudentColumn" prefWidth="116.0" text="usernameStudent" />
+                                             </columns></TableView>
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -130,11 +158,44 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <TableView layoutX="20.8" layoutY="24.0" prefHeight="395.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <TableView fx:id="tableProfesor" layoutX="20.8" layoutY="24.0" prefHeight="395.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <columns>
+                                                <TableColumn fx:id="usernameProfesorColumn" prefWidth="116.0" text="usernameProfesor" />
+                                             </columns></TableView>
                                        </children>
                                     </AnchorPane>
                               </content>
                             </Tab>
+                              <Tab text="Sugestii">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <TableView fx:id="tableSugestii" prefHeight="366.0" prefWidth="290.0">
+                                            <columns>
+                                              <TableColumn fx:id="suggestedUserColumn" prefWidth="140.0" text="username" />
+                                              <TableColumn fx:id="suggestedRoleColumn" prefWidth="148.0" text="rol" />
+                                            </columns>
+                                          </TableView>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </Tab>
+                              <Tab text="Grupuri">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <TableView fx:id="tableGrupuri" prefHeight="367.0" prefWidth="290.0">
+                                            <columns>
+                                              <TableColumn fx:id="idGrupColumn" prefWidth="48.00006103515625" text="idGrup" />
+                                              <TableColumn fx:id="numeGrupColumn" prefWidth="70.39996337890625" text="numeGrup" />
+                                                <TableColumn fx:id="idIntalnireColumn" prefWidth="63.99993896484375" text="idIntalnire" />
+                                                <TableColumn fx:id="dataIntalnireColumn" prefWidth="97.60009765625" text="dataIntalnire" />
+                                            </columns>
+                                          </TableView>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </Tab>
                           </tabs>
                         </TabPane>
                      </children>
@@ -143,15 +204,34 @@
             </SplitPane>
             <ToolBar prefHeight="40.0" prefWidth="806.0">
                <items>
-                  <Button mnemonicParsing="false" text="Salveaza">
+                  <Button mnemonicParsing="false" onAction="#onCreateButton" prefHeight="43.0" prefWidth="94.0" text="Creaza grup">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="14.0" />
                      </font>
                   </Button>
-                  <Separator orientation="VERTICAL" prefHeight="43.0" prefWidth="551.0" />
-                  <Button mnemonicParsing="false" text="Sterge grup">
+                  <Button mnemonicParsing="false" onAction="#onModifyButton" prefHeight="43.0" prefWidth="121.0" text="Modifica grup">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#onDeleteButton" prefHeight="43.0" prefWidth="105.0" text="Sterge grup">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#onAddMeeting" prefHeight="43.0" prefWidth="136.0" text="Adauga intalnire">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#onModifyMeeting" prefHeight="43.0" prefWidth="138.0" text="Modifica intalnire">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#onDeleteMeeting" prefHeight="43.0" prefWidth="134.0" text="Sterge intalnire">
+                     <font>
+                        <Font size="14.0" />
                      </font>
                   </Button>
                </items>

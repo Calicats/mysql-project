@@ -1,12 +1,12 @@
 package com.example.platforma;
 
 import com.example.controllers.*;
+import com.example.controllers.GrupuriDeStudiiController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import javax.swing.text.View;
 import java.io.IOException;
 
 public class Main extends Application {
@@ -142,6 +142,18 @@ public class Main extends Application {
                             ViewActivitateTotalProfesor controller = fxmlLoader.getController();
                             controller.initUser(username, tableName);
                         }
+                        case "grupuriDeStudii.fxml" ->
+                        {
+                            currentStage.setTitle("Grupuri de studii");
+                            GrupuriDeStudiiController controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
+                        case "creazaModificaGrupDeStudii.fxml" ->
+                        {
+                            currentStage.setTitle("Gestionare grup de studii");
+                            CreazaModificaGrupDeStudii controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
                     }
                 }
                 case "student" ->
@@ -165,6 +177,18 @@ public class Main extends Application {
                         {
                             currentStage.setTitle("Inscriere activitate");
                             InscriereActivitateController controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
+                        case "grupuriDeStudii.fxml" ->
+                        {
+                            currentStage.setTitle("Grupuri de studii");
+                            GrupuriDeStudiiController controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
+                        case "creazaModificaGrupDeStudii.fxml" ->
+                        {
+                            currentStage.setTitle("Gestionare grup de studii");
+                            CreazaModificaGrupDeStudii controller = fxmlLoader.getController();
                             controller.initUser(username, tableName);
                         }
                     }

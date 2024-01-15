@@ -30,108 +30,44 @@ public class IntalnireGrupStudiu {
         }
     }
 
-    private IntalnireGrupStudiu(int id, java.sql.Date dataIntalnire, int numarMinParticipanti, int ora, int minut, int idGrupStudiu) {
+    public IntalnireGrupStudiu(int id, java.sql.Date dataIntalnire, int numarMinParticipanti, int ora, int minut, int numarParticipanti, int idGrupStudiu) {
         this.id = id;
         this.dataIntalnire = dataIntalnire;
         this.numarMinParticipanti = numarMinParticipanti;
         this.ora = ora;
         this.minut = minut;
+        this.numarParticipanti = numarParticipanti;
         this.idGrupStudiu = idGrupStudiu;
+    }
+
+    public IntalnireGrupStudiu(String numeGrup, java.sql.Date dataIntalnire, int numarParticipanti)
+    {
+        this.numeGrup = numeGrup;
+        this.dataIntalnire = dataIntalnire;
+        this.numarParticipanti = numarParticipanti;
     }
 
     public static List<IntalnireGrupStudiu> getTable() {
         List<IntalnireGrupStudiu> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT idIntalnireGrupStudiu FROM IntalnireGrupStudiu");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM IntalnireGrupStudiu");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int idIntalnireGrupStudiu = rs.getInt("idIntalnireGrupStudiu");
-                list.add(new IntalnireGrupStudiu(idIntalnireGrupStudiu));
+                int id = rs.getInt("idIntalnireGrupStudiu");
+                java.sql.Date dataIntalnire = rs.getDate("dataIntalnire");
+                int numarMinParticipanti = rs.getInt("numarMinParticipanti");
+                int ora = rs.getInt("ora");
+                int minut = rs.getInt("minut");
+                int numarParticipanti = rs.getInt("numarParticipanti");
+                int idGrupStudiu = rs.getInt("idGrupStudiu");
+                list.add(new IntalnireGrupStudiu(id, dataIntalnire, numarMinParticipanti, ora, minut, numarParticipanti, idGrupStudiu));
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
         return list;
-    }
-
-    public static int updateEntry(int idIntalnireGrupStudiu, IntalnireGrupStudiu other) {
-        Connection connection = Connect.getConnection();
-        try {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "UPDATE IntalnireGrupStudiu SET dataIntalnire = ?, numarMinParticipanti = ?, ora = ?, minut = ?, idGrupStudiu = ? WHERE idIntalnireGrupStudiu = ?");
-            stmt.setDate(1, other.dataIntalnire);
-            stmt.setInt(2, other.numarMinParticipanti);
-            stmt.setInt(3, other.ora);
-            stmt.setInt(4, other.minut);
-            stmt.setInt(5, other.idGrupStudiu);
-            stmt.setInt(6, idIntalnireGrupStudiu);
-            return stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace(System.err);
-            return 0;
-        }
-    }
-
-    public static int updateEntry(int idIntalnireGrupStudiu, String column, java.sql.Date value) {
-        Connection connection = Connect.getConnection();
-        try {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "UPDATE IntalnireGrupStudiu SET ? = ? WHERE idIntalnireGrupStudiu = ?");
-            stmt.setString(1, column);
-            stmt.setDate(2, value);
-            stmt.setInt(3, idIntalnireGrupStudiu);
-            return stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace(System.err);
-            return 0;
-        }
-    }
-
-    public static int updateEntry(int idIntalnireGrupStudiu, String column, int value) {
-        Connection connection = Connect.getConnection();
-        try {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "UPDATE IntalnireGrupStudiu SET ? = ? WHERE idIntalnireGrupStudiu = ?");
-            stmt.setString(1, column);
-            stmt.setInt(2, value);
-            stmt.setInt(3, idIntalnireGrupStudiu);
-            return stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace(System.err);
-            return 0;
-        }
-    }
-
-    public static int deleteEntry(int idIntalnireGrupStudiu) {
-        Connection connection = Connect.getConnection();
-        try {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "DELETE FROM IntalnireGrupStudiu WHERE idIntalnireGrupStudiu = ?");
-            stmt.setInt(1, idIntalnireGrupStudiu);
-            return stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace(System.err);
-            return 0;
-        }
-    }
-
-    public static int insert(IntalnireGrupStudiu newIntalnireGrupStudiu) {
-        Connection connection = Connect.getConnection();
-        try {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO IntalnireGrupStudiu(dataIntalnire, numarMinParticipanti, ora, minut, idGrupStudiu) VALUES (?, ?, ?, ?, ?)");
-            stmt.setDate(1, newIntalnireGrupStudiu.dataIntalnire);
-            stmt.setInt(2, newIntalnireGrupStudiu.numarMinParticipanti);
-            stmt.setInt(3, newIntalnireGrupStudiu.ora);
-            stmt.setInt(4, newIntalnireGrupStudiu.minut);
-            stmt.setInt(5, newIntalnireGrupStudiu.idGrupStudiu);
-            return stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace(System.err);
-            return 0;
-        }
     }
 
     public int getId() {
@@ -154,8 +90,18 @@ public class IntalnireGrupStudiu {
         return minut;
     }
 
+    public int getNumarParticipanti()
+    {
+        return numarParticipanti;
+    }
+
     public int getIdGrupStudiu() {
         return idGrupStudiu;
+    }
+
+    public String getNumeGrup()
+    {
+        return numeGrup;
     }
 
     @Override
@@ -166,6 +112,7 @@ public class IntalnireGrupStudiu {
                 ", numarMinParticipanti=" + numarMinParticipanti +
                 ", ora=" + ora +
                 ", minut=" + minut +
+                ", numarParticipanti=" + numarParticipanti +
                 ", idGrupStudiu=" + idGrupStudiu +
                 '}';
     }
@@ -175,5 +122,9 @@ public class IntalnireGrupStudiu {
     private int numarMinParticipanti;
     private int ora;
     private int minut;
+    private int numarParticipanti;
     private int idGrupStudiu;
+
+    // folowing fields are used in a JOIN DO NOT MODIFY !!!
+    private String numeGrup;
 }

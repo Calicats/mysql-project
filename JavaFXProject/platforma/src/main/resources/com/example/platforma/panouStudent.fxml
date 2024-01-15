@@ -26,7 +26,7 @@
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="138.0" style="-fx-background-color: transparent;" text="Grupuri de studii" textFill="WHITE">
+            <Button mnemonicParsing="false" onAction="#onGrupStudii" prefHeight="100.0" prefWidth="138.0" style="-fx-background-color: transparent;" text="Grupuri de studii" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
