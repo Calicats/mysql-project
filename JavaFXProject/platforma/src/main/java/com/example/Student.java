@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Student extends User {
+    public static final int ID_ROL = 4;
+
     public Student(int id) {
         Connection connection = Connect.getConnection();
         try {

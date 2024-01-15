@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SuperAdministrator extends User {
+    public static final int ID_ROL = 1;
+
     public SuperAdministrator(int id) {
         Connection connection = Connect.getConnection();
         try {
