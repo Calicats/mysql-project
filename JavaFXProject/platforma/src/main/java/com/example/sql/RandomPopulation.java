@@ -150,7 +150,7 @@ public class RandomPopulation {
     }
 
     private static String randomUsernameFrom(String name) {
-        return name.replace(" ", "_");
+        return name.replace(" ", "_").toLowerCase();
     }
 
     private static String randomEmailFrom(String name) {
