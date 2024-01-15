@@ -111,6 +111,21 @@ public class Curs {
         }
     }
 
+    public static int insert(Curs newCurs) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO Curs(numeCurs, descriere, nrMaximStudenti) VALUES (?, ?, ?)");
+            stmt.setString(1, newCurs.numeCurs);
+            stmt.setString(2, newCurs.descriere);
+            stmt.setInt(3, newCurs.nrMaximStudenti);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getIdCurs() {
         return idCurs;
     }

@@ -108,6 +108,22 @@ public class ParticipantActivitate {
         }
     }
 
+    public static int insert(ParticipantActivitate newParticipantActivitate) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO ParticipantActivitate(numarParticipanti, idActivitate, idStudent, idProfesor) VALUES (?, ?, ?, ?)");
+            stmt.setInt(1, newParticipantActivitate.numarParticipanti);
+            stmt.setInt(2, newParticipantActivitate.idActivitate);
+            stmt.setInt(3, newParticipantActivitate.idStudent);
+            stmt.setInt(4, newParticipantActivitate.idProfesor);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }

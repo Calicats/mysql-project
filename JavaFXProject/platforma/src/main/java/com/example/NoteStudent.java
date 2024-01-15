@@ -129,6 +129,21 @@ public class NoteStudent {
         }
     }
 
+    public static int insert(NoteStudent newNoteStudent) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO NoteStudent(nota, idStudent, idActivitate) VALUES (?, ?, ?)");
+            stmt.setInt(1, newNoteStudent.nota);
+            stmt.setInt(2, newNoteStudent.idStudent);
+            stmt.setInt(3, newNoteStudent.idActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }

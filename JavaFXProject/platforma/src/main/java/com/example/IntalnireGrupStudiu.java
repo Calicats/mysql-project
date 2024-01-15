@@ -117,6 +117,23 @@ public class IntalnireGrupStudiu {
         }
     }
 
+    public static int insert(IntalnireGrupStudiu newIntalnireGrupStudiu) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO IntalnireGrupStudiu(dataIntalnire, numarMinParticipanti, ora, minut, idGrupStudiu) VALUES (?, ?, ?, ?, ?)");
+            stmt.setDate(1, newIntalnireGrupStudiu.dataIntalnire);
+            stmt.setInt(2, newIntalnireGrupStudiu.numarMinParticipanti);
+            stmt.setInt(3, newIntalnireGrupStudiu.ora);
+            stmt.setInt(4, newIntalnireGrupStudiu.minut);
+            stmt.setInt(5, newIntalnireGrupStudiu.idGrupStudiu);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }

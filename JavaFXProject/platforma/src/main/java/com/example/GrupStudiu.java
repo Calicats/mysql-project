@@ -111,6 +111,21 @@ public class GrupStudiu {
         }
     }
 
+    public static int insert(GrupStudiu newGrupStudiu) {
+        Connection connection = Connect.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO GrupStudiu(numeGrup, descriere, idParticipantActivitate) VALUES (?, ?, ?)");
+            stmt.setString(1, newGrupStudiu.numeGrup);
+            stmt.setString(2, newGrupStudiu.descriere);
+            stmt.setInt(3, newGrupStudiu.idParticipantActivitate);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
     public int getId() {
         return id;
     }

@@ -2,10 +2,7 @@ package com.example;
 
 import com.example.sql.Connect;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,6 +106,25 @@ public class Administrator extends User {
             PreparedStatement stmt = connection.prepareStatement(
                     "DELETE FROM Administrator WHERE idAdmin = ?");
             stmt.setInt(1, idAdmin);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return 0;
+        }
+    }
+
+    public static int insert(Administrator newAdmin) {
+        Connection connection = Connect.getConnection();
+        try {
+            CallableStatement stmt = connection.prepareCall(
+                    "{CALL AddNewAdministrator(?, ?, ?, ?, ?, ?, ?)}");
+            stmt.setString(1, newAdmin.cnp);
+            stmt.setString(2, newAdmin.nume);
+            stmt.setString(3, newAdmin.adresa);
+            stmt.setString(4, newAdmin.nrTelefon);
+            stmt.setString(5, newAdmin.email);
+            stmt.setString(6, newAdmin.username);
+            stmt.setString(7, newAdmin.parola);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace(System.err);
