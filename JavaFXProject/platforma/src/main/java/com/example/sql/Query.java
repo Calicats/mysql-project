@@ -343,6 +343,22 @@ public class Query {
         return getInfoFromQuery(connection, query);
     }
 
+    public static String[][] getCatalogOnIdActivitate(Connection connection, int id)
+    {
+        String query = "SELECT " +
+                "    NS.idNoteStudent, " +
+                "    NS.nota, " +
+                "    S.username AS usernameStudent, " +
+                "    NS.idActivitate " +
+                "FROM " +
+                "    NoteStudent NS " +
+                "    JOIN Student S ON NS.idStudent = S.idStudent " +
+                "WHERE " +
+                "    NS.idActivitate = ?";
+
+        return getInfoFromQueryWithInt(connection, query, id);
+    }
+
     public static String[][] getGrup(Connection connection)
     {
         String query = "SELECT GS.idGrupStudiu, " +

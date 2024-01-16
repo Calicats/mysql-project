@@ -654,7 +654,8 @@ SELECT * FROM ParticipantActivitate;
 SELECT * FROM GrupStudiu;
 SELECT * FROM MembruGrupStudiu;
 SELECT * FROM IntalnireGrupStudiu;
-SELECT * FROM MembruIntalnireGrupStudiu;   
+SELECT * FROM MembruIntalnireGrupStudiu;
+SELECT * FROM NoteStudent;   
 
 /*
 call AddNoteStudent("1", 10, "1", "1");

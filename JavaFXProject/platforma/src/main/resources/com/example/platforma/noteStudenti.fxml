@@ -21,6 +21,11 @@
                               <Font size="18.0" />
                            </font>
                         </Button>
+                        <Button mnemonicParsing="false" onAction="#onDownloadButton" text="Descarca">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
                     </items>
                   </ToolBar>
                </children>
