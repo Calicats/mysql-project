@@ -583,8 +583,6 @@ END;
 //
 DELIMITER ;
 
-DROP TRIGGER DeleteNoteStudentOnCursDelete
-
 DELIMITER //
 CREATE TRIGGER DeleteNoteStudentOnCursDelete
 BEFORE DELETE ON Curs
