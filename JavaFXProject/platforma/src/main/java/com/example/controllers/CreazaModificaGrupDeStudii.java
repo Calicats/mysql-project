@@ -602,6 +602,12 @@ public class CreazaModificaGrupDeStudii {
                 return;
             }
 
+            if(Query.existsMeeting(connection, numeGrup))
+            {
+                errorHandling.setText("Exista deja o intalnire planificata!");
+                return;
+            }
+
             Insert.addNewMeeting(connection, numeGrup, selectedDate, participanti, ora, minute);
             errorHandling.setTextFill(rgb(0,255, 0));
             errorHandling.setText("Adaugare cu succes!");
@@ -703,6 +709,12 @@ public class CreazaModificaGrupDeStudii {
             if(!Query.existsGrup(connection, numeGrup))
             {
                 errorHandling.setText("Grupul nu exista!");
+                return;
+            }
+
+            if(!Query.existsMeeting(connection, numeGrup))
+            {
+                errorHandling.setText("Nu exista o intalnire planificata!");
                 return;
             }
 
@@ -825,6 +837,12 @@ public class CreazaModificaGrupDeStudii {
             if(!Query.existsGrup(connection, numeGrup))
             {
                 errorHandling.setText("Grupul nu exista!");
+                return;
+            }
+
+            if(!Query.existsMeeting(connection, numeGrup))
+            {
+                errorHandling.setText("Nu exista o intalnire planificata!");
                 return;
             }
 

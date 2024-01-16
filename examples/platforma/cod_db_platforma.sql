@@ -411,17 +411,14 @@ FOR EACH ROW
 BEGIN
     DECLARE totalParticipants INT;
 
-    -- Set the numarParticipanti column for the new record to 1 initially
     SET NEW.numarParticipanti = 1;
 
-    -- Get the total number of participants for the specific activity and subactivity
     SELECT COUNT(*) INTO totalParticipants
     FROM ParticipantActivitate
     WHERE idActivitate = NEW.idActivitate
     AND idProfesor = NEW.idProfesor
     AND idStudent = NEW.idStudent;
 
-    -- Update the numarParticipanti column for the new record
     SET NEW.numarParticipanti = NEW.numarParticipanti + totalParticipants;
 END;
 //
@@ -439,7 +436,6 @@ END;
 //
 DELIMITER ;
 
--- Trigger for decrementing numarParticipanti when an entry is removed from MembruIntalnireGrupStudiu
 DELIMITER //
 CREATE TRIGGER DecrementNumarParticipanti
 AFTER DELETE ON MembruIntalnireGrupStudiu
@@ -448,6 +444,194 @@ BEGIN
     UPDATE IntalnireGrupStudiu
     SET numarParticipanti = numarParticipanti - 1
     WHERE idIntalnireGrupStudiu = OLD.idIntalnireGrupStudiu;
+END;
+//
+DELIMITER ;
+
+-- triggere lipsa
+
+DELIMITER //
+CREATE TRIGGER DeleteParticipantActivitateOnStudentDelete
+AFTER DELETE ON Student
+FOR EACH ROW
+BEGIN
+    DECLARE studentId INT;
+
+    SELECT idStudent INTO studentId
+    FROM Student
+    WHERE username = OLD.username;
+
+    DELETE FROM ParticipantActivitate WHERE idStudent = studentId;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteParticipantActivitateOnProfesorDelete
+AFTER DELETE ON Profesor
+FOR EACH ROW
+BEGIN
+    DECLARE profesorId INT;
+
+    SELECT idProfesor INTO profesorId
+    FROM Profesor
+    WHERE username = OLD.username;
+
+    DELETE FROM ParticipantActivitate WHERE idProfesor = profesorId;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteMembruGrupStudiuOnStudentDelete
+AFTER DELETE ON Student
+FOR EACH ROW
+BEGIN
+    DELETE FROM MembruGrupStudiu WHERE username = OLD.username;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteMembruGrupStudiuOnProfesorDelete
+AFTER DELETE ON Profesor
+FOR EACH ROW
+BEGIN
+    DELETE FROM MembruGrupStudiu WHERE username = OLD.username;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteMembruIntalnireGrupStudiuOnStudentDelete
+AFTER DELETE ON Student
+FOR EACH ROW
+BEGIN
+    DELETE FROM MembruIntalnireGrupStudiu WHERE username = OLD.username;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteMembruIntalnireGrupStudiuOnProfesorDelete
+AFTER DELETE ON Profesor
+FOR EACH ROW
+BEGIN
+    DELETE FROM MembruIntalnireGrupStudiu WHERE username = OLD.username;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteNoteStudentOnStudentDelete
+AFTER DELETE ON Student
+FOR EACH ROW
+BEGIN
+    DECLARE studentId INT;
+
+    SELECT idStudent INTO studentId
+    FROM Student
+    WHERE username = OLD.username;
+
+    DELETE FROM NoteStudent WHERE idStudent = studentId;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteActivitateOnCursDelete
+AFTER DELETE ON Curs
+FOR EACH ROW
+BEGIN
+    DECLARE cursId INT;
+
+    SET cursId = (SELECT idCurs FROM Curs WHERE numeCurs = OLD.numeCurs);
+
+    DELETE FROM Activitate WHERE idCurs = cursId;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteParticipantActivitateOnCursDelete
+AFTER DELETE ON Curs
+FOR EACH ROW
+BEGIN
+    DECLARE cursId INT;
+
+    SET cursId = (SELECT idCurs FROM Curs WHERE numeCurs = OLD.numeCurs);
+
+    DELETE FROM ParticipantActivitate WHERE idActivitate IN (SELECT idActivitate FROM Activitate WHERE idCurs = cursId);
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteProgramareActivitateOnCursDelete
+AFTER DELETE ON Curs
+FOR EACH ROW
+BEGIN
+    DECLARE cursId INT;
+
+    SET cursId = (SELECT idCurs FROM Curs WHERE numeCurs = OLD.numeCurs);
+
+    DELETE FROM ProgramareActivitate WHERE idParticipantActivitate IN (SELECT idParticipantActivitate FROM ParticipantActivitate WHERE idActivitate IN (SELECT idActivitate FROM Activitate WHERE idCurs = cursId));
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteNoteStudentOnCursDelete
+AFTER DELETE ON Curs
+FOR EACH ROW
+BEGIN
+    DECLARE cursId INT;
+
+    SET cursId = (SELECT idCurs FROM Curs WHERE numeCurs = OLD.numeCurs);
+
+    DELETE FROM NoteStudent WHERE idActivitate IN (SELECT idActivitate FROM Activitate WHERE idCurs = cursId);
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteActivitateOnProfesorDelete
+AFTER DELETE ON Profesor
+FOR EACH ROW
+BEGIN
+    DECLARE professorId INT;
+
+    SELECT idProfesor INTO professorId
+    FROM Profesor
+    WHERE username = OLD.username;
+
+    DELETE FROM Activitate WHERE idProfesor = professorId;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteMembruGrupStudiuOnGrupStudiuDelete
+AFTER DELETE ON GrupStudiu
+FOR EACH ROW
+BEGIN
+    DELETE FROM MembruGrupStudiu WHERE idGrupStudiu = OLD.idGrupStudiu;
+
+    DELETE FROM MesajGrupStudiu WHERE idGrupStudiu = OLD.idGrupStudiu;
+
+    DELETE FROM IntalnireGrupStudiu WHERE idGrupStudiu = OLD.idGrupStudiu;
+
+    DELETE FROM MembruIntalnireGrupStudiu WHERE idGrupStudiu = OLD.idGrupStudiu;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER DeleteMembruIntalnireGrupStudiuOnIntalnireGrupStudiuDelete
+AFTER DELETE ON IntalnireGrupStudiu
+FOR EACH ROW
+BEGIN
+    DELETE FROM MembruIntalnireGrupStudiu WHERE idIntalnireGrupStudiu = OLD.idIntalnireGrupStudiu;
 END;
 //
 DELIMITER ;

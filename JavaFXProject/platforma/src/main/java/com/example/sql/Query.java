@@ -917,6 +917,18 @@ public class Query {
         return -1;
     }
 
+    public static boolean existsMeeting(Connection connection, String numeGrup) throws Exception
+    {
+        String query = "SELECT * FROM IntalnireGrupStudiu IGS " +
+                "JOIN GrupStudiu GS ON GS.idGrupStudiu = IGS.idGrupStudiu " +
+                "WHERE GS.numeGrup = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, numeGrup);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
     public static int getNrMaximStudenti(Connection connection, int idActivitate) throws SQLException {
         String nrMaximStudentiQuery = "SELECT nrMaximStudenti FROM Curs WHERE idCurs = (SELECT idCurs FROM Activitate WHERE idActivitate = ?)";
         try (PreparedStatement nrMaximStudentiStatement = connection.prepareStatement(nrMaximStudentiQuery)) {
