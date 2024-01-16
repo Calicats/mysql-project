@@ -452,7 +452,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER DeleteParticipantActivitateOnStudentDelete
-AFTER DELETE ON Student
+BEFORE DELETE ON Student
 FOR EACH ROW
 BEGIN
     DECLARE studentId INT;
@@ -468,7 +468,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER DeleteParticipantActivitateOnProfesorDelete
-AFTER DELETE ON Profesor
+BEFORE DELETE ON Profesor
 FOR EACH ROW
 BEGIN
     DECLARE profesorId INT;
@@ -524,7 +524,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER DeleteNoteStudentOnStudentDelete
-AFTER DELETE ON Student
+BEFORE DELETE ON Student
 FOR EACH ROW
 BEGIN
     DECLARE studentId INT;
@@ -538,9 +538,10 @@ END;
 //
 DELIMITER ;
 
+
 DELIMITER //
 CREATE TRIGGER DeleteActivitateOnCursDelete
-AFTER DELETE ON Curs
+BEFORE DELETE ON Curs
 FOR EACH ROW
 BEGIN
     DECLARE cursId INT;
@@ -554,7 +555,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER DeleteParticipantActivitateOnCursDelete
-AFTER DELETE ON Curs
+BEFORE DELETE ON Curs
 FOR EACH ROW
 BEGIN
     DECLARE cursId INT;
@@ -566,9 +567,11 @@ END;
 //
 DELIMITER ;
 
+DROP TRIGGER DeleteProgramareActivitateOnCursDelete
+
 DELIMITER //
 CREATE TRIGGER DeleteProgramareActivitateOnCursDelete
-AFTER DELETE ON Curs
+BEFORE DELETE ON Curs
 FOR EACH ROW
 BEGIN
     DECLARE cursId INT;
@@ -580,9 +583,11 @@ END;
 //
 DELIMITER ;
 
+DROP TRIGGER DeleteNoteStudentOnCursDelete
+
 DELIMITER //
 CREATE TRIGGER DeleteNoteStudentOnCursDelete
-AFTER DELETE ON Curs
+BEFORE DELETE ON Curs
 FOR EACH ROW
 BEGIN
     DECLARE cursId INT;
@@ -596,7 +601,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER DeleteActivitateOnProfesorDelete
-AFTER DELETE ON Profesor
+BEFORE DELETE ON Profesor
 FOR EACH ROW
 BEGIN
     DECLARE professorId INT;
@@ -612,7 +617,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER DeleteMembruGrupStudiuOnGrupStudiuDelete
-AFTER DELETE ON GrupStudiu
+BEFORE DELETE ON GrupStudiu
 FOR EACH ROW
 BEGIN
     DELETE FROM MembruGrupStudiu WHERE idGrupStudiu = OLD.idGrupStudiu;
@@ -628,7 +633,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER DeleteMembruIntalnireGrupStudiuOnIntalnireGrupStudiuDelete
-AFTER DELETE ON IntalnireGrupStudiu
+BEFORE DELETE ON IntalnireGrupStudiu
 FOR EACH ROW
 BEGIN
     DELETE FROM MembruIntalnireGrupStudiu WHERE idIntalnireGrupStudiu = OLD.idIntalnireGrupStudiu;
