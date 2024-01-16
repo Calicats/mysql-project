@@ -6,12 +6,19 @@ import com.example.sql.Connect;
 import com.example.sql.Query;
 import com.example.sql.Update;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -44,7 +51,7 @@ public class CatalogProfesoriController {
         // get the current user's id
         int id=-1;
         try{
-            id = Query.getIdByUsername(Objects.requireNonNull(Connect.getConnection()), username);
+            id = Query.getIdByUsername(Objects.requireNonNull(Connect.getConnection()), "profesor", username);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,6 +74,7 @@ public class CatalogProfesoriController {
                 activitateProfesorListForThisProfesor.add(activitate);
             }
         }
+
         // create the table columns
         TableColumn<Activitate, Integer> idActivitateColumn = new TableColumn<>("Id");
         TableColumn<Activitate, String> numeCursColumn = new TableColumn<>("Nume curs");
@@ -82,6 +90,15 @@ public class CatalogProfesoriController {
         nrMaximStudentiColumn.setCellValueFactory(new PropertyValueFactory<>("nrMaximStudenti"));
         procentNotaColumn.setCellValueFactory(new PropertyValueFactory<>("procentNota"));
 
+        TableColumn<NoteStudent, Integer> idNotaNoteColumn = new TableColumn<>("idNota");
+        idNotaNoteColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<NoteStudent, Integer> notaNoteColumn = new TableColumn<>("nota");
+        notaNoteColumn.setCellValueFactory(new PropertyValueFactory<>("nota"));
+        TableColumn<NoteStudent, String> studentNoteColumn = new TableColumn<>("student");
+        studentNoteColumn.setCellValueFactory(new PropertyValueFactory<>("usernameStudent"));
+        TableColumn<NoteStudent, Integer> idActivitateNoteColumn = new TableColumn<>("idActivitate");
+        idActivitateNoteColumn.setCellValueFactory(new PropertyValueFactory<>("idActivitate"));
+
         // add the columns to the table
         cursuriTable.getColumns().add(idActivitateColumn);
         cursuriTable.getColumns().add(numeCursColumn);
@@ -89,10 +106,14 @@ public class CatalogProfesoriController {
         cursuriTable.getColumns().add(descriereColumn);
         cursuriTable.getColumns().add(nrMaximStudentiColumn);
         cursuriTable.getColumns().add(procentNotaColumn);
+
+        studentList.getColumns().add(idNotaNoteColumn);
+        studentList.getColumns().add(notaNoteColumn);
+        studentList.getColumns().add(studentNoteColumn);
+        studentList.getColumns().add(idActivitateNoteColumn);
+
         // add the list to the table as an observable list
         cursuriTable.setItems(FXCollections.observableList(activitateProfesorListForThisProfesor));
-
-
     }
 
 
@@ -127,7 +148,6 @@ public class CatalogProfesoriController {
 
         // save the grade
         Update.updateEntryInNoteStudent(Objects.requireNonNull(Connect.getConnection()), new NoteStudent(NoteStudent.getNextId(), grade, currentStudentId, currentCursId));
-
     }
 
     public void cautaActivitate(ActionEvent actionEvent) {
@@ -165,6 +185,7 @@ public class CatalogProfesoriController {
             }
         }
 
+        populateCatalog();
     }
 
     public void cautaStudent(ActionEvent actionEvent) {
@@ -179,7 +200,7 @@ public class CatalogProfesoriController {
             return;
         }
         try{
-            currentStudentId = Query.getIdByUsername(Objects.requireNonNull(Connect.getConnection()), textFieldUsernameStudent.getText());
+            currentStudentId = Query.getIdByUsername(Objects.requireNonNull(Connect.getConnection()), "student", textFieldUsernameStudent.getText());
         } catch (Exception e) {
             errorLabel.setText("Nu exista un student cu acest username!");
             return;
@@ -200,7 +221,73 @@ public class CatalogProfesoriController {
         }
         errorLabel.setText("Studentul a fost gasit!");
         idStudentSelectat = currentStudentId;
+    }
 
+    public void onDownloadCatalog()
+    {
+        if(textFieldIdActivitate.getText().isEmpty())
+        {
+            errorLabel.setText("Introdu un id de activitate!");
+            return;
+        }
 
+        saveTableDataToCSV();
+    }
+
+    private void saveTableDataToCSV() {
+        String defaultFileName = "catalog.csv";
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV File");
+        fileChooser.setInitialFileName(defaultFileName);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+
+        Stage stage = new Stage();
+        File selectedFile = fileChooser.showSaveDialog(stage);
+
+        if (selectedFile != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))) {
+                // Writing header
+                writer.write("idNota,username,nota,idActivitate");
+                writer.newLine();
+
+                // Writing data
+                for (NoteStudent noteStudent : studentList.getItems()) {
+                    writer.write(String.format("%d,%s,%d,%d",
+                            noteStudent.getId(),
+                            noteStudent.getUsernameStudent(),
+                            noteStudent.getNota(),
+                            noteStudent.getIdActivitate()));
+                    writer.newLine();
+                }
+
+                System.out.println("CSV file saved successfully!");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void populateCatalog()
+    {
+        Connection connection = Connect.getConnection();
+        if(connection == null)
+        {
+            return;
+        }
+
+        String[][] allInfo = Query.getCatalogOnIdActivitate(connection, idActivitateSelectat);
+        if(allInfo == null)
+        {
+            errorLabel.setText("Eroare la deschiderea catalogului!");
+            return;
+        }
+
+        ObservableList<NoteStudent> list = FXCollections.observableArrayList();
+        for(String[] row: allInfo)
+        {
+            list.add(new NoteStudent(Integer.parseInt(row[0]), Integer.parseInt(row[1]), row[2], Integer.parseInt(row[3])));
+        }
+
+        studentList.setItems(list);
     }
 }

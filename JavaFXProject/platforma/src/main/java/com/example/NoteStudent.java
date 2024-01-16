@@ -35,6 +35,15 @@ public class NoteStudent {
         this.idActivitate = idActivitate;
     }
 
+    // constructor used for JOIN DO NOT MODIFY!!!!!
+    public NoteStudent(int id, int nota, String usernameStudent, int idActivitate)
+    {
+        this.id = id;
+        this.nota = nota;
+        this.usernameStudent = usernameStudent;
+        this.idActivitate = idActivitate;
+    }
+
     public static List<NoteStudent> getTable() {
         List<NoteStudent> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
@@ -178,6 +187,11 @@ public class NoteStudent {
         return idActivitate;
     }
 
+    public String getUsernameStudent()
+    {
+        return usernameStudent;
+    }
+
     @Override
     public String toString() {
         return "NoteStudent{" +
@@ -192,4 +206,6 @@ public class NoteStudent {
     private int nota;
     private int idStudent;
     private int idActivitate;
+
+    private String usernameStudent; // field used in JOIN, DO NOT MODIFY!!!!
 }

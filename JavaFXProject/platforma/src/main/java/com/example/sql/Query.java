@@ -343,6 +343,22 @@ public class Query {
         return getInfoFromQuery(connection, query);
     }
 
+    public static String[][] getCatalogOnIdActivitate(Connection connection, int id)
+    {
+        String query = "SELECT " +
+                "    NS.idNoteStudent, " +
+                "    NS.nota, " +
+                "    S.username AS usernameStudent, " +
+                "    NS.idActivitate " +
+                "FROM " +
+                "    NoteStudent NS " +
+                "    JOIN Student S ON NS.idStudent = S.idStudent " +
+                "WHERE " +
+                "    NS.idActivitate = ?";
+
+        return getInfoFromQueryWithInt(connection, query, id);
+    }
+
     public static String[][] getGrup(Connection connection)
     {
         String query = "SELECT GS.idGrupStudiu, " +
@@ -915,6 +931,18 @@ public class Query {
         }
 
         return -1;
+    }
+
+    public static boolean existsMeeting(Connection connection, String numeGrup) throws Exception
+    {
+        String query = "SELECT * FROM IntalnireGrupStudiu IGS " +
+                "JOIN GrupStudiu GS ON GS.idGrupStudiu = IGS.idGrupStudiu " +
+                "WHERE GS.numeGrup = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, numeGrup);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
     }
 
     public static int getNrMaximStudenti(Connection connection, int idActivitate) throws SQLException {
