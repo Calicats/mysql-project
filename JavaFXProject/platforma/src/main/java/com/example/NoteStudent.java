@@ -22,6 +22,7 @@ public class NoteStudent {
                 nota = rs.getInt("nota");
                 idStudent = rs.getInt("idStudent");
                 idActivitate = rs.getInt("idActivitate");
+                usernameStudent = new Student(idStudent).getUsername();
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
@@ -190,6 +191,31 @@ public class NoteStudent {
     public String getUsernameStudent()
     {
         return usernameStudent;
+    }
+
+    public String setUsernameStudent()
+    {
+        return this.usernameStudent = new Student(idStudent).getUsername();
+    }
+
+    public NoteStudent setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public NoteStudent setNota(int nota) {
+        this.nota = nota;
+        return this;
+    }
+
+    public NoteStudent setIdStudent(int idStudent) {
+        this.idStudent = idStudent;
+        return this;
+    }
+
+    public NoteStudent setIdActivitate(int idActivitate) {
+        this.idActivitate = idActivitate;
+        return this;
     }
 
     @Override

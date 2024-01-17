@@ -98,8 +98,8 @@ CREATE TABLE IF NOT EXISTS ProgramareActivitate (
     minut int,
     durata int,
     
-    idParticipantActivitate INT,
-    FOREIGN KEY (idParticipantActivitate) REFERENCES ParticipantActivitate(idParticipantActivitate)
+    idActivitate INT,
+    FOREIGN KEY (idActivitate) REFERENCES Activitate(idActivitate)
 );
 
 -- ADAUGARA NOTA LA STUDENT

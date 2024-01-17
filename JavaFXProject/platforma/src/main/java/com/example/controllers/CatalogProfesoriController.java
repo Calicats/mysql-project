@@ -27,8 +27,7 @@ import java.util.Objects;
 
 public class CatalogProfesoriController {
 
-    public ChoiceBox selectCurs;
-    public ChoiceBox selectStudent;
+
     public Button saveGradeButton;
     public Button backButton;
     @FXML
@@ -127,27 +126,45 @@ public class CatalogProfesoriController {
             errorLabel.setText("Nota trebuie sa fie un numar!");
             return;
         }
-        if(selectStudent.getSelectionModel().isEmpty())
+        if(idActivitateSelectat == -1)
         {
-            errorLabel.setText("Nu ati selectat un student!");
+            errorLabel.setText("Nu ati cautat o activitate!");
             return;
         }
-        if(selectCurs.getSelectionModel().isEmpty())
+        if(idStudentSelectat == -1)
         {
-            errorLabel.setText("Nu ati selectat un curs!");
+            errorLabel.setText("Nu ati cautat un student!");
             return;
         }
-        if(grade>0 && grade<11) {
-            NoteStudent noteStudent = new NoteStudent(NoteStudent.getNextId(), grade, currentStudentId, currentCursId);
 
+        if(grade>0 && grade<11) {
+            // update the grade
+            //get the id of the grade
+            int idNota = -1;
+            for (NoteStudent noteStudent : NoteStudent.getTable(idStudentSelectat)) {
+
+                if (noteStudent.getIdActivitate() == idActivitateSelectat) {
+                    if(idNota!=-1)
+                    {
+                        // delete the other grades
+                        NoteStudent.deleteEntry(noteStudent.getId());
+                        continue;
+                    }
+                    idNota = noteStudent.getId();
+
+                }
+            }
+            NoteStudent noteStudent = new NoteStudent(idNota, grade, idStudentSelectat, idActivitateSelectat);
+            NoteStudent.updateOrInsert(noteStudent);
+            errorLabel.setText("Nota a fost salvata!");
         }
         else {
             errorLabel.setText("Nota trebuie sa fie intre 1 si 10!");
             return;
         }
 
-        // save the grade
-        Update.updateEntryInNoteStudent(Objects.requireNonNull(Connect.getConnection()), new NoteStudent(NoteStudent.getNextId(), grade, currentStudentId, currentCursId));
+        // update the grade
+
     }
 
     public void cautaActivitate(ActionEvent actionEvent) {
@@ -179,13 +196,52 @@ public class CatalogProfesoriController {
         List<ParticipantActivitate> studentList = ParticipantActivitate.getTable();
         List<Student> studentListForThisCourse = new ArrayList<>();
         for (ParticipantActivitate participantActivitate : studentList) {
-            if(participantActivitate.getId() == currentCursId)
+            if(participantActivitate.getIdActivitate() == currentCursId)
             {
-                studentListForThisCourse.add(new Student(participantActivitate.getIdStudent()));
+                Student student = new Student(participantActivitate.getIdStudent());
+                studentListForThisCourse.add(student);
             }
         }
+        ObservableList<NoteStudent> list = FXCollections.observableArrayList();
+        // for each student, get the grade, if it doesnt exist, add a new entry with grade 0
+        for(Student student: studentListForThisCourse)
+        {
+            boolean ok = false;
+            for(NoteStudent noteStudent: NoteStudent.getTable(student.getId()))
+            {
+                if(noteStudent.getIdActivitate() == currentCursId && noteStudent.getIdStudent() == student.getId())
+                {
+                    noteStudent.setUsernameStudent();
+                    list.add(noteStudent);
+                    ok = true;
+                }
+            }
+            if(!ok)
+            {
+                NoteStudent noteStudent = new NoteStudent(NoteStudent.getNextId(), 0, student.getId(), currentCursId);
+                noteStudent.setUsernameStudent();
+                NoteStudent.insert(noteStudent);
+                list.add(noteStudent);
+            }
+        }
+        this.studentList.getColumns().clear();
+        // set column names
+        TableColumn<NoteStudent, Integer> idNotaNoteColumn = new TableColumn<>("idNota");
+        idNotaNoteColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<NoteStudent, Integer> notaNoteColumn = new TableColumn<>("nota");
+        notaNoteColumn.setCellValueFactory(new PropertyValueFactory<>("nota"));
+        TableColumn<NoteStudent, String> studentNoteColumn = new TableColumn<>("student");
+        studentNoteColumn.setCellValueFactory(new PropertyValueFactory<>("usernameStudent"));
+        TableColumn<NoteStudent, Integer> idActivitateNoteColumn = new TableColumn<>("idActivitate");
+        idActivitateNoteColumn.setCellValueFactory(new PropertyValueFactory<>("idActivitate"));
+        // add the columns to the table
+        this.studentList.getColumns().add(idNotaNoteColumn);
+        this.studentList.getColumns().add(notaNoteColumn);
+        this.studentList.getColumns().add(studentNoteColumn);
+        this.studentList.getColumns().add(idActivitateNoteColumn);
+        this.studentList.setItems(list);
 
-        populateCatalog();
+        //populateCatalog();
     }
 
     public void cautaStudent(ActionEvent actionEvent) {

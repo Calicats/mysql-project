@@ -1067,4 +1067,38 @@ public class Query {
             default -> null;
         };
     }
+
+    public static String[][] getQueryForProgramareCursuri(Connection connection, String username) throws Exception
+    {
+        String query = "SELECT PrA.idProgramareActivitate, PrA.dataIncepere, PrA.dataFinalizare, " +
+                "PrA.frecventa, PrA.zi, PrA.ora, PrA.minut, PrA.durata, PA.idParticipantActivitate, A.numeActivitate " +
+                "FROM ProgramareActivitate PrA " +
+                "JOIN ParticipantActivitate PA ON PrA.idParticipantActivitate = PA.idParticipantActivitate " +
+                "JOIN Activitate A ON PA.idActivitate = A.idActivitate " +
+                "JOIN Curs C ON A.idCurs = C.idCurs " +
+                "JOIN Profesor P ON A.idProfesor = P.idProfesor " +
+                "WHERE P.username = ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, username);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        return generateTable(resultSet, columnCount);
+    }
+
+
+    public static boolean checkIfActivitateExists(Connection connection, int idActivitate) {
+        String query = "SELECT * FROM Activitate WHERE idActivitate = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, idActivitate);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
 }

@@ -2,14 +2,26 @@ package com.example;
 
 import com.example.sql.Connect;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProgramareActivitate {
+
+
+    public ProgramareActivitate() {
+        // default data
+        this.id = -1;
+        this.dataIncepere = new Date(0);
+        this.dataFinalizare = new Date(0);
+        this.frecventa = "";
+        this.zi = "";
+        this.ora = 0;
+        this.minut = 0;
+        this.durata = 0;
+        this.idActivitate = -1;
+    }
+
     public ProgramareActivitate(int id) {
         Connection connection = Connect.getConnection();
         try {
@@ -26,15 +38,17 @@ public class ProgramareActivitate {
                 ora = rs.getInt("ora");
                 minut = rs.getInt("minut");
                 durata = rs.getInt("durata");
-                idParticipantActivitate = rs.getInt("idParticipantActivitate");
+                idActivitate = rs.getInt("idActivitate");
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
     }
 
+
+
     private ProgramareActivitate(int id, java.sql.Date dataIncepere, java.sql.Date dataFinalizare, String frecventa,
-                                 String zi, int ora, int minut, int durata, int idParticipantActivitate) {
+                                 String zi, int ora, int minut, int durata, int idActivitate) {
         this.id = id;
         this.dataIncepere = dataIncepere;
         this.dataFinalizare = dataFinalizare;
@@ -43,7 +57,19 @@ public class ProgramareActivitate {
         this.ora = ora;
         this.minut = minut;
         this.durata = durata;
-        this.idParticipantActivitate = idParticipantActivitate;
+        this.idActivitate = idActivitate;
+    }
+
+    public ProgramareActivitate(int id, Date date, Date date1, String string, String string1, int i, int i1, int i2, int i3, int i4) {
+        this.id = id;
+        this.dataIncepere = date;
+        this.dataFinalizare = date1;
+        this.frecventa = string;
+        this.zi = string1;
+        this.ora = i;
+        this.minut = i1;
+        this.durata = i2;
+        this.idActivitate = i3;
     }
 
     public static List<ProgramareActivitate> getTable() {
@@ -55,7 +81,9 @@ public class ProgramareActivitate {
 
             while (rs.next()) {
                 int idProgramareActivitate = rs.getInt("idProgramareActivitate");
-                list.add(new ProgramareActivitate(idProgramareActivitate));
+                ProgramareActivitate programareActivitate = new ProgramareActivitate(idProgramareActivitate);
+                programareActivitate.setNumeActivitate();
+                list.add(programareActivitate);
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
@@ -75,7 +103,7 @@ public class ProgramareActivitate {
             stmt.setInt(5, other.ora);
             stmt.setInt(6, other.minut);
             stmt.setInt(7, other.durata);
-            stmt.setInt(8, other.idParticipantActivitate);
+            stmt.setInt(8, other.idActivitate);
             stmt.setInt(9, idProgramareActivitate);
             return stmt.executeUpdate();
         } catch (SQLException e) {
@@ -146,7 +174,7 @@ public class ProgramareActivitate {
         Connection connection = Connect.getConnection();
         try {
             PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO ProgramareActivitate(dataIncepere, dataFinalizare, frecventa, zi, ora, minut, durata, idParticipantActivitate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                    "INSERT INTO ProgramareActivitate(dataIncepere, dataFinalizare, frecventa, zi, ora, minut, durata, idActivitate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             stmt.setDate(1, newProgramareActivitate.dataIncepere);
             stmt.setDate(2, newProgramareActivitate.dataFinalizare);
             stmt.setString(3, newProgramareActivitate.frecventa);
@@ -154,12 +182,60 @@ public class ProgramareActivitate {
             stmt.setInt(5, newProgramareActivitate.ora);
             stmt.setInt(6, newProgramareActivitate.minut);
             stmt.setInt(7, newProgramareActivitate.durata);
-            stmt.setInt(8, newProgramareActivitate.idParticipantActivitate);
+            stmt.setInt(8, newProgramareActivitate.idActivitate);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace(System.err);
             return 0;
         }
+    }
+
+    public ProgramareActivitate setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public ProgramareActivitate setDataIncepere(Date dataIncepere) {
+        this.dataIncepere = dataIncepere;
+        return this;
+    }
+
+    public ProgramareActivitate setDataFinalizare(Date dataFinalizare) {
+        this.dataFinalizare = dataFinalizare;
+        return this;
+    }
+
+    public ProgramareActivitate setFrecventa(String frecventa) {
+        this.frecventa = frecventa;
+        return this;
+    }
+
+    public ProgramareActivitate setZi(String zi) {
+        this.zi = zi;
+        return this;
+    }
+
+    public ProgramareActivitate setOra(int ora) {
+        this.ora = ora;
+        return this;
+    }
+
+    public ProgramareActivitate setMinut(int minut) {
+        this.minut = minut;
+        return this;
+    }
+
+    public ProgramareActivitate setDurata(int durata) {
+        this.durata = durata;
+        return this;
+    }
+
+
+
+    public ProgramareActivitate setNumeActivitate() {
+        int idCurs = new Activitate(idActivitate).getIdCurs();
+        this.numeActivitate = new Curs(idCurs).getNumeCurs();
+        return this;
     }
 
     public int getId() {
@@ -194,8 +270,13 @@ public class ProgramareActivitate {
         return durata;
     }
 
-    public int getIdParticipantActivitate() {
-        return idParticipantActivitate;
+    public int getIdActivitate() {
+        return idActivitate;
+    }
+
+    public ProgramareActivitate setIdActivitate(int idActivitate) {
+        this.idActivitate = idActivitate;
+        return this;
     }
 
     @Override
@@ -209,7 +290,8 @@ public class ProgramareActivitate {
                 ", ora=" + ora +
                 ", minut=" + minut +
                 ", durata=" + durata +
-                ", idParticipantActivitate=" + idParticipantActivitate +
+                ", idActivitate=" + idActivitate +
+                ", numeActivitate='" + numeActivitate + '\'' +
                 '}';
     }
 
@@ -221,5 +303,8 @@ public class ProgramareActivitate {
     private int ora;
     private int minut;
     private int durata;
-    private int idParticipantActivitate;
+    private int idActivitate;
+
+    // field for query DO NOT TOUCH OR CHANGE
+    private String numeActivitate="error";
 }

@@ -124,6 +124,12 @@ public class Main extends Application {
                     switch(fxml)
                     {
                         case "logare.fxml" -> currentStage.setTitle("Logare platforma");
+                        case "programareCursuriProfesor.fxml" ->
+                        {
+                            currentStage.setTitle("Programare cursuri");
+                            ProgramareCursuriProfesorController controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
                         case "panouProfesor.fxml" ->
                         {
                             currentStage.setTitle("Panou profesor");

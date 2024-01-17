@@ -46,6 +46,14 @@ public class ParticipantActivitate {
         this.nrParticipanti = nrParticipanti;
     }
 
+    public ParticipantActivitate(int idActivitate, int idProfesor) {
+        // default data
+        this.id = ParticipantActivitate.getTable().size();
+        this.numarParticipanti = 0;
+        this.idActivitate = idActivitate;
+        this.idStudent = 0;
+    }
+
     public static List<ParticipantActivitate> getTable() {
         List<ParticipantActivitate> list = new ArrayList<>();
         Connection connection = Connect.getConnection();
@@ -213,6 +221,9 @@ public class ParticipantActivitate {
     private String descriere;
     private int nrMaximStudenti;
     private int nrParticipanti;
+
+    // query field DO NOT TOUCH OR CHANGE
+
 
 }
 
