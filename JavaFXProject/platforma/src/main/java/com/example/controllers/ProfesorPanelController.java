@@ -140,4 +140,8 @@ public class ProfesorPanelController {
     public void openCatalog(ActionEvent actionEvent) throws IOException {
         Main.main.changeScene("catalogProfesori.fxml", username, tableName, 1024, 768);
     }
+
+    public void openProgrameazaActivitate(ActionEvent actionEvent) throws IOException {
+        Main.main.changeScene("programareCursuriProfesor.fxml", username, tableName, 1024, 768);
+    }
 }

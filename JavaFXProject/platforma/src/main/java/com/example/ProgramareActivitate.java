@@ -2,10 +2,7 @@ package com.example;
 
 import com.example.sql.Connect;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +41,18 @@ public class ProgramareActivitate {
         this.minut = minut;
         this.durata = durata;
         this.idParticipantActivitate = idParticipantActivitate;
+    }
+
+    public ProgramareActivitate(int id, Date date, Date date1, String string, String string1, int i, int i1, int i2, int i3, int i4) {
+        this.id = id;
+        this.dataIncepere = date;
+        this.dataFinalizare = date1;
+        this.frecventa = string;
+        this.zi = string1;
+        this.ora = i;
+        this.minut = i1;
+        this.durata = i2;
+        this.idParticipantActivitate = i3;
     }
 
     public static List<ProgramareActivitate> getTable() {
@@ -222,4 +231,7 @@ public class ProgramareActivitate {
     private int minut;
     private int durata;
     private int idParticipantActivitate;
+
+    // field for query DO NOT TOUCH OR CHANGE
+    private String numeActivitate;
 }

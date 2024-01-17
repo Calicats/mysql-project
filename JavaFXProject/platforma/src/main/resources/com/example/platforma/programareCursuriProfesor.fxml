@@ -30,7 +30,7 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <TableView prefHeight="352.8" prefWidth="175.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <TableView fx:id="programareActivitateTable" prefHeight="352.8" prefWidth="175.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
@@ -40,7 +40,8 @@
                                     <ToolBar prefHeight="40.0" prefWidth="200.0">
                                       <items>
                                           <Label text="Selecteaza activitate " />
-                                          <ChoiceBox fx:id="dropBoxSelecteazaActivitate" onContextMenuRequested="#loadActivitatiSelectorActivitate" onMouseClicked="#dropBoxSelecteazaActivitateSelectItem" prefWidth="150.0" />
+                                          <TextField fx:id="idActivitateTextField" prefHeight="26.0" prefWidth="79.0" promptText="id activitate" />
+                                          <Button mnemonicParsing="false" onAction="#searchActivitate" text="Search" />
                                       </items>
                                     </ToolBar>
                                     <ToolBar prefHeight="40.0" prefWidth="200.0">
