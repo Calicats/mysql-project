@@ -46,7 +46,7 @@
                                              <items>
                                                 <Label prefHeight="42.0" prefWidth="111.0" text="Selecteaza studentul" textAlignment="CENTER" />
                                                 <TextField fx:id="textFieldUsernameStudent" prefHeight="26.0" prefWidth="247.0" promptText="username student" />
-                                                <Button mnemonicParsing="false" onAction="#cautaStudent" text="Cauta" />
+                                                <Button mnemonicParsing="false" onAction="#cautaStudent" text="Selecteaza" />
                                              </items>
                                           </ToolBar>
                                           <ToolBar>
