@@ -143,4 +143,9 @@ public class StudentPanelController {
     {
         Main.main.changeScene("grupuriDeStudii.fxml", username, tableName, 1200, 562);
     }
+
+    public void onShowAllActivities() throws IOException
+    {
+        Main.main.changeScene("panouActivitatiStudentiTotal.fxml", username, tableName, 1024, 768);
+    }
 }

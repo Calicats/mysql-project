@@ -16,6 +16,11 @@
                   <Font size="15.0" />
                </font>
             </Button>
+            <Button mnemonicParsing="false" onAction="#onShowAllActivities" prefHeight="100.0" prefWidth="119.0" style="-fx-background-color: transparent;" text="Activitatea ta" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
             <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="126.0" style="-fx-background-color: transparent;" text="Activitate de azi" textFill="WHITE">
                <font>
                   <Font size="15.0" />

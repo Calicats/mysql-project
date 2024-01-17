@@ -325,6 +325,72 @@ public class Query {
         return resultSet.next();
     }
 
+    public static String[][] getStudentActivitesOnId(Connection connection, String username) throws Exception
+    {
+        String query = "SELECT pa.idParticipantActivitate, S.username, C.numeCurs, C.descriere, a.tip, c.nrMaximStudenti, a.procentNota " +
+                "                FROM ParticipantActivitate pa " +
+                "                JOIN Activitate a ON pa.idActivitate = a.idActivitate " +
+                "                JOIN Curs c ON a.idCurs = c.idCurs " +
+                "                Join Student S ON S.idStudent = pa.IdStudent " +
+                "                WHERE pa.idStudent = ?";
+        int idStudent = getIdByUsername(connection, "student", username);
+
+        return getInfoFromQueryWithInt(connection, query, idStudent);
+    }
+
+    public static String[][] getStudentActivites(Connection connection)
+    {
+        String query = "SELECT pa.idParticipantActivitate, S.username, C.numeCurs, C.descriere, a.tip, c.nrMaximStudenti, a.procentNota " +
+                "                FROM ParticipantActivitate pa " +
+                "                JOIN Activitate a ON pa.idActivitate = a.idActivitate " +
+                "                JOIN Curs c ON a.idCurs = c.idCurs " +
+                "                Join Student S ON S.idStudent = pa.IdStudent ";
+
+        return getInfoFromQuery(connection, query);
+    }
+
+    public static String[][] getStudentActivitesOnActivity(Connection connection, String numeCurs)
+    {
+        String query = "SELECT pa.idParticipantActivitate, S.username, C.numeCurs, C.descriere, a.tip, c.nrMaximStudenti, a.procentNota " +
+                "                FROM ParticipantActivitate pa " +
+                "                JOIN Activitate a ON pa.idActivitate = a.idActivitate " +
+                "                JOIN Curs c ON a.idCurs = c.idCurs " +
+                "                Join Student S ON S.idStudent = pa.IdStudent " +
+                "                WHERE C.numeCurs = ?";
+
+        return getInfoFromQueryWithString(connection, query, numeCurs);
+    }
+
+    public static boolean existsStudentInActivity(Connection connection, String username) throws Exception
+    {
+        String query = "SELECT pa.idParticipantActivitate, S.username, C.numeCurs, C.descriere, a.tip, c.nrMaximStudenti, a.procentNota " +
+                "                FROM ParticipantActivitate pa " +
+                "                JOIN Activitate a ON pa.idActivitate = a.idActivitate " +
+                "                JOIN Curs c ON a.idCurs = c.idCurs " +
+                "                Join Student S ON S.idStudent = pa.IdStudent " +
+                "                WHERE pa.idStudent = ?";
+        int idStudent = getIdByUsername(connection, "student", username);
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, idStudent);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
+    public static int getIdIntalnireMax(Connection connection) throws Exception
+    {
+        String query = "SELECT MAX(idIntalnireGrupStudiu) FROM IntalnireGrupStudiu";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next())
+        {
+            return resultSet.getInt(1);
+        }
+        return -1;
+    }
+
     public static String[][] getMembersStudent(Connection connection)
     {
         String query = "SELECT MG.username " +
