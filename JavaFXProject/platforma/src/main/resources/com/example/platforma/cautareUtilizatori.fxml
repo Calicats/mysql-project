@@ -35,7 +35,7 @@
                </font>
             </Label>
             <TableView fx:id="tableUsers" layoutX="420.0" layoutY="59.0" prefHeight="200.0" prefWidth="506.0" />
-            <TableView fx:id="tableActivitati" layoutX="420.0" layoutY="289.0" prefHeight="200.0" prefWidth="506.0">
+            <TableView fx:id="tableActivitati" layoutX="24.0" layoutY="295.0" prefHeight="200.0" prefWidth="404.0">
                <columns>
                   <TableColumn fx:id="idColumn" prefWidth="39.20001220703125" text="id" />
                   <TableColumn fx:id="usernameColumn" prefWidth="62.399993896484375" text="username" />
@@ -53,6 +53,17 @@
             </Label>
             <TextField fx:id="activityNameField" layoutX="173.0" layoutY="149.0" promptText="Nume activitate" />
             <Button fx:id="searchActivityButton" layoutX="336.0" layoutY="149.0" mnemonicParsing="false" onAction="#onSearchActivity" text="Cauta" />
+            <TableView fx:id="tableActivitatiStudent" layoutX="506.0" layoutY="295.0" prefHeight="200.0" prefWidth="404.0">
+               <columns>
+                  <TableColumn fx:id="idColumnStudent" prefWidth="39.20001220703125" text="id" />
+                  <TableColumn fx:id="usernameColumnStudent" prefWidth="62.399993896484375" text="username" />
+                  <TableColumn fx:id="numeColumnStudent" prefWidth="60.79998779296875" text="nume" />
+                  <TableColumn fx:id="descriereColumnStudent" prefWidth="60.0" text="descriere" />
+                  <TableColumn fx:id="tipColumnStudent" prefWidth="41.5999755859375" text="tip" />
+                  <TableColumn fx:id="nrMaximStudentiColumnStudent" prefWidth="107.99993896484375" text="nrMaximStudenti" />
+                  <TableColumn fx:id="procentColumnStudent" prefWidth="87.20001220703125" text="procentNota" />
+               </columns>
+            </TableView>
          </children>
       </AnchorPane>
    </left>

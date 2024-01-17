@@ -55,6 +55,31 @@ public class FindUsersController {
     private TableColumn<Activitate, String> nrMaximStudentiColumn;
     @FXML
     private TableColumn<Activitate, String> procentColumn;
+
+    @FXML
+    private TableView<Activitate> tableActivitatiStudent;
+
+    @FXML
+    private TableColumn<Activitate, String> tipColumnStudent;
+
+    @FXML
+    private TableColumn<Activitate, String> usernameColumnStudent;
+
+    @FXML
+    private TableColumn<Activitate, String> procentColumnStudent;
+
+    @FXML
+    private TableColumn<Activitate, String> idColumnStudent;
+
+    @FXML
+    private TableColumn<Activitate, String> numeColumnStudent;
+
+    @FXML
+    private TableColumn<Activitate, String> nrMaximStudentiColumnStudent;
+
+    @FXML
+    private TableColumn<Activitate, String> descriereColumnStudent;
+
     private String username;
     private String tableName;
 
@@ -132,6 +157,9 @@ public class FindUsersController {
                 {
                     generateTableActivitati();
                     populateTableActivitati(connection);
+
+                    generateTableActivitatiStudent();
+                    populateTableActivitatiStudent();
                 }
                 generateTableUsers(columnsUsers);
                 populateTableUsers(connection, tableName);
@@ -256,6 +284,10 @@ public class FindUsersController {
 
             generateTableActivitati();
             populateTableActivitatiOnActivity(connection, activityNameString);
+
+            generateTableActivitatiStudent();
+            populateTableActivitatiStudentOnActivity(activityNameString);
+
             errorHandling.setText("");
         }
         catch(Exception e)
@@ -284,6 +316,8 @@ public class FindUsersController {
     {
         tableActivitati.getItems().clear();
         tableActivitati.setVisible(expr);
+        tableActivitatiStudent.getItems().clear();
+        tableActivitatiStudent.setVisible(expr);
         numeColumn.setVisible(expr);
         usernameColumn.setVisible(expr);
         tipColumn.setVisible(expr);
@@ -334,6 +368,111 @@ public class FindUsersController {
         removeEllipses(descriereColumn);
         removeEllipses(nrMaximStudentiColumn);
         removeEllipses(procentColumn);
+    }
+
+    private void generateTableActivitatiStudent()
+    {
+        idColumnStudent.setCellValueFactory(new PropertyValueFactory<>("idActivitate"));
+        usernameColumnStudent.setCellValueFactory(new PropertyValueFactory<>("username"));
+        numeColumnStudent.setCellValueFactory(new PropertyValueFactory<>("numeCurs"));
+        tipColumnStudent.setCellValueFactory(new PropertyValueFactory<>("tip"));
+        descriereColumnStudent.setCellValueFactory(new PropertyValueFactory<>("descriere"));
+        nrMaximStudentiColumnStudent.setCellValueFactory(new PropertyValueFactory<>("nrMaximStudenti"));
+        procentColumnStudent.setCellValueFactory(new PropertyValueFactory<>("procentNota"));
+
+        removeEllipses(idColumnStudent);
+        removeEllipses(usernameColumnStudent);
+        removeEllipses(numeColumnStudent);
+        removeEllipses(tipColumnStudent);
+        removeEllipses(descriereColumnStudent);
+        removeEllipses(nrMaximStudentiColumnStudent);
+        removeEllipses(procentColumnStudent);
+    }
+
+    private void populateTableActivitatiStudent()
+    {
+        Connection connection = Connect.getConnection();
+        if(connection == null)
+        {
+            return;
+        }
+        ObservableList<Activitate> list = FXCollections.observableArrayList();
+        String[][] allInfo = null;
+        try
+        {
+            allInfo = Query.getStudentActivites(connection);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        if(allInfo == null)
+        {
+            System.out.println("Tabela vida!");
+            return;
+        }
+
+        for(String[] row: allInfo)
+        {
+            Activitate activitate = rowToActivitateStudent(row);
+            list.add(activitate);
+        }
+
+        tableActivitatiStudent.setItems(list);
+    }
+
+    private void populateTableActivitatiStudentOnActivity(String numeCurs)
+    {
+        Connection connection = Connect.getConnection();
+        if(connection == null)
+        {
+            return;
+        }
+        ObservableList<Activitate> list = FXCollections.observableArrayList();
+        String[][] allInfo = null;
+        try
+        {
+            allInfo = Query.getStudentActivitesOnActivity(connection, numeCurs);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        if(allInfo == null)
+        {
+            System.out.println("Tabela vida!");
+            return;
+        }
+
+        for(String[] row: allInfo)
+        {
+            Activitate activitate = rowToActivitateStudent(row);
+            list.add(activitate);
+        }
+
+        tableActivitatiStudent.setItems(list);
+    }
+
+    private Activitate rowToActivitateStudent(String[] row)
+    {
+        int idActivitate = -1;
+        int nrMaximStudenti = -1;
+        int procentNota = -1;
+
+        try
+        {
+            idActivitate = Integer.parseInt(row[0]);
+            nrMaximStudenti = Integer.parseInt(row[5]);
+            procentNota = Integer.parseInt(row[6]);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return new Activitate(idActivitate, row[1], row[2], row[3], row[4],nrMaximStudenti, procentNota);
     }
 
     /***

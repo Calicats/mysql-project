@@ -191,6 +191,12 @@ public class Main extends Application {
                             CreazaModificaGrupDeStudii controller = fxmlLoader.getController();
                             controller.initUser(username, tableName);
                         }
+                        case "panouActivitatiStudentiTotal.fxml" ->
+                        {
+                            currentStage.setTitle("Activitatea ta");
+                            ViewActivitateTotalStudent controller = fxmlLoader.getController();
+                            controller.initUser(username, tableName);
+                        }
                     }
                 }
             }
