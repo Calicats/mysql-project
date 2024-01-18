@@ -18,7 +18,7 @@
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="133.0" style="-fx-background-color: transparent;" text="Activitate de azi" textFill="WHITE">
+            <Button mnemonicParsing="false" onAction="#activitateDeAzi" prefHeight="100.0" prefWidth="133.0" style="-fx-background-color: transparent;" text="Activitate de azi" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>

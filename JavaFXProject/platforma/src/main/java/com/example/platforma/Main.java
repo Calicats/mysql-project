@@ -160,6 +160,12 @@ public class Main extends Application {
                             CreazaModificaGrupDeStudii controller = fxmlLoader.getController();
                             controller.initUser(username, tableName);
                         }
+                        case "activitateaDeAzi.fxml" ->
+                        {
+                            currentStage.setTitle("Activitatea de azi");
+                            ActivitateaDeAziController controller = fxmlLoader.getController();
+                            controller.init(tableName);
+                        }
                     }
                 }
                 case "student" ->
@@ -202,6 +208,12 @@ public class Main extends Application {
                             currentStage.setTitle("Activitatea ta");
                             ViewActivitateTotalStudent controller = fxmlLoader.getController();
                             controller.initUser(username, tableName);
+                        }
+                        case "activitateaDeAzi.fxml" ->
+                        {
+                            currentStage.setTitle("Activitatea de azi");
+                            ActivitateaDeAziController controller = fxmlLoader.getController();
+                            controller.init(tableName);
                         }
                     }
                 }

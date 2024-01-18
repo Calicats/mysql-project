@@ -432,6 +432,9 @@ public class ProgramareCursuriProfesorController {
 
         if(isUpdate){
             ProgramareActivitate.updateEntry(programareActivitateCurrent.getId(), programareActivitateCurrent);
+            System.out.println("Datele au fost salvate");
+            createDialogErrorBox("Datele au fost salvate. \nProgramre: " + programareActivitateCurrent.toString());
+
             return;
         }
         // create a new entry
