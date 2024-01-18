@@ -148,4 +148,8 @@ public class StudentPanelController {
     {
         Main.main.changeScene("panouActivitatiStudentiTotal.fxml", username, tableName, 1024, 768);
     }
+
+    public void activitateaDeAzi(ActionEvent actionEvent) throws IOException {
+        Main.main.changeScene("activitateaDeAzi.fxml", username, tableName, 1024, 768);
+    }
 }

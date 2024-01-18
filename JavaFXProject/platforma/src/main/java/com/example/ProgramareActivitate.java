@@ -95,7 +95,7 @@ public class ProgramareActivitate {
         Connection connection = Connect.getConnection();
         try {
             PreparedStatement stmt = connection.prepareStatement(
-                    "UPDATE ProgramareActivitate SET dataIncepere = ?, dataFinalizare = ?, frecventa = ?, zi = ?, ora = ?, minut = ?, durata = ?, idParticipantActivitate = ? WHERE idProgramareActivitate = ?");
+                    "UPDATE ProgramareActivitate SET dataIncepere = ?, dataFinalizare = ?, frecventa = ?, zi = ?, ora = ?, minut = ?, durata = ? WHERE idProgramareActivitate = ?");
             stmt.setDate(1, other.dataIncepere);
             stmt.setDate(2, other.dataFinalizare);
             stmt.setString(3, other.frecventa);
@@ -104,7 +104,6 @@ public class ProgramareActivitate {
             stmt.setInt(6, other.minut);
             stmt.setInt(7, other.durata);
             stmt.setInt(8, other.idActivitate);
-            stmt.setInt(9, idProgramareActivitate);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace(System.err);
