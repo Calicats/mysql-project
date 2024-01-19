@@ -2,6 +2,7 @@ package com.example.platforma;
 
 import com.example.controllers.*;
 import com.example.controllers.GrupuriDeStudiiController;
+import com.example.sql.RandomPopulation;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -29,6 +30,12 @@ public class Main extends Application {
         currentStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("logare.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+
+//        // load random data
+//        RandomPopulation.populateSuperAdministrators(50);
+//        RandomPopulation.populateAdministrators(50);
+//        RandomPopulation.populateProfesors(50);
+//        RandomPopulation.populateStudents(50);
 
         stage.setResizable(false);
         stage.setTitle("Logare platforma");
