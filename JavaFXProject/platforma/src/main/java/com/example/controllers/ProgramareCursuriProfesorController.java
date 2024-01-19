@@ -446,7 +446,7 @@ public class ProgramareCursuriProfesorController {
 
         // tell the user that the data has been saved
         System.out.println("Datele au fost salvate");
-        createDialogErrorBox("Datele au fost salvate. \nProgramre: " + programareActivitateCurrent.toString());
+        createDialogErrorBox("Datele au fost salvate.");
 
 
     }
